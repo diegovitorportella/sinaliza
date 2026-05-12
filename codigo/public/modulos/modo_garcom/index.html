@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinaliza - Modo Garçom</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+    <div class="container py-4">
+        <header class="mb-4 text-center">
+            <h1 class="fw-bold text-primary">Modo Garçom</h1>
+            <p class="text-muted">Selecione uma frase para comunicação rápida.</p>
+        </header>
+
+        <div class="mb-4">
+            <input type="text" id="inputPesquisa" class="form-control form-control-lg shadow-sm" placeholder="🔍 Buscar frase...">
+        </div>
+
+        <div class="mb-4 d-flex gap-2 overflow-auto pb-2" id="containerCategorias">
+            <button class="btn btn-primary rounded-pill px-4 btn-categoria" data-categoria="Todas">Todas</button>
+        </div>
+
+        <div class="row g-3" id="gridFrases"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
