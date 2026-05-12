@@ -21,5 +21,433 @@
       "email": "rommel@gmail.com",
       "id": 3
     }
+  ],
+  "restaurantes": [
+    {
+      "id": 1,
+      "nome": "Restaurante Sabor & Inclusão",
+      "endereco": "Rua X, 123",
+      "cidade": "Belo Horizonte",
+      "telefone": "(31) 99999-9999",
+      "tipoCozinha": "Brasileira",
+      "horario": "Seg-Sex 11h-22h",
+      "foto": "imagem.jpg",
+      "cardapioDigital": false,
+      "qrCodeMesas": false,
+      "checklist": {
+        "comunicacao": {
+          "libras": false,
+          "cardapioImagens": false,
+          "cardapioDigitalAcessivel": false,
+          "chatTexto": false
+        },
+        "tecnologia": {
+          "qrCode": false,
+          "tabletPedidos": false,
+          "pedidoVisual": false
+        },
+        "atendimento": {
+          "chamadaVisual": false,
+          "funcionariosTreinados": false,
+          "tempoRespostaRapido": false
+        },
+        "inclusao": {
+          "ambienteVisual": false,
+          "sinalizacao": false
+        }
+      },
+      "pontuacaoAcessibilidade": 0
+    },
+    {
+      "id": 2,
+      "nome": "Cantina Bella Vista",
+      "endereco": "Av. Paulista, 500",
+      "cidade": "São Paulo",
+      "telefone": "(11) 98888-1111",
+      "tipoCozinha": "Italiana",
+      "horario": "Seg-Dom 12h-23h",
+      "foto": "cantina.jpg",
+      "cardapioDigital": true,
+      "qrCodeMesas": true,
+      "checklist": {
+        "comunicacao": {
+          "libras": true,
+          "cardapioImagens": true,
+          "cardapioDigitalAcessivel": true,
+          "chatTexto": true
+        },
+        "tecnologia": {
+          "qrCode": true,
+          "tabletPedidos": true,
+          "pedidoVisual": true
+        },
+        "atendimento": {
+          "chamadaVisual": true,
+          "funcionariosTreinados": true,
+          "tempoRespostaRapido": true
+        },
+        "inclusao": {
+          "ambienteVisual": true,
+          "sinalizacao": true
+        }
+      },
+      "pontuacaoAcessibilidade": 10
+    },
+    {
+      "id": 3,
+      "nome": "Sushi Zen",
+      "endereco": "Rua das Flores, 89",
+      "cidade": "Curitiba",
+      "telefone": "(41) 97777-2222",
+      "tipoCozinha": "Japonesa",
+      "horario": "Ter-Dom 18h-23h",
+      "foto": "sushi.jpg",
+      "cardapioDigital": true,
+      "qrCodeMesas": false,
+      "checklist": {
+        "comunicacao": {
+          "libras": false,
+          "cardapioImagens": true,
+          "cardapioDigitalAcessivel": true,
+          "chatTexto": false
+        },
+        "tecnologia": {
+          "qrCode": false,
+          "tabletPedidos": true,
+          "pedidoVisual": true
+        },
+        "atendimento": {
+          "chamadaVisual": false,
+          "funcionariosTreinados": true,
+          "tempoRespostaRapido": true
+        },
+        "inclusao": {
+          "ambienteVisual": true,
+          "sinalizacao": false
+        }
+      },
+      "pontuacaoAcessibilidade": 7
+    },
+    {
+      "id": 4,
+      "nome": "Churrascaria Fogo Vivo",
+      "endereco": "Av. Brasil, 1000",
+      "cidade": "Rio de Janeiro",
+      "telefone": "(21) 96666-3333",
+      "tipoCozinha": "Churrasco",
+      "horario": "Seg-Dom 11h-22h",
+      "foto": "churrasco.jpg",
+      "cardapioDigital": false,
+      "qrCodeMesas": true,
+      "checklist": {
+        "comunicacao": {
+          "libras": false,
+          "cardapioImagens": true,
+          "cardapioDigitalAcessivel": false,
+          "chatTexto": false
+        },
+        "tecnologia": {
+          "qrCode": true,
+          "tabletPedidos": false,
+          "pedidoVisual": true
+        },
+        "atendimento": {
+          "chamadaVisual": true,
+          "funcionariosTreinados": false,
+          "tempoRespostaRapido": true
+        },
+        "inclusao": {
+          "ambienteVisual": true,
+          "sinalizacao": true
+        }
+      },
+      "pontuacaoAcessibilidade": 6
+    },
+    {
+      "id": 5,
+      "nome": "Veggie Life",
+      "endereco": "Rua Verde, 45",
+      "cidade": "Florianópolis",
+      "telefone": "(48) 95555-4444",
+      "tipoCozinha": "Vegetariana",
+      "horario": "Seg-Sab 10h-20h",
+      "foto": "veggie.jpg",
+      "cardapioDigital": true,
+      "qrCodeMesas": true,
+      "checklist": {
+        "comunicacao": {
+          "libras": true,
+          "cardapioImagens": true,
+          "cardapioDigitalAcessivel": true,
+          "chatTexto": true
+        },
+        "tecnologia": {
+          "qrCode": true,
+          "tabletPedidos": true,
+          "pedidoVisual": true
+        },
+        "atendimento": {
+          "chamadaVisual": true,
+          "funcionariosTreinados": true,
+          "tempoRespostaRapido": true
+        },
+        "inclusao": {
+          "ambienteVisual": true,
+          "sinalizacao": true
+        }
+      },
+      "pontuacaoAcessibilidade": 10
+    },
+    {
+      "id": 6,
+      "nome": "Burger House",
+      "endereco": "Av. Central, 300",
+      "cidade": "Porto Alegre",
+      "telefone": "(51) 94444-5555",
+      "tipoCozinha": "Hambúrguer",
+      "horario": "Seg-Dom 17h-00h",
+      "foto": "burger.jpg",
+      "cardapioDigital": true,
+      "qrCodeMesas": false,
+      "checklist": {
+        "comunicacao": {
+          "libras": false,
+          "cardapioImagens": true,
+          "cardapioDigitalAcessivel": true,
+          "chatTexto": false
+        },
+        "tecnologia": {
+          "qrCode": false,
+          "tabletPedidos": true,
+          "pedidoVisual": true
+        },
+        "atendimento": {
+          "chamadaVisual": false,
+          "funcionariosTreinados": true,
+          "tempoRespostaRapido": true
+        },
+        "inclusao": {
+          "ambienteVisual": true,
+          "sinalizacao": false
+        }
+      },
+      "pontuacaoAcessibilidade": 7
+    },
+    {
+      "id": 7,
+      "nome": "Nordestino Raiz",
+      "endereco": "Rua do Sol, 210",
+      "cidade": "Salvador",
+      "telefone": "(71) 93333-6666",
+      "tipoCozinha": "Nordestina",
+      "horario": "Seg-Dom 11h-21h",
+      "foto": "nordestino.jpg",
+      "cardapioDigital": false,
+      "qrCodeMesas": false,
+      "checklist": {
+        "comunicacao": {
+          "libras": false,
+          "cardapioImagens": true,
+          "cardapioDigitalAcessivel": false,
+          "chatTexto": false
+        },
+        "tecnologia": {
+          "qrCode": false,
+          "tabletPedidos": false,
+          "pedidoVisual": false
+        },
+        "atendimento": {
+          "chamadaVisual": false,
+          "funcionariosTreinados": false,
+          "tempoRespostaRapido": true
+        },
+        "inclusao": {
+          "ambienteVisual": true,
+          "sinalizacao": true
+        }
+      },
+      "pontuacaoAcessibilidade": 4
+    },
+    {
+      "id": 8,
+      "nome": "Café Central",
+      "endereco": "Praça XV, 12",
+      "cidade": "Rio de Janeiro",
+      "telefone": "(21) 92222-7777",
+      "tipoCozinha": "Cafeteria",
+      "horario": "Seg-Sex 7h-19h",
+      "foto": "cafe.jpg",
+      "cardapioDigital": true,
+      "qrCodeMesas": true,
+      "checklist": {
+        "comunicacao": {
+          "libras": true,
+          "cardapioImagens": true,
+          "cardapioDigitalAcessivel": true,
+          "chatTexto": true
+        },
+        "tecnologia": {
+          "qrCode": true,
+          "tabletPedidos": false,
+          "pedidoVisual": true
+        },
+        "atendimento": {
+          "chamadaVisual": true,
+          "funcionariosTreinados": true,
+          "tempoRespostaRapido": true
+        },
+        "inclusao": {
+          "ambienteVisual": true,
+          "sinalizacao": true
+        }
+      },
+      "pontuacaoAcessibilidade": 9
+    }
+  ],
+  "categorias_garcom": [
+    { "id": 1, "nome": "Apresentação", "icone": "👋" },
+    { "id": 2, "nome": "Pedidos", "icone": "🍔" },
+    { "id": 3, "nome": "Pagamento", "icone": "💳" },
+    { "id": 4, "nome": "Dúvidas", "icone": "❓" },
+    { "id": 5, "nome": "Restrições", "icone": "🚫" },
+    { "id": 6, "nome": "Emergência", "icone": "🚨" }
+  ],
+  "frases_garcom": [
+    {
+      "id": 1,
+      "categoria": "Apresentação",
+      "texto": "Olá! Sou surdo(a). Por favor, comunique-se comigo lendo as frases desta tela ou apontando.",
+      "icone": "👋",
+      "favorita": true,
+      "customizada": false,
+      "ordem": 1
+    },
+    {
+      "id": 2,
+      "categoria": "Apresentação",
+      "texto": "Você pode escrever a resposta para mim, por favor?",
+      "icone": "✍️",
+      "favorita": true,
+      "customizada": false,
+      "ordem": 2
+    },
+    {
+      "id": 3,
+      "categoria": "Pedidos",
+      "texto": "Pode me trazer o cardápio, por favor?",
+      "icone": "📖",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 3
+    },
+    {
+      "id": 4,
+      "categoria": "Pedidos",
+      "texto": "Gostaria de pedir este item do cardápio.",
+      "icone": "🍔",
+      "favorita": true,
+      "customizada": false,
+      "ordem": 4
+    },
+    {
+      "id": 5,
+      "categoria": "Pedidos",
+      "texto": "Pode me trazer uma água, por favor?",
+      "icone": "💧",
+      "favorita": true,
+      "customizada": false,
+      "ordem": 5
+    },
+    {
+      "id": 6,
+      "categoria": "Dúvidas",
+      "texto": "Onde fica o banheiro?",
+      "icone": "🚽",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 6
+    },
+    {
+      "id": 7,
+      "categoria": "Dúvidas",
+      "texto": "Qual é a senha do Wi-Fi?",
+      "icone": "📶",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 7
+    },
+    {
+      "id": 8,
+      "categoria": "Restrições",
+      "texto": "Este prato contém glúten ou lactose?",
+      "icone": "🌾",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 8
+    },
+    {
+      "id": 9,
+      "categoria": "Restrições",
+      "texto": "Tenho alergia. Por favor, prepare meu pedido sem certos ingredientes.",
+      "icone": "🚫",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 9
+    },
+    {
+      "id": 10,
+      "categoria": "Pagamento",
+      "texto": "Pode trazer a conta, por favor?",
+      "icone": "🧾",
+      "favorita": true,
+      "customizada": false,
+      "ordem": 10
+    },
+    {
+      "id": 11,
+      "categoria": "Pagamento",
+      "texto": "Vou pagar com cartão de crédito/débito.",
+      "icone": "💳",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 11
+    },
+    {
+      "id": 12,
+      "categoria": "Pagamento",
+      "texto": "Vocês aceitam Pix?",
+      "icone": "📱",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 12
+    },
+    {
+      "id": 13,
+      "categoria": "Emergência",
+      "texto": "Estou passando mal, por favor chame ajuda.",
+      "icone": "🚨",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 13
+    },
+    {
+      "id": 14,
+      "categoria": "Emergência",
+      "texto": "Por favor, chame o gerente.",
+      "icone": "👔",
+      "favorita": false,
+      "customizada": false,
+      "ordem": 14
+    }
+  ],
+  "cardapio": [
+    {
+      "id": 1,
+      "nome": "Pizza Margherita",
+      "descricao": "Molho de tomate, mozzarella fresca, manjericão e azeite de oliva",
+      "categoria": "Pizzas",
+      "preco": 45.0,
+      "urlFoto": "https://exemplo.com/imagens/pizza-margherita.jpg"
+    }
   ]
 }
