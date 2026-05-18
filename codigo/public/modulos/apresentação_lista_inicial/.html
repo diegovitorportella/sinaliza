@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurantes Acessíveis | Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- VLibras Widget - Essencial para acessibilidade de surdos no Brasil -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav role="navigation" aria-label="Menu Principal">
+            <h1>Guia de Restaurantes <span>Acessíveis</span></h1>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section class="intro">
+            <h2>Restaurantes Disponíveis</h2>
+            <p>Encontre locais com atendimento em LIBRAS e suporte visual completo.</p>
+        </section>
+
+        <!-- Lista de Restaurantes -->
+        <section class="restaurant-list" aria-label="Lista de Restaurantes">
+            
+            <!-- Card Restaurante 1 -->
+            <article class="card" tabindex="0">
+                <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400" alt="Fachada do Restaurante Sabor e Sinais">
+                <div class="card-content">
+                    <div class="badge-libras" aria-label="Atendimento em LIBRAS disponível">
+                        <span class="icon">🤟</span> LIBRAS
+                    </div>
+                    <h3>Sabor e Sinais</h3>
+                    <p>Culinária Brasileira com cardápio totalmente em vídeo-LIBRAS.</p>
+                    <button aria-label="Ver detalhes do Restaurante Sabor e Sinais">Ver Detalhes</button>
+                </div>
+            </article>
+
+            <!-- Card Restaurante 2 -->
+            <article class="card" tabindex="0">
+                <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=400" alt="Interior do Restaurante Visual Gastronomia">
+                <div class="card-content">
+                    <div class="badge-libras" aria-label="Atendimento em LIBRAS disponível">
+                        <span class="icon">🤟</span> LIBRAS
+                    </div>
+                    <h3>Visual Gastronomia</h3>
+                    <p>Especialista em frutos do mar com equipe treinada em sinais.</p>
+                    <button aria-label="Ver detalhes do Restaurante Visual Gastronomia">Ver Detalhes</button>
+                </div>
+            </article>
+
+            <!-- Card Restaurante 3 -->
+            <article class="card" tabindex="0">
+                <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=400" alt="Prato executivo do Café Silencioso">
+                <div class="card-content">
+                    <div class="badge-libras" aria-label="Atendimento em LIBRAS disponível">
+                        <span class="icon">🤟</span> LIBRAS
+                    </div>
+                    <h3>Café Silencioso</h3>
+                    <p>Ambiente acolhedor e sinalizado para uma experiência completa.</p>
+                    <button aria-label="Ver detalhes do Café Silencioso">Ver Detalhes</button>
+                </div>
+            </article>
+
+        </section>
+    </main>
+
+    <!-- Script VLibras -->
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+</body>
+</html>
