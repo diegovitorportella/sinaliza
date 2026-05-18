@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Pratos e Preços</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="container">
+    <section class="card">
+      <h1>Cadastro de Pratos e Preços</h1>
+
+      <p class="descricao">
+        Cadastre os pratos disponíveis no restaurante e seus respectivos preços.
+      </p>
+
+      <form id="formPrato">
+        <label for="nomePrato">Nome do prato:</label>
+        <input 
+          type="text" 
+          id="nomePrato" 
+          placeholder="Ex: Pizza Margherita"
+        >
+
+        <label for="precoPrato">Preço do prato:</label>
+        <input 
+          type="number" 
+          id="precoPrato" 
+          placeholder="Ex: 45.00"
+          step="0.01"
+        >
+
+        <label for="categoriaPrato">Categoria:</label>
+        <select id="categoriaPrato">
+          <option value="">Selecione uma categoria</option>
+          <option value="Entrada">Entrada</option>
+          <option value="Prato Principal">Prato Principal</option>
+          <option value="Sobremesa">Sobremesa</option>
+          <option value="Bebida">Bebida</option>
+        </select>
+
+        <button type="submit">Cadastrar Prato</button>
+      </form>
+
+      <p id="mensagem"></p>
+
+      <h2>Pratos Cadastrados</h2>
+
+      <div id="listaPratos" class="lista-pratos">
+        <p class="vazio">Nenhum prato cadastrado ainda.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
