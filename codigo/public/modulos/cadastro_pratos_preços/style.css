@@ -50,7 +50,8 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   padding: 13px;
   border: 2px solid #cfd6df;
   border-radius: 8px;
@@ -58,8 +59,14 @@ select {
   outline: none;
 }
 
+textarea {
+  resize: vertical;
+  line-height: 1.4;
+}
+
 input:focus,
-select:focus {
+select:focus,
+textarea:focus {
   border-color: #2563eb;
 }
 
@@ -77,6 +84,31 @@ button {
 
 button:hover {
   background-color: #1d4ed8;
+}
+
+.area-ia {
+  margin-top: 15px;
+  padding: 15px;
+  border: 2px dashed #bfdbfe;
+  border-radius: 8px;
+  background-color: #eff6ff;
+  display: flex;
+  flex-direction: column;
+}
+
+.botao-secundario {
+  margin-top: 12px;
+  background-color: #111827;
+}
+
+.botao-secundario:hover {
+  background-color: #374151;
+}
+
+.aviso-ia {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #4b5563;
 }
 
 #mensagem {
