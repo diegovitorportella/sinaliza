@@ -1,4 +1,4 @@
-
+/* Reset e Variáveis de Cores */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -9,54 +9,111 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: #f4f6f9;
     color: #334155;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
+    padding: 40px 20px;
 }
 
 .container {
-    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Cabeçalho */
+.header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.title {
+    color: #2563eb;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #64748b;
+    font-size: 15px;
+}
+
+/* Barra de Pesquisa */
+.search-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    margin-bottom: 40px;
 }
 
-
-.card {
-    background-color: #ffffff;
+.search-input {
     width: 100%;
-    max-width: 520px;
-    padding: 35px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    padding: 14px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
+.search-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
 
-.main-title {
-    color: #2563eb; 
-    font-size: 24px;
-    font-weight: 700;
+/* Layout Principal Split (Grade + Detalhes) */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+@media (min-width: 900px) {
+    .main-content {
+        grid-template-columns: 1.2fr 1fr;
+    }
+}
+
+.grid-section h2 {
+    font-size: 18px;
+    color: #1e293b;
     margin-bottom: 16px;
 }
 
-
-.meta-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
+/* Grid de Cards */
+.restaurant-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
 }
 
-
-.rating-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* Card da Lista */
+.restaurant-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
 }
 
+.restaurant-card:hover {
+    transform: translateY(-2px);
+    border-color: #2563eb;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}
+
+.restaurant-name {
+    color: #1e293b;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* Badge Geral */
 .rating-badge {
+    display: inline-block;
     background-color: #f1f5f9;
     color: #1e293b;
     font-size: 13px;
@@ -67,38 +124,90 @@ body {
 }
 
 .stars {
-    color: #eab308;  
-    font-size: 18px;
-    letter-spacing: 2px;
+    color: #eab308;
+    font-size: 16px;
+    margin-top: 4px;
 }
 
+.restaurant-desc {
+    color: #475569;
+    font-size: 14px;
+    margin: 12px 0;
+    line-height: 1.5;
+}
 
+/* Painel de Detalhes (Card Estilizado) */
+.details-section .card {
+    background-color: #ffffff;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 20px;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.btn-close {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.main-title {
+    color: #2563eb; 
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.meta-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Modificadores Dinâmicos do Selo baseados na nota */
 .accessibility-seal {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background-color: #dcfce7;
-    color: #15803d;
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.5px;
     padding: 6px 12px;
     border-radius: 6px;
     align-self: flex-start;
+    transition: all 0.3s ease;
 }
 
-.seal-icon {
-    font-weight: bold;
-}
+/* Regras de cores pedidas */
+.seal-green { background-color: #dcfce7; color: #15803d; }
+.seal-yellow { background-color: #fef9c3; color: #a16207; }
+.seal-red { background-color: #fee2e2; color: #b91c1c; }
 
 .section {
     margin-bottom: 24px;
 }
 
-
 .section-title {
     color: #2563eb;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     margin-bottom: 10px;
 }
@@ -109,12 +218,12 @@ body {
     line-height: 1.6;
 }
 
+/* Lista de Recursos */
 .resource-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
-
 
 .resource-item {
     display: flex;
@@ -122,10 +231,9 @@ body {
     gap: 12px;
     background-color: #f8fafc;
     border: 1px solid #e2e8f0;
-    padding: 12px 14px;
+    padding: 10px 14px;
     border-radius: 8px;
 }
-
 
 .check-icon {
     display: flex;
@@ -138,32 +246,70 @@ body {
     border-radius: 50%;
     font-size: 11px;
     font-weight: bold;
-    flex-shrink: 0;
 }
 
-
 .resource-text {
-    font-size: 14px;
+    font-size: 13px;
     color: #334155;
     font-weight: 500;
 }
 
+/* Seção de Entrada de Estrelas */
+.rating-form-container {
+    background-color: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e1;
+}
+
+.star-rating-input {
+    display: flex;
+    gap: 8px;
+    margin: 12px 0;
+}
+
+.star-input {
+    font-size: 30px;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: color 0.1s;
+}
+
+.star-input.active, .star-input:hover {
+    color: #eab308;
+}
+
+/* Botão de Ação */
+.btn-details {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-details:hover {
+    background-color: #1d4ed8;
+}
 
 .location-footer {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-top: 28px;
+    margin-top: 24px;
     padding-top: 16px;
     border-top: 1px solid #f1f5f9;
     color: #64748b;
+    font-size: 13px;
 }
 
-.pin-icon {
-    font-size: 16px;
-}
-
-.location-text {
-    font-size: 14px;
-    font-weight: 500;
+/* Utilitários */
+.hidden {
+    display: none !important;
 }

@@ -3,63 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Restaurante - Outback Steakhouse</title>
+    <title>Guia de Restaurantes Acessíveis</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div class="card">
-            <h1 class="main-title">Outback Steakhouse</h1>
-            
-            <div class="meta-container">
-                <div class="rating-row">
-                    <span class="rating-badge">Nota 5/5</span>
-                    <div class="stars">★★★★★</div>
-                </div>
-                
-                <div class="accessibility-seal">
-                    <span class="seal-icon">✓</span> SELO DE ACESSIBILIDADE
-                </div>
-            </div>
+        <header class="header">
+            <h1 class="title">Guia de Restaurantes Acessíveis</h1>
+            <p class="subtitle">Encontre os melhores locais com a acessibilidade que você precisa.</p>
+        </header>
 
-            <div class="section">
-                <h2 class="section-title">Sobre o Local</h2>
-                <p class="description-text">
-                    Um ambiente aconchegante que se destaca pelo atendimento inclusivo. Nossa equipe é treinada para garantir a melhor experiência para todos.
-                </p>
-            </div>
-
-            <div class="section>
-                <h2 class="section-title">Recursos de Acessibilidade</h2>
-                
-                <div class="resource-list">
-                    <div class="resource-item">
-                        <span class="check-icon">✓</span>
-                        <span class="resource-text">Atendimento 100% em LIBRAS</span>
-                    </div>
-
-                    <div class="resource-item">
-                        <span class="check-icon">✓</span>
-                        <span class="resource-text">Cardápio digital em vídeo com intérprete</span>
-                    </div>
-
-                    <div class="resource-item">
-                        <span class="check-icon">✓</span>
-                        <span class="resource-text">Ambiente com boa iluminação visual</span>
-                    </div>
-
-                    <div class="resource-item">
-                        <span class="check-icon">✓</span>
-                        <span class="resource-text">Avisos visuais para chamadas de mesa</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="location-footer">
-                <span class="pin-icon">📍</span>
-                <span class="location-text">Shopping Cidade</span>
-            </div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Ex: Outback, Pizzaria Margherita..." class="search-input">
         </div>
+
+        <main class="main-content">
+            <section class="grid-section">
+                <h2>Restaurantes Disponíveis</h2>
+                <div id="restaurant-grid" class="restaurant-grid">
+                    </div>
+            </section>
+
+            <section id="details-section" class="details-section hidden">
+                <div class="card">
+                    <div class="details-header">
+                        <h2 id="det-title" class="main-title">Selecione um restaurante</h2>
+                        <button id="close-details" class="btn-close">✕ Fechar</button>
+                    </div>
+                    
+                    <div class="meta-container">
+                        <div class="rating-row">
+                            <span id="det-rating-badge" class="rating-badge">Nota -/-</span>
+                            <div id="det-stars" class="stars"></div>
+                        </div>
+                        
+                        <div id="det-seal" class="accessibility-seal">
+                            <span class="seal-icon">✓</span> <span id="det-seal-text">SELO</span>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h3 class="section-title">Sobre o Local</h3>
+                        <p id="det-description" class="description-text"></p>
+                    </div>
+
+                    <div class="section">
+                        <h3 class="section-title">Recursos de Acessibilidade</h3>
+                        <div id="det-resources" class="resource-list">
+                            </div>
+                    </div>
+
+                    <div class="section rating-form-container">
+                        <h3 class="section-title">Deixe sua Avaliação</h3>
+                        <p class="description-text">Sua opinião ajuda a manter os dados de acessibilidade atualizados.</p>
+                        <div class="star-rating-input">
+                            <span class="star-input" data-value="1">★</span>
+                            <span class="star-input" data-value="2">★</span>
+                            <span class="star-input" data-value="3">★</span>
+                            <span class="star-input" data-value="4">★</span>
+                            <span class="star-input" data-value="5">★</span>
+                        </div>
+                        <button id="btn-submit-rating" class="btn-details">Enviar Avaliação</button>
+                    </div>
+
+                    <div class="location-footer">
+                        <span class="pin-icon">📍</span>
+                        <span id="det-location" class="location-text"></span>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
