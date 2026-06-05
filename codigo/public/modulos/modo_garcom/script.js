@@ -1,9 +1,21 @@
 let frasesData = [];
 let categoriaAtual = 'Todas';
 
+const overlayTelaCheia = document.getElementById('overlayTelaCheia');
+const overlayIcone = document.getElementById('overlayIcone');
+const overlayTexto = document.getElementById('overlayTexto');
+const btnFecharOverlay = document.getElementById('btnFecharOverlay');
+
 document.addEventListener('DOMContentLoaded', () => {
     carregarCategorias();
     carregarFrases();
+
+    btnFecharOverlay.addEventListener('click', fecharOverlay);
+    overlayTelaCheia.addEventListener('click', (e) => {
+        if (e.target === overlayTelaCheia) {
+            fecharOverlay();
+        }
+    });
 });
 
 async function carregarCategorias() {
@@ -71,13 +83,17 @@ function renderizarGrid(frases) {
         div.className = 'col-6 col-md-4 col-lg-3';
         
         div.innerHTML = `
-            <div class="card h-100 card-frase shadow-sm rounded-4">
+            <div class="card h-100 card-frase shadow-sm rounded-4" data-id="${frase.id}">
                 <div class="card-body text-center d-flex flex-column justify-content-center">
                     <div class="icone-grande mb-2">${frase.icone}</div>
                     <h6 class="card-title fw-semibold text-dark">${frase.texto}</h6>
                 </div>
             </div>
         `;
+        const cardClicavel = div.querySelector('.card-frase');
+        cardClicavel.addEventListener('click', () => {
+            abrirOverlay(frase.icone, frase.texto);
+        });
         
         grid.appendChild(div);
     });
@@ -96,3 +112,15 @@ function filtrarFrases() {
 }
 
 document.getElementById('inputPesquisa').addEventListener('input', filtrarFrases);
+
+function abrirOverlay(icone, texto) {
+    overlayIcone.innerHTML = icone;
+    overlayTexto.textContent = texto;
+    overlayTelaCheia.classList.remove('overlay-inativo');
+    overlayTelaCheia.classList.add('overlay-ativo');
+}
+
+function fecharOverlay() {
+    overlayTelaCheia.classList.remove('overlay-ativo');
+    overlayTelaCheia.classList.add('overlay-inativo');
+}

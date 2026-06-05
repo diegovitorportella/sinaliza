@@ -439,7 +439,7 @@
       "customizada": false,
       "ordem": 14
     }
-  ],
+  ], 
   "cardapio": [
     {
       "id": 1,
@@ -448,6 +448,46 @@
       "categoria": "Pizzas",
       "preco": 45.0,
       "urlFoto": "https://exemplo.com/imagens/pizza-margherita.jpg"
+    },
+    {
+      "id": 2,
+      "nome": "Hambúrguer Artesanal",
+      "descricao": "Pão brioche, carne 180g, cheddar, bacon crocante e molho especial",
+      "categoria": "Hambúrgueres",
+      "preco": 38.5,
+      "urlFoto": "https://exemplo.com/imagens/hamburguer-artesanal.jpg"
+    },
+    {
+      "id": 3,
+      "nome": "Sushi Combo",
+      "descricao": "20 peças variadas de sushi, sashimi e hot roll",
+      "categoria": "Japonesa",
+      "preco": 59.9,
+      "urlFoto": "https://exemplo.com/imagens/sushi-combo.jpg"
+    },
+    {
+      "id": 4,
+      "nome": "Lasanha à Bolonhesa",
+      "descricao": "Camadas de massa fresca com molho bolonhesa e queijo gratinado",
+      "categoria": "Massas",
+      "preco": 42.0,
+      "urlFoto": "https://exemplo.com/imagens/lasanha-bolonhesa.jpg"
+    },
+    {
+      "id": 5,
+      "nome": "Salada Caesar",
+      "descricao": "Alface romana, frango grelhado, croutons, parmesão e molho caesar",
+      "categoria": "Saladas",
+      "preco": 29.9,
+      "urlFoto": "https://exemplo.com/imagens/salada-caesar.jpg"
+    },
+    {
+      "id": 6,
+      "nome": "Brownie com Sorvete",
+      "descricao": "Brownie de chocolate servido com sorvete de creme e calda quente",
+      "categoria": "Sobremesas",
+      "preco": 22.5,
+      "urlFoto": "https://exemplo.com/imagens/brownie-sorvete.jpg"
     }
   ]
 }

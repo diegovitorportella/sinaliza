@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurantes Acessíveis | Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav role="navigation" aria-label="Menu Principal">
+            <h1>Guia de Restaurantes <span>Acessíveis</span></h1>
+        </nav>
+    </header>
+
+    <main id="main-content" class="container">
+        <section class="intro" style="margin-bottom: 2rem; text-align: center;">
+            <h2>Restaurantes Disponíveis</h2>
+            <p>Encontre locais com atendimento em LIBRAS e suporte visual completo.</p>
+            
+            <div style="margin-top: 1.5rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                <input type="text" id="inputBusca" placeholder="🔍 Buscar por nome, culinária ou cidade..." 
+                       style="width: 100%; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius); font-size: 1rem; box-shadow: var(--shadow);">
+            </div>
+        </section>
+
+        <section id="lista-restaurantes" class="restaurant-grid" aria-label="Lista de Restaurantes">
+            </section>
+    </main>
+
+    <script src="script.js"></script>
+
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+</body>
+</html>
