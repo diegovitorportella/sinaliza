@@ -73,6 +73,54 @@ legend {
     border-radius: 4px;
 }
 
+.tags-group {
+    margin-bottom: 20px;
+}
+
+.tags-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag-btn {
+    width: auto;
+    padding: 6px 14px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    background-color: #ffffff;
+    color: var(--primary-color);
+    border: 1.5px solid var(--primary-color);
+}
+
+.tag-btn:hover {
+    background-color: #eff6ff;
+}
+
+.tag-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.tag-btn.active {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+}
+
+.tag-btn.active:hover {
+    background-color: #1d4ed8;
+}
+
 .input-group {
     display: flex;
     flex-direction: column;
