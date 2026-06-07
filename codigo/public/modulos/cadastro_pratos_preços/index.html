@@ -1,4 +1,4 @@
-DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -40,6 +40,23 @@ DOCTYPE html>
           <option value="Sobremesa">Sobremesa</option>
           <option value="Bebida">Bebida</option>
         </select>
+
+        <div class="area-ia">
+          <label for="descricaoPrato">Descrição assistida por IA:</label>
+          <textarea
+            id="descricaoPrato"
+            rows="4"
+            placeholder="Clique em Gerar descrição com IA ou escreva sua própria descrição."
+          ></textarea>
+
+          <button type="button" id="btnGerarDescricao" class="botao-secundario">
+            Gerar descrição com IA
+          </button>
+
+          <p class="aviso-ia">
+            A descrição é gerada automaticamente, mas você pode editar antes de cadastrar.
+          </p>
+        </div>
 
         <button type="submit">Cadastrar Prato</button>
       </form>

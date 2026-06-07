@@ -21,3 +21,60 @@ body {
 #containerCategorias::-webkit-scrollbar {
     display: none;
 }
+
+#overlayTelaCheia {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+.overlay-inativo {
+    opacity: 0;
+    pointer-events: none; 
+}
+
+.overlay-ativo {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.icone-overlay {
+    font-size: 8rem;
+    line-height: 1;
+}
+
+.texto-overlay {
+    font-size: 3.5rem;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+#btnFecharOverlay {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 3rem;
+    line-height: 1;
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+#btnFecharOverlay:hover {
+    color: #ff4444 !important;
+    transform: scale(1.1);
+}
+
+@media (max-width: 576px) {
+    .icone-overlay {
+        font-size: 5rem;
+    }
+    .texto-overlay {
+        font-size: 2rem;
+    }
+}

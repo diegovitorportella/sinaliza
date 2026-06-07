@@ -9,6 +9,15 @@
 </head>
 <body class="bg-light">
 
+    <!-- Navegação (Para voltar para a Home) -->
+    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <span class="fs-4">← Voltar</span>
+            </a>
+        </div>
+    </nav>
+
     <div class="container py-4">
         <header class="mb-4 text-center">
             <h1 class="fw-bold text-primary">Modo Garçom</h1>
@@ -26,6 +35,17 @@
         <div class="row g-3" id="gridFrases"></div>
     </div>
 
+    <div id="overlayTelaCheia" class="overlay-inativo d-flex flex-column justify-content-center align-items-center">
+        <button id="btnFecharOverlay" class="btn btn-lg text-white" aria-label="Fechar tela cheia">
+            ✖
+        </button>
+
+        <div class="text-center p-4">
+            <div id="overlayIcone" class="icone-overlay mb-4"></div>
+            <h1 id="overlayTexto" class="texto-overlay text-white fw-bold"></h1>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
