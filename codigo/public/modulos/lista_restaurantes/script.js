@@ -23,14 +23,13 @@ function renderizarCards(lista) {
     }
 
     lista.forEach(restaurante => {
-        // Cria a tag <article> exatamente como no HTML original
         const article = document.createElement('article');
         article.className = 'card';
         article.tabIndex = 0;
 
         // Verifica se o restaurante tem libras para exibir o selinho dele
         let seloLibras = '';
-        if (restaurante.checklist && restaurante.checklist.comunicacao.libras) {
+        if (restaurante.checklist && restaurante.checklist.comunicacao && restaurante.checklist.comunicacao.libras) {
             seloLibras = `
                 <div class="badge-libras" aria-label="Atendimento em LIBRAS disponível" style="color: var(--primary); font-weight: bold; margin-bottom: 0.5rem;">
                     <span class="icon">🤟</span> LIBRAS
@@ -38,10 +37,9 @@ function renderizarCards(lista) {
             `;
         }
 
-        // Colocando uma imagem genérica padrão se a foto do banco for só "imagem.jpg"
-        let fotoUrl = restaurante.foto.length > 15 ? restaurante.foto : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400';
+        let fotoUrl = (restaurante.foto && restaurante.foto.length > 15) ? restaurante.foto : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400';
 
-        // Preenche o card com o conteúdo do banco usando as classes CSS do Gustavo
+        // PASSAGEM DE BASTÃO: O onclick no botão chama a função irParaDetalhes passando o ID
         article.innerHTML = `
             <img src="${fotoUrl}" alt="Fachada do Restaurante ${restaurante.nome}" class="card-image">
             <div class="card-content">
@@ -52,12 +50,17 @@ function renderizarCards(lista) {
                     📍 ${restaurante.cidade} <br>
                     ⭐ Nota de Acessibilidade: ${restaurante.pontuacaoAcessibilidade}/10
                 </p>
-                <button class="btn-action" aria-label="Ver detalhes do ${restaurante.nome}">Ver Detalhes</button>
+                <button class="btn-action" aria-label="Ver detalhes do ${restaurante.nome}" onclick="irParaDetalhes(${restaurante.id})">Ver Detalhes</button>
             </div>
         `;
 
         container.appendChild(article);
     });
+}
+
+function irParaDetalhes(id) {
+    // Usando aspas normais e concatenação para evitar qualquer erro de crase
+    window.location.href = "../detalhes/index.html?id=" + id;
 }
 
 // EVENTO 2: Barra de pesquisa interativa

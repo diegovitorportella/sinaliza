@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Restaurante | Sinaliza</title>
+    <!-- Adicionado o Bootstrap para a Navbar e ícones -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-light">
+
+    <!-- NAVBAR GLOBAL -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="../../index.html">
+                <i class="bi bi-ear-fill text-warning"></i> Sinaliza
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-warning" href="../lista_restaurantes/index.html">Restaurantes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../modo_garcom/index.html">Modo Garçom</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            Gerenciamento
+                        </a>
+                        <ul class="dropdown-menu shadow">
+                            <li><a class="dropdown-item" href="../cadastro_de_usuarios/index.html"><i class="bi bi-person-fill-gear"></i> Perfil do Usuário</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Estado de erro -->
+        <div id="estado-erro" class="hidden" style="text-align:center;padding:60px 20px;">
+            <p style="font-size:2rem;">😕</p>
+            <h2>Restaurante não encontrado</h2>
+            <p style="color:#64748b;margin-top:8px;">Nenhum restaurante foi selecionado.</p>
+            <a href="../../index.html" class="btn-details" style="display:inline-block;margin-top:20px;text-decoration:none;">Voltar para a Home</a>
+        </div>
+
+        <!-- Estado de carregamento -->
+        <div id="estado-carregando" style="text-align:center;padding:60px 20px;">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <p style="color:#64748b;font-size:1rem;">Carregando informações do restaurante...</p>
+        </div>
+
+        <!-- Conteúdo principal -->
+        <main id="conteudo-principal" class="hidden">
+            <section class="card-restaurante">
+                <img id="det-foto" src="" alt="" class="foto-restaurante">
+                <div class="info-restaurante">
+                    <div class="tags-topo">
+                        <span id="det-tipo-cozinha" class="tag-cozinha"></span>
+                        <span id="det-libras-badge" class="hidden tag-libras">✓ LIBRAS</span>
+                    </div>
+                    <h2 id="det-nome" class="nome-restaurante"></h2>
+                    <p id="det-descricao" class="descricao-restaurante"></p>
+                    <div class="meta-grid">
+                        <div><span class="meta-icon">📍</span> <span id="det-endereco"></span></div>
+                        <div><span class="meta-icon">🏙️</span> <span id="det-cidade"></span></div>
+                        <div><span class="meta-icon">📞</span> <span id="det-telefone"></span></div>
+                        <div><span class="meta-icon">🕒</span> <span id="det-horario"></span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card section">
+                <h3 class="section-title">Pontuação de Acessibilidade</h3>
+                <div class="pontuacao-container">
+                    <div id="det-selo" class="accessibility-seal">
+                        <span id="det-selo-icon"></span>
+                        <span id="det-selo-texto"></span>
+                    </div>
+                    <div style="flex:1">
+                        <div class="pontuacao-bar-grande">
+                            <div id="det-pontuacao-fill" class="pontuacao-fill-grande"></div>
+                        </div>
+                        <p id="det-pontuacao-label" style="font-size:13px;color:#64748b;margin-top:4px;"></p>
+                    </div>
+                </div>
+                <div id="det-checklist" class="checklist-grid"></div>
+            </section>
+
+            <section class="card section">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <h3 class="section-title" style="margin-bottom:0;">Avaliações</h3>
+                    <a id="link-avaliar" href="#" class="btn-secundario">+ Deixar avaliação</a>
+                </div>
+                <div id="resumo-avaliacoes" class="resumo-avaliacoes"></div>
+                <div id="lista-avaliacoes"></div>
+            </section>
+
+            <section class="card section">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <h3 class="section-title" style="margin-bottom:0;">Cardápio</h3>
+                    <a id="link-gerenciar-cardapio" href="#" class="btn-secundario">Gerenciar cardápio</a>
+                </div>
+                <div id="lista-cardapio" class="grid-cardapio"></div>
+            </section>
+
+            <section style="text-align:center;padding:24px 0;">
+                <a href="../modo_garcom/index.html" class="btn-garcom">
+                    <i class="bi bi-chat-square-text me-2"></i> Abrir Modo Garçom
+                </a>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avaliação de Acessibilidade</title>
+    <title>Avaliação de Acessibilidade | Sinaliza</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <header class="page-header">
+        <a id="link-voltar" href="../../index.html" class="btn-voltar">← Voltar</a>
+        <h1 id="titulo-pagina">Avaliar Acessibilidade</h1>
+        <p id="subtitulo-pagina" class="subtitulo">Carregando...</p>
+    </header>
+
     <main class="form-container">
-        <h2>Avaliar Acessibilidade do Estabelecimento</h2>
         <p>Sua opinião ajuda a construir um mundo mais inclusivo para a comunidade surda e com deficiência auditiva.</p>
 
         <form id="feedbackForm">
             <fieldset class="rating-fieldset">
                 <legend>Sua nota para a acessibilidade local (de 1 a 5):</legend>
-                
                 <div class="star-rating">
                     <input type="radio" id="star5" name="rating" value="5" required />
                     <label for="star5" title="Excelente - 5 estrelas">★</label>
-
                     <input type="radio" id="star4" name="rating" value="4" />
                     <label for="star4" title="Bom - 4 estrelas">★</label>
-
                     <input type="radio" id="star3" name="rating" value="3" />
                     <label for="star3" title="Regular - 3 estrelas">★</label>
-
                     <input type="radio" id="star2" name="rating" value="2" />
                     <label for="star2" title="Ruim - 2 estrelas">★</label>
-
                     <input type="radio" id="star1" name="rating" value="1" />
                     <label for="star1" title="Péssimo - 1 estrela">★</label>
                 </div>
@@ -49,13 +49,14 @@
             </div>
 
             <div class="input-group">
-                <label for="comment">Conte-nos mais detalhes (O local tem menu em Libras? Atendentes capacitados? Sinalização visual?):</label>
-                <textarea id="comment" name="comment" rows="5" placeholder="Escreva sua experiência aqui..." required></textarea>
+                <label for="comment">Conte-nos mais detalhes:</label>
+                <textarea id="comment" name="comment" rows="5"
+                    placeholder="O local tem menu em Libras? Atendentes capacitados? Sinalização visual?" required></textarea>
             </div>
 
             <button type="submit" id="submitBtn">Enviar Avaliação</button>
         </form>
-        
+
         <div id="message" class="hidden" aria-live="polite"></div>
     </main>
 
