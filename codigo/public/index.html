@@ -3,196 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sinaliza - Home</title>
+    <title>Sinaliza - Acessibilidade Gastronômica</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        .hero-section {
-            background: linear-gradient(135deg, #093070 0%, #0d6efd 100%);
-            color: white;
-            padding: 60px 0;
-            border-radius: 0 0 2rem 2rem;
-        }
-        .card-restaurante {
-            transition: transform 0.2s, box-shadow 0.2s;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        .card-restaurante:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
-            border-color: #0d6efd;
-        }
-        .card-restaurante img {
-            height: 180px;
-            object-fit: cover;
-        }
-        .badge-libras {
-            font-size: 0.72rem;
-            background-color: #e7f1ff;
-            color: #0d6efd;
-            border: 1px solid #b6d4fe;
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-weight: 600;
-        }
-        .pontuacao-bar {
-            height: 6px;
-            border-radius: 3px;
-            background: #e2e8f0;
-            overflow: hidden;
-        }
-        .pontuacao-fill {
-            height: 100%;
-            border-radius: 3px;
-            transition: width 0.4s ease;
-        }
-        #secao-restaurantes { display: none; }
-        #loading-spinner { display: none; }
-    </style>
-</head>
-<body class="bg-light">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     
-    <!-- NAVBAR GLOBAL -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="index.html">
-                <i class="bi bi-ear-fill text-warning"></i> Sinaliza
+    <link rel="stylesheet" href="home.css">
+</head>
+<body class="bg-body-tertiary font-sans">
+    
+    <div class="bg-pattern"></div>
+
+    <nav class="navbar navbar-expand-lg fixed-top glass-nav">
+        <div class="container-xl">
+            <a class="navbar-brand d-flex align-items-center gap-3" href="index.html">
+                <div class="brand-icon shadow-lg">
+                    <i class="bi bi-hands"></i> 
+                </div>
+                <span class="brand-text">Sinaliza<span class="text-primary">.</span></span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            
+            <button class="navbar-toggler border-0 bg-light p-2 rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="bi bi-list fs-4"></i>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-4">
                     <li class="nav-item">
-                        <a class="nav-link active" href="index.html">Home</a>
+                        <a class="nav-link active fw-bold position-relative" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-warning" href="./modulos/lista_restaurantes/index.html">Restaurantes</a>
+                        <a class="nav-link fw-medium" href="./modulos/lista_restaurantes/index.html">Restaurantes</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./modulos/modo_garcom/index.html">Modo Garçom</a>
+                        <a class="nav-link fw-medium" href="./modulos/modo_garcom/index.html">Modo Garçom</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle fw-medium" href="#" role="button" data-bs-toggle="dropdown">
                             Gerenciamento
                         </a>
-                        <ul class="dropdown-menu shadow">
-                            <li><a class="dropdown-item" href="./modulos/cadastro_de_usuarios/index.html"><i class="bi bi-person-fill-gear"></i> Perfil do Usuário</a></li>
+                        <ul class="dropdown-menu border-0 shadow-lg rounded-4 p-2 mt-2">
+                            <li><a class="dropdown-item rounded-3 py-2 fw-medium" href="./modulos/cadastro_de_usuarios/index.html"><i class="bi bi-person-gear text-primary me-2"></i> Perfil do Usuário</a></li>
                         </ul>
                     </li>
                 </ul>
+                <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                    <a href="#" class="text-decoration-none text-secondary fw-bold px-3 btn-hover-dark">Entrar</a>
+                    <a href="./modulos/cadastro_de_usuarios/index.html" class="btn btn-dark rounded-4 px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2">
+                        Criar Conta <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <header class="hero-section text-center shadow-sm">
-        <div class="container">
-            <h1 class="display-4 fw-bold">Plataforma Sinaliza</h1>
-            <p class="lead text-white-50 mb-4">Conectando a comunidade surda a experiências gastronômicas totalmente acessíveis.</p>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="input-group input-group-lg shadow">
-                        <span class="input-group-text bg-white border-0">
-                            <i class="bi bi-search text-muted"></i>
-                        </span>
-                        <input type="text" id="inputBuscaHome" class="form-control border-0" placeholder="Buscar por nome, culinária ou cidade..." autocomplete="off">
+    <header class="hero-section position-relative">
+        <div class="container-xl">
+            <div class="row align-items-center gy-5">
+                
+                <div class="col-lg-6 text-center text-lg-start z-2">
+                    <div class="badge-custom mb-4 mx-auto mx-lg-0">
+                        <i class="bi bi-eye-fill text-primary"></i> Comunicação Visual & Inclusão
                     </div>
-                    <p class="text-white-50 small mt-2" id="txtResultados"></p>
+                    
+                    <h1 class="hero-title mb-4">
+                        Sabores sem <br>
+                        <span class="text-gradient">Barreiras.</span>
+                    </h1>
+                    
+                    <p class="hero-subtitle mb-5">
+                        A primeira plataforma focada na comunidade surda. Descubra restaurantes avaliados por acessibilidade em LIBRAS e atendimento inclusivo.
+                    </p>
+                    
+                    <div class="search-container mx-auto mx-lg-0">
+                        <div class="search-glow"></div>
+                        <div class="search-box">
+                            <i class="bi bi-search search-icon"></i>
+                            <input type="text" id="inputBuscaHome" class="search-input" placeholder="Nome, culinária ou cidade..." autocomplete="off">
+                            <button class="btn btn-primary search-btn">
+                                Buscar <i class="bi bi-stars"></i>
+                            </button>
+                        </div>
+                        <div id="txtResultados" class="search-results-text mt-3 fw-bold text-dark"></div>
+                    </div>
                 </div>
+
+                <div class="col-lg-6 d-none d-lg-block position-relative z-1">
+                    <div class="hero-visual-composition">
+                        <div class="blob-bg"></div>
+                        
+                        <img src="https://images.unsplash.com/photo-1737567425973-bf7b6369d08a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZWFmJTIwc2lnbiUyMGxhbmd1YWdlJTIwZnJpZW5kcyUyMHJlc3RhdXJhbnR8ZW58MXx8fHwxNzgxMDUwMDIwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" alt="Amigos surdos conversando" class="img-main shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiZWF1dGlmdWwlMjByZXN0YXVyYW50JTIwZm9vZCUyMHNwcmVhZHxlbnwxfHx8fDE3ODEwNTAwMjJ8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral" alt="Pratos deliciosos" class="img-secondary shadow-lg">
+                        
+                        <div class="floating-badge shadow-lg">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="icon-circle bg-success-subtle text-success">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </div>
+                                <div>
+                                    <p class="mb-0 text-muted small text-uppercase fw-bold" style="font-size:0.7rem; letter-spacing:1px">Atendimento</p>
+                                    <p class="mb-0 fw-black text-dark">Em LIBRAS</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </header>
 
-    <main class="container my-5">
-        <div id="loading-spinner" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
+    <main class="flex-grow-1">
+        
+        <div id="loading-spinner" class="py-5 my-5 text-center">
+            <div class="spinner-border text-primary border-4" style="width: 3.5rem; height: 3.5rem;" role="status">
                 <span class="visually-hidden">Carregando...</span>
             </div>
-            <p class="text-muted mt-2">Carregando restaurantes...</p>
+            <h5 class="mt-4 fw-bold text-secondary">A buscar opções acessíveis...</h5>
         </div>
 
-        <section id="secao-restaurantes">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="fw-bold text-dark mb-0" id="tituloSecao">Restaurantes</h4>
-                <a href="./modulos/lista_restaurantes/index.html" class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                    Ver todos <i class="bi bi-arrow-right"></i>
-                </a>
+        <section id="secao-restaurantes" class="restaurants-section">
+            <div class="container-xl">
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end mb-5 gap-4">
+                    <div>
+                        <h2 class="section-title text-dark" id="tituloSecao">Destaques Acessíveis</h2>
+                        <div class="title-underline"></div>
+                        <p class="text-secondary fw-medium fs-5 mb-0">Os locais mais bem avaliados pela comunidade surda.</p>
+                    </div>
+                    <a href="./modulos/lista_restaurantes/index.html" class="btn btn-outline-dark rounded-4 px-4 py-2 fw-bold d-flex align-items-center gap-2">
+                        Ver todos <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+                
+                <div class="row g-4" id="gridRestaurantesHome"></div>
             </div>
-            <div class="row g-4" id="gridRestaurantesHome"></div>
         </section>
 
-        <section id="secao-acesso-rapido" class="mt-5">
-            <div class="text-center mb-4">
-                <h4 class="fw-bold text-dark">Acesso Rápido</h4>
-                <p class="text-muted">Explore as funcionalidades da plataforma.</p>
-            </div>
-            <div class="row g-4 justify-content-center">
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm rounded-4" style="transition: transform .2s; cursor:pointer" onclick="window.location.href='./modulos/modo_garcom/index.html'">
-                        <div class="card-body text-center py-4">
-                            <div class="text-primary display-5 mb-2"><i class="bi bi-chat-left-text-fill"></i></div>
-                            <h5 class="card-title fw-bold">Modo Garçom</h5>
-                            <p class="card-text text-muted small">Painel de frases para comunicação assistida em LIBRAS no restaurante.</p>
-                            <a href="./modulos/modo_garcom/index.html" class="btn btn-outline-primary btn-sm rounded-pill px-4 mt-2">Acessar</a>
+        <section id="secao-acesso-rapido" class="features-section">
+            <div class="container-xl">
+                <div class="text-center mb-5 pb-3 max-w-700 mx-auto">
+                    <h3 class="section-title">Recursos Pensados para Si</h3>
+                    <p class="text-secondary fs-5 fw-medium">Ferramentas visuais e intuitivas para garantir autonomia e conforto na sua experiência gastronómica.</p>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="feature-card h-100" onclick="window.location.href='./modulos/modo_garcom/index.html'">
+                            <div class="feature-icon bg-primary-subtle text-primary">
+                                <i class="bi bi-chat-square-text"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Modo Garçom</h4>
+                            <p class="text-secondary fw-medium mb-4 flex-grow-1">Painel visual de comunicação rápida com a equipa do restaurante.</p>
+                            <div class="feature-link text-dark fw-bold">
+                                Aceder <i class="bi bi-arrow-right ms-1"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm rounded-4" style="transition: transform .2s; cursor:pointer" onclick="window.location.href='./modulos/lista_restaurantes/index.html'">
-                        <div class="card-body text-center py-4">
-                            <div class="text-warning display-5 mb-2"><i class="bi bi-shop-window"></i></div>
-                            <h5 class="card-title fw-bold">Guia de Restaurantes</h5>
-                            <p class="card-text text-muted small">Lista completa de restaurantes com filtro por acessibilidade e culinária.</p>
-                            <a href="./modulos/lista_restaurantes/index.html" class="btn btn-outline-primary btn-sm rounded-pill px-4 mt-2">Acessar</a>
+                    <div class="col-md-4">
+                        <div class="feature-card h-100" onclick="window.location.href='./modulos/lista_restaurantes/index.html'">
+                            <div class="feature-icon bg-warning-subtle text-warning">
+                                <i class="bi bi-shop"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">Guia Detalhado</h4>
+                            <p class="text-secondary fw-medium mb-4 flex-grow-1">Explore locais filtrando especificamente por recursos de acessibilidade e LIBRAS.</p>
+                            <div class="feature-link text-dark fw-bold">
+                                Aceder <i class="bi bi-arrow-right ms-1"></i>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm rounded-4" style="transition: transform .2s; cursor:pointer" onclick="window.location.href='./modulos/cadastro_de_usuarios/index.html'">
-                        <div class="card-body text-center py-4">
-                            <div class="text-success display-5 mb-2"><i class="bi bi-person-fill-gear"></i></div>
-                            <h5 class="card-title fw-bold">Meu Perfil</h5>
-                            <p class="card-text text-muted small">Gerencie seu cadastro e preferências de acessibilidade.</p>
-                            <a href="./modulos/cadastro_de_usuarios/index.html" class="btn btn-outline-primary btn-sm rounded-pill px-4 mt-2">Acessar</a>
+                    <div class="col-md-4">
+                        <div class="feature-card h-100" onclick="window.location.href='./modulos/cadastro_de_usuarios/index.html'">
+                            <div class="feature-icon bg-success-subtle text-success">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <h4 class="fw-bold mb-3">O Meu Perfil</h4>
+                            <p class="text-secondary fw-medium mb-4 flex-grow-1">Guarde as suas preferências, restrições e restaurantes favoritos num só lugar.</p>
+                            <div class="feature-link text-dark fw-bold">
+                                Aceder <i class="bi bi-arrow-right ms-1"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <section id="secao-mapa" class="map-creative-section">
+            <div class="container-xl">
+                <div class="map-wrapper bg-dark text-white shadow-lg">
+                    <div class="map-bg-glow"></div>
+                    
+                    <div class="row align-items-center g-5 position-relative z-1">
+                        <div class="col-lg-5">
+                            <div class="badge-custom bg-white bg-opacity-10 text-info border-light border-opacity-25 mb-4">
+                                <i class="bi bi-geo-alt-fill"></i> Mapa Interativo
+                            </div>
+                            <h3 class="display-5 fw-black mb-4">Explore a inclusão <br>ao seu redor.</h3>
+                            <p class="text-light text-opacity-75 fs-5 mb-5 fw-medium">Navegue pelo mapa e encontre facilmente restaurantes que oferecem atendimento em LIBRAS e outras facilidades visuais.</p>
+                            
+                            <button id="btnExpandirMapa" class="btn btn-primary btn-lg rounded-4 fw-bold shadow px-4">
+                                <i class="bi bi-arrows-angle-expand me-2"></i> Expandir Mapa
+                            </button>
+                        </div>
+                        
+                        <div class="col-lg-7">
+                            <div class="map-frame-container" id="mapContainerWrapper">
+                                <div class="map-gradient-border">
+                                    <div id="mapa-restaurantes" class="map-inner bg-white"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <footer class="bg-dark text-white-50 text-center py-3 mt-5">
-        <div class="container small">
-            <p class="mb-0">&copy; 2026 Sinaliza – Trabalho Interdisciplinar I – PUC Minas</p>
+    <footer class="footer-custom bg-white border-top">
+        <div class="container-xl py-5">
+            <div class="row align-items-center gy-4">
+                <div class="col-md-4 text-center text-md-start">
+                    <a class="navbar-brand d-inline-flex align-items-center gap-2 mb-2 text-decoration-none" href="index.html">
+                        <div class="brand-icon small bg-primary text-white p-2 rounded">
+                            <i class="bi bi-hands"></i>
+                        </div>
+                        <span class="fs-4 fw-black text-dark">Sinaliza<span class="text-primary">.</span></span>
+                    </a>
+                    <p class="text-secondary fw-medium mb-0">Autonomia e sabor para a comunidade surda.</p>
+                </div>
+                
+                <div class="col-md-4 text-center">
+                    <div class="d-flex gap-3 justify-content-center">
+                        <a href="#" class="social-circle"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-circle"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-circle"><i class="bi bi-twitter-x"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 text-center text-md-end text-secondary fw-medium">
+                    <p class="mb-1">&copy; 2026 Sinaliza</p>
+                    <p class="mb-0 small">Trabalho Interdisciplinar I – PUC Minas</p>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
     <script>
         const API = 'http://localhost:3000';
         let todosRestaurantes = [];
+        let mapa;
 
+        // Animação de Expandir o Mapa (Adicionado pela IA)
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnExpandir = document.getElementById('btnExpandirMapa');
+            const mapWrapper = document.getElementById('mapContainerWrapper');
+            let isExpanded = false;
+
+            if(btnExpandir && mapWrapper) {
+                btnExpandir.addEventListener('click', () => {
+                    isExpanded = !isExpanded;
+                    if(isExpanded) {
+                        mapWrapper.style.height = '600px';
+                        btnExpandir.innerHTML = '<i class="bi bi-arrows-angle-contract me-2"></i> Reduzir Mapa';
+                        setTimeout(() => { if(window.mapa) window.mapa.invalidateSize(); }, 400);
+                    } else {
+                        mapWrapper.style.height = '350px';
+                        btnExpandir.innerHTML = '<i class="bi bi-arrows-angle-expand me-2"></i> Expandir Mapa';
+                        setTimeout(() => { if(window.mapa) window.mapa.invalidateSize(); }, 400);
+                    }
+                });
+            }
+        });
+
+        // Carregamento Inicial de Dados
         document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('loading-spinner').style.display = 'block';
+            
+            inicializarMapa();
+
             try {
                 const resp = await fetch(`${API}/restaurantes`);
                 todosRestaurantes = await resp.json();
+                
                 const destaques = [...todosRestaurantes].sort((a, b) => b.pontuacaoAcessibilidade - a.pontuacaoAcessibilidade).slice(0, 4);
-                renderizarGrid(destaques, 'Destaques – mais acessíveis');
+                renderizarGrid(destaques, 'Destaques Acessíveis');
+                
+                adicionarPinosNoMapa(todosRestaurantes);
+
             } catch (e) {
                 document.getElementById('secao-restaurantes').style.display = 'block';
-                document.getElementById('gridRestaurantesHome').innerHTML = '<p class="text-danger">Não foi possível conectar ao servidor. Verifique se o JSON Server está rodando.</p>';
+                document.getElementById('gridRestaurantesHome').innerHTML = '<p class="text-danger text-center w-100 fw-bold">Não foi possível conectar ao servidor. Verifique se o JSON Server está a correr.</p>';
             } finally {
                 document.getElementById('loading-spinner').style.display = 'none';
             }
         });
 
+        // Lógica do Mapa Leaflet
+        function inicializarMapa() {
+            window.mapa = L.map('mapa-restaurantes').setView([-19.916681, -43.934493], 12);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(window.mapa);
+        }
+
+        function adicionarPinosNoMapa(restaurantes) {
+            restaurantes.forEach(rest => {
+                if (rest.lat && rest.lng) {
+                    const marcador = L.marker([rest.lat, rest.lng]).addTo(window.mapa);
+                    const conteudoPopup = `
+                        <h6>${rest.nome}</h6>
+                        <p>${rest.tipoCozinha} • Nota: ${rest.pontuacaoAcessibilidade}/10</p>
+                        <button class="btn btn-primary btn-sm w-100" onclick="irParaDetalhes(${rest.id})">
+                            Ver Detalhes
+                        </button>
+                    `;
+                    marcador.bindPopup(conteudoPopup);
+                }
+            });
+        }
+
+        // Sistema de Pesquisa
         document.getElementById('inputBuscaHome').addEventListener('input', (e) => {
             const termo = e.target.value.trim().toLowerCase();
             if (termo.length === 0) {
                 const destaques = [...todosRestaurantes].sort((a, b) => b.pontuacaoAcessibilidade - a.pontuacaoAcessibilidade).slice(0, 4);
-                renderizarGrid(destaques, 'Destaques – mais acessíveis');
+                renderizarGrid(destaques, 'Destaques Acessíveis');
                 document.getElementById('txtResultados').textContent = '';
                 document.getElementById('secao-acesso-rapido').style.display = 'block';
                 return;
@@ -205,44 +346,51 @@
             document.getElementById('txtResultados').textContent = filtrados.length > 0 ? `${filtrados.length} resultado(s)` : '';
         });
 
+        // Geração dos Cards
         function renderizarGrid(lista, titulo) {
             const grid = document.getElementById('gridRestaurantesHome');
-            document.getElementById('tituloSecao').textContent = titulo || 'Restaurantes';
+            document.getElementById('tituloSecao').textContent = titulo || 'Destaques Acessíveis';
             document.getElementById('secao-restaurantes').style.display = 'block';
             grid.innerHTML = '';
+            
             if (lista.length === 0) {
-                grid.innerHTML = `<div class="col-12 text-center py-4"><i class="bi bi-search text-muted" style="font-size:2rem"></i><p class="text-muted mt-2">Nenhum restaurante encontrado para essa busca.</p></div>`;
+                grid.innerHTML = `<div class="col-12 text-center py-4"><i class="bi bi-search text-muted" style="font-size:2rem"></i><p class="text-muted mt-2">Nenhum restaurante encontrado para esta busca.</p></div>`;
                 return;
             }
+            
             lista.forEach(r => {
-                const corPontuacao = r.pontuacaoAcessibilidade >= 7 ? '#22c55e' : r.pontuacaoAcessibilidade >= 4 ? '#f59e0b' : '#ef4444';
-                const librasTag = r.checklist?.comunicacao?.libras ? `<span class="badge-libras me-1">✓ LIBRAS</span>` : '';
+                const corPontuacao = r.pontuacaoAcessibilidade >= 7 ? '#10b981' : r.pontuacaoAcessibilidade >= 4 ? '#f59e0b' : '#ef4444';
+                const librasTag = r.checklist?.comunicacao?.libras ? `<span class="badge-libras"><i class="bi bi-check-circle-fill me-1"></i> LIBRAS</span>` : '';
+                let fotoUrl = (r.foto && r.foto.length > 15) ? r.foto : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400';
+                
                 const col = document.createElement('div');
                 col.className = 'col-sm-6 col-lg-3';
+                
                 col.innerHTML = `
-                    <div class="card card-restaurante border-0 shadow-sm rounded-4 h-100">
-                        <img src="${r.foto}" alt="${r.nome}" class="rounded-top-4">
-                        <div class="card-body d-flex flex-column pb-2">
-                            <div class="mb-1">${librasTag}</div>
-                            <h6 class="fw-bold text-dark mb-1">${r.nome}</h6>
-                            <p class="text-muted small mb-2">${r.tipoCozinha} • ${r.cidade}</p>
-                            <div class="mb-1">
+                    <div class="card card-restaurante" onclick="irParaDetalhes(${r.id})">
+                        <img src="${fotoUrl}" alt="${r.nome}">
+                        <div class="card-body">
+                            <div>${librasTag}</div>
+                            <h6>${r.nome}</h6>
+                            <p class="small flex-grow-1">${r.tipoCozinha} • ${r.cidade}</p>
+                            
+                            <div class="mt-auto">
                                 <div class="pontuacao-bar">
                                     <div class="pontuacao-fill" style="width:${r.pontuacaoAcessibilidade * 10}%; background:${corPontuacao}"></div>
                                 </div>
                                 <small class="text-muted">Acessibilidade: ${r.pontuacaoAcessibilidade}/10</small>
                             </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-3">
-                            <button class="btn btn-primary btn-sm w-100 rounded-pill fw-semibold" onclick="irParaDetalhes(${r.id})">Ver Detalhes</button>
+                        <div class="card-footer">
+                            <button class="btn btn-primary w-100">Ver Detalhes</button>
                         </div>
                     </div>`;
                 grid.appendChild(col);
             });
         }
 
+        // Roteamento
         function irParaDetalhes(id) {
-            // Usa o parâmetro ?restauranteId= para fazer o roteamento
             window.location.href = `./modulos/detalhes/index.html?restauranteId=${id}`;
         }
     </script>
