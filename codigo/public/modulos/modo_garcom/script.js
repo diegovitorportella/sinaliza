@@ -1,126 +1,230 @@
-let frasesData = [];
-let categoriaAtual = 'Todas';
+const API = 'http://localhost:3000';
+let todasFrases = [];
+let categoriasAtuais = [];
+let categoriaSelecionada = 'Todas';
 
-const overlayTelaCheia = document.getElementById('overlayTelaCheia');
-const overlayIcone = document.getElementById('overlayIcone');
-const overlayTexto = document.getElementById('overlayTexto');
-const btnFecharOverlay = document.getElementById('btnFecharOverlay');
+document.addEventListener('DOMContentLoaded', async () => {
+    await carregarCategorias();
+    await carregarFrases();
 
-document.addEventListener('DOMContentLoaded', () => {
-    carregarCategorias();
-    carregarFrases();
-
-    btnFecharOverlay.addEventListener('click', fecharOverlay);
-    overlayTelaCheia.addEventListener('click', (e) => {
-        if (e.target === overlayTelaCheia) {
-            fecharOverlay();
-        }
-    });
+    document.getElementById('inputPesquisa').addEventListener('input', filtrarE_Renderizar);
+    document.getElementById('btnFecharOverlay').addEventListener('click', fecharOverlay);
+    document.getElementById('formFrase').addEventListener('submit', salvarFrase);
+    document.getElementById('modalFrase').addEventListener('hidden.bs.modal', resetarFormulario);
 });
 
+// ==========================================
+// 1. READ (Carregar Categorias e Frases)
+// ==========================================
 async function carregarCategorias() {
     try {
-        const response = await fetch('http://localhost:3000/categorias_garcom');
-        const categorias = await response.json();
+        const resp = await fetch(`${API}/categorias_garcom`);
+        categoriasAtuais = await resp.json();
+        
+        // Injeta a categoria personalizada no array dinamicamente
+        categoriasAtuais.push({ id: 'custom', nome: 'Minhas Frases', icone: '🌟' });
+
         const container = document.getElementById('containerCategorias');
 
-        const btnTodas = document.querySelector('[data-categoria="Todas"]');
-        btnTodas.addEventListener('click', () => {
-            mudarCorBotao(btnTodas);
-            categoriaAtual = 'Todas';
-            filtrarFrases();
-        });
-
-        categorias.forEach(cat => {
+        categoriasAtuais.forEach(cat => {
             const btn = document.createElement('button');
-            btn.className = 'btn btn-outline-primary rounded-pill px-4 text-nowrap btn-categoria';
-            btn.setAttribute('data-categoria', cat.nome);
+            // MÁGICA DA RESPONSIVIDADE: text-nowrap e flex-shrink-0 aplicados aqui!
+            btn.className = 'btn btn-outline-primary rounded-pill px-4 fw-medium text-nowrap flex-shrink-0 btn-categoria bg-white shadow-sm border-0';
+            btn.dataset.categoria = cat.nome;
             btn.innerHTML = `${cat.icone} ${cat.nome}`;
+            btn.onclick = () => selecionarCategoria(cat.nome, btn);
             
-            btn.addEventListener('click', () => {
-                mudarCorBotao(btn);
-                categoriaAtual = cat.nome;
-                filtrarFrases();
-            });
-
+            // Destaque visual sutil para a aba de customizadas
+            if (cat.nome === 'Minhas Frases') {
+                btn.classList.add('border-primary', 'text-primary'); 
+            }
+            
             container.appendChild(btn);
         });
-    } catch (error) {
-        console.error("Erro ao carregar categorias:", error);
+    } catch (erro) {
+        console.error("Erro ao carregar categorias", erro);
     }
-}
-
-function mudarCorBotao(botaoClicado) {
-    document.querySelectorAll('.btn-categoria').forEach(b => {
-        b.classList.remove('btn-primary');
-        b.classList.add('btn-outline-primary');
-    });
-    botaoClicado.classList.remove('btn-outline-primary');
-    botaoClicado.classList.add('btn-primary');
 }
 
 async function carregarFrases() {
     try {
-        const response = await fetch('http://localhost:3000/frases_garcom');
-        frasesData = await response.json();
-        renderizarGrid(frasesData);
-    } catch (error) {
-        console.error("Erro ao carregar frases:", error);
+        const resp = await fetch(`${API}/frases_garcom`);
+        todasFrases = await resp.json();
+        filtrarE_Renderizar();
+    } catch (erro) {
+        console.error("Erro ao carregar frases", erro);
     }
 }
 
-function renderizarGrid(frases) {
-    const grid = document.getElementById('gridFrases');
-    grid.innerHTML = '';
-
-    if(frases.length === 0) {
-        grid.innerHTML = '<div class="col-12 text-center text-muted mt-4">Nenhuma frase encontrada.</div>';
-        return;
-    }
-
-    frases.forEach(frase => {
-        const div = document.createElement('div');
-        div.className = 'col-6 col-md-4 col-lg-3';
-        
-        div.innerHTML = `
-            <div class="card h-100 card-frase shadow-sm rounded-4" data-id="${frase.id}">
-                <div class="card-body text-center d-flex flex-column justify-content-center">
-                    <div class="icone-grande mb-2">${frase.icone}</div>
-                    <h6 class="card-title fw-semibold text-dark">${frase.texto}</h6>
-                </div>
-            </div>
-        `;
-        const cardClicavel = div.querySelector('.card-frase');
-        cardClicavel.addEventListener('click', () => {
-            abrirOverlay(frase.icone, frase.texto);
-        });
-        
-        grid.appendChild(div);
+// ==========================================
+// 2. RENDERIZAÇÃO E FILTROS DINÂMICOS
+// ==========================================
+function selecionarCategoria(nomeCategoria, btnElement) {
+    categoriaSelecionada = nomeCategoria;
+    document.querySelectorAll('.btn-categoria').forEach(b => {
+        b.classList.remove('active', 'btn-primary');
+        b.classList.add('bg-white', 'text-secondary'); // Devolve o visual inativo
     });
+    
+    btnElement.classList.remove('bg-white', 'text-secondary');
+    btnElement.classList.add('active', 'btn-primary');
+    filtrarE_Renderizar();
 }
 
-function filtrarFrases() {
-    const termoPesquisa = document.getElementById('inputPesquisa').value.toLowerCase();
+function filtrarE_Renderizar() {
+    const termo = document.getElementById('inputPesquisa').value.toLowerCase();
     
-    const frasesFiltradas = frasesData.filter(frase => {
-        const bateCategoria = categoriaAtual === 'Todas' || frase.categoria === categoriaAtual;
-        const bateTexto = frase.texto.toLowerCase().includes(termoPesquisa);
+    const filtradas = todasFrases.filter(f => {
+        const bateCategoria = categoriaSelecionada === 'Todas' || f.categoria === categoriaSelecionada;
+        const bateTexto = f.texto.toLowerCase().includes(termo);
         return bateCategoria && bateTexto;
     });
 
-    renderizarGrid(frasesFiltradas);
+    renderizarGrid(filtradas);
 }
 
-document.getElementById('inputPesquisa').addEventListener('input', filtrarFrases);
+function renderizarGrid(lista) {
+    const grid = document.getElementById('gridFrases');
+    grid.innerHTML = '';
 
+    if (lista.length === 0) {
+        grid.innerHTML = `<div class="col-12 text-center text-muted py-5">Nenhuma frase encontrada.</div>`;
+        return;
+    }
+
+    lista.forEach(f => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4';
+        
+        let acoesHTML = '';
+        if (f.customizada) {
+            acoesHTML = `
+                <div class="acoes-card">
+                    <button class="btn-acao-card btn-editar" title="Editar" onclick="abrirEdicao(event, '${f.id}')"><i class="bi bi-pencil-fill"></i></button>
+                    <button class="btn-acao-card btn-excluir" title="Excluir" onclick="excluirFrase(event, '${f.id}')"><i class="bi bi-trash-fill"></i></button>
+                </div>
+            `;
+        }
+
+        col.innerHTML = `
+            <div class="card card-frase h-100" onclick="abrirOverlay('${f.icone}', '${f.texto}')">
+                ${acoesHTML}
+                <div class="icone-grande shadow-sm">${f.icone}</div>
+                <h5>${f.texto}</h5>
+                <span class="badge bg-light text-secondary border mt-3">${f.categoria}</span>
+            </div>
+        `;
+        grid.appendChild(col);
+    });
+}
+
+// ==========================================
+// 3. CREATE & UPDATE (Salvar ou Editar)
+// ==========================================
+async function salvarFrase(event) {
+    event.preventDefault(); 
+    
+    const id = document.getElementById('fraseId').value;
+    const icone = document.getElementById('fraseIcone').value;
+    const texto = document.getElementById('fraseTexto').value;
+
+    const novaFrase = {
+        icone: icone,
+        texto: texto,
+        categoria: 'Minhas Frases', // Força todas as frases novas a irem para a categoria especial
+        customizada: true,
+        favorita: false
+    };
+
+    try {
+        let url = `${API}/frases_garcom`;
+        let metodo = 'POST'; 
+
+        if (id) { 
+            url = `${API}/frases_garcom/${id}`;
+            metodo = 'PUT';
+        }
+
+        const resp = await fetch(url, {
+            method: metodo,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(novaFrase)
+        });
+
+        if (resp.ok) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalFrase'));
+            modal.hide();
+            await carregarFrases(); // Recarrega os dados do DB dinamicamente
+            
+            // Redireciona o utilizador diretamente para a aba "Minhas Frases"
+            const btnMinhasFrases = Array.from(document.querySelectorAll('.btn-categoria')).find(b => b.dataset.categoria === 'Minhas Frases');
+            if (btnMinhasFrases) {
+                selecionarCategoria('Minhas Frases', btnMinhasFrases);
+            }
+        }
+    } catch (erro) {
+        console.error("Erro ao salvar frase:", erro);
+        alert("Ocorreu um erro ao salvar a frase.");
+    }
+}
+
+function abrirEdicao(event, id) {
+    event.stopPropagation(); 
+    
+    const frase = todasFrases.find(f => f.id == id);
+    if (!frase) return;
+
+    document.getElementById('modalFraseLabel').textContent = 'Editar Minha Frase';
+    document.getElementById('fraseId').value = frase.id;
+    document.getElementById('fraseIcone').value = frase.icone;
+    document.getElementById('fraseTexto').value = frase.texto;
+
+    const modal = new bootstrap.Modal(document.getElementById('modalFrase'));
+    modal.show();
+}
+
+function resetarFormulario() {
+    document.getElementById('formFrase').reset();
+    document.getElementById('fraseId').value = '';
+    document.getElementById('modalFraseLabel').textContent = 'Adicionar Nova Frase';
+}
+
+// ==========================================
+// 4. DELETE (Excluir)
+// ==========================================
+async function excluirFrase(event, id) {
+    event.stopPropagation(); 
+    
+    if (confirm("Tem certeza que deseja apagar esta frase customizada?")) {
+        try {
+            const resp = await fetch(`${API}/frases_garcom/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (resp.ok) {
+                await carregarFrases(); 
+            }
+        } catch (erro) {
+            console.error("Erro ao excluir:", erro);
+            alert("Ocorreu um erro ao tentar excluir.");
+        }
+    }
+}
+
+// ==========================================
+// 5. OVERLAY TELA CHEIA (Visualização)
+// ==========================================
 function abrirOverlay(icone, texto) {
-    overlayIcone.innerHTML = icone;
-    overlayTexto.textContent = texto;
-    overlayTelaCheia.classList.remove('overlay-inativo');
-    overlayTelaCheia.classList.add('overlay-ativo');
+    document.getElementById('overlayIcone').textContent = icone;
+    document.getElementById('overlayTexto').textContent = texto;
+    
+    const overlay = document.getElementById('overlayTelaCheia');
+    overlay.classList.remove('overlay-inativo');
+    overlay.classList.add('overlay-ativo');
 }
 
 function fecharOverlay() {
-    overlayTelaCheia.classList.remove('overlay-ativo');
-    overlayTelaCheia.classList.add('overlay-inativo');
+    const overlay = document.getElementById('overlayTelaCheia');
+    overlay.classList.remove('overlay-ativo');
+    overlay.classList.add('overlay-inativo');
 }
