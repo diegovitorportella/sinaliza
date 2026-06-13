@@ -729,6 +729,15 @@
       "favorita": false,
       "customizada": false,
       "ordem": 14
+    },
+    {
+      "icone": "😉",
+      "texto": "Obrigado pelo atendimento!",
+      "categoria": "Apresentação",
+      "customizada": true,
+      "favorita": false,
+      "id": "d_Iqy449GZc"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
