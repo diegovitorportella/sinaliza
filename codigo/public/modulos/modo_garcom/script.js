@@ -13,28 +13,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('modalFrase').addEventListener('hidden.bs.modal', resetarFormulario);
 });
 
-// ==========================================
-// 1. READ (Carregar Categorias e Frases)
-// ==========================================
 async function carregarCategorias() {
     try {
         const resp = await fetch(`${API}/categorias_garcom`);
         categoriasAtuais = await resp.json();
         
-        // Injeta a categoria personalizada no array dinamicamente
         categoriasAtuais.push({ id: 'custom', nome: 'Minhas Frases', icone: '🌟' });
 
         const container = document.getElementById('containerCategorias');
 
         categoriasAtuais.forEach(cat => {
             const btn = document.createElement('button');
-            // MÁGICA DA RESPONSIVIDADE: text-nowrap e flex-shrink-0 aplicados aqui!
             btn.className = 'btn btn-outline-primary rounded-pill px-4 fw-medium text-nowrap flex-shrink-0 btn-categoria bg-white shadow-sm border-0';
             btn.dataset.categoria = cat.nome;
             btn.innerHTML = `${cat.icone} ${cat.nome}`;
             btn.onclick = () => selecionarCategoria(cat.nome, btn);
             
-            // Destaque visual sutil para a aba de customizadas
             if (cat.nome === 'Minhas Frases') {
                 btn.classList.add('border-primary', 'text-primary'); 
             }
@@ -56,14 +50,11 @@ async function carregarFrases() {
     }
 }
 
-// ==========================================
-// 2. RENDERIZAÇÃO E FILTROS DINÂMICOS
-// ==========================================
 function selecionarCategoria(nomeCategoria, btnElement) {
     categoriaSelecionada = nomeCategoria;
     document.querySelectorAll('.btn-categoria').forEach(b => {
         b.classList.remove('active', 'btn-primary');
-        b.classList.add('bg-white', 'text-secondary'); // Devolve o visual inativo
+        b.classList.add('bg-white', 'text-secondary');
     });
     
     btnElement.classList.remove('bg-white', 'text-secondary');
@@ -118,9 +109,6 @@ function renderizarGrid(lista) {
     });
 }
 
-// ==========================================
-// 3. CREATE & UPDATE (Salvar ou Editar)
-// ==========================================
 async function salvarFrase(event) {
     event.preventDefault(); 
     
@@ -131,7 +119,7 @@ async function salvarFrase(event) {
     const novaFrase = {
         icone: icone,
         texto: texto,
-        categoria: 'Minhas Frases', // Força todas as frases novas a irem para a categoria especial
+        categoria: 'Minhas Frases',
         customizada: true,
         favorita: false
     };
@@ -154,9 +142,8 @@ async function salvarFrase(event) {
         if (resp.ok) {
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalFrase'));
             modal.hide();
-            await carregarFrases(); // Recarrega os dados do DB dinamicamente
+            await carregarFrases(); 
             
-            // Redireciona o utilizador diretamente para a aba "Minhas Frases"
             const btnMinhasFrases = Array.from(document.querySelectorAll('.btn-categoria')).find(b => b.dataset.categoria === 'Minhas Frases');
             if (btnMinhasFrases) {
                 selecionarCategoria('Minhas Frases', btnMinhasFrases);
@@ -189,9 +176,6 @@ function resetarFormulario() {
     document.getElementById('modalFraseLabel').textContent = 'Adicionar Nova Frase';
 }
 
-// ==========================================
-// 4. DELETE (Excluir)
-// ==========================================
 async function excluirFrase(event, id) {
     event.stopPropagation(); 
     
@@ -211,9 +195,6 @@ async function excluirFrase(event, id) {
     }
 }
 
-// ==========================================
-// 5. OVERLAY TELA CHEIA (Visualização)
-// ==========================================
 function abrirOverlay(icone, texto) {
     document.getElementById('overlayIcone').textContent = icone;
     document.getElementById('overlayTexto').textContent = texto;

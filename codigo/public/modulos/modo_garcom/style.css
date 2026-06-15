@@ -1,4 +1,3 @@
-/* Custom Styles - Sinaliza (Modo Garçom - Tema Visual da Home) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
 
 :root {
@@ -47,14 +46,12 @@ body {
 .hero-subtitle { font-size: 1.25rem; color: var(--secondary); font-weight: 500; line-height: 1.6; max-width: 600px; }
 .badge-custom { display: inline-flex; align-items: center; gap: 8px; background-color: var(--primary-light); border: 1px solid rgba(37, 99, 235, 0.2); color: var(--primary-dark); padding: 8px 16px; border-radius: 50px; font-weight: 700; font-size: 0.875rem; }
 
-/* Navbar */
 .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.3); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03); padding: 1rem 0; }
 .brand-text { font-weight: 900; font-size: 1.5rem; letter-spacing: -0.03em; text-decoration: none; }
 .nav-link { color: var(--secondary); transition: color 0.3s; font-weight: 500; position: relative; }
 .nav-link:hover, .nav-link.active { color: var(--dark) !important; }
 .nav-link.active::after { content: ''; position: absolute; bottom: -15px; left: 0; width: 100%; height: 3px; background-color: var(--primary); border-radius: 3px 3px 0 0; }
 
-/* Barra de Busca */
 .search-container { position: relative; }
 .search-glow { position: absolute; top: -4px; left: -4px; right: -4px; bottom: -4px; background: linear-gradient(to right, var(--primary), #06b6d4); border-radius: 20px; filter: blur(10px); opacity: 0.25; transition: opacity 0.3s; }
 .search-container:focus-within .search-glow { opacity: 0.5; }
@@ -63,7 +60,6 @@ body {
 .search-input { flex: 1; border: none; background: transparent; padding: 12px 0; font-size: 1.1rem; font-weight: 500; color: var(--dark); outline: none; width: 100%; }
 .search-input::placeholder { color: #94a3b8; }
 
-/* Scroll Horizontal Suave para Categorias (Responsividade Mobile) */
 #containerCategorias {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -72,21 +68,19 @@ body {
     padding-bottom: 10px;
     padding-left: 5px;
     padding-right: 5px;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE e Edge */
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
 }
 #containerCategorias::-webkit-scrollbar {
-    display: none; /* Chrome, Safari e Opera */
+    display: none; 
 }
 
-/* Botões de Categorias */
 .btn-categoria {
     background-color: white !important; color: var(--secondary) !important; border: 1px solid rgba(0,0,0,0.08) !important; border-radius: 50px !important; padding: 12px 28px !important; font-size: 1rem !important; font-weight: 700 !important; transition: all 0.3s ease !important; white-space: nowrap !important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02) !important; cursor: pointer;
 }
 .btn-categoria:hover { transform: translateY(-3px) !important; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05) !important; color: var(--primary) !important; border-color: var(--primary-light) !important; }
 .btn-categoria.btn-primary, .btn-categoria.active { background-color: var(--primary) !important; color: white !important; border-color: var(--primary) !important; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3) !important; }
 
-/* Cards de Frases */
 .card-frase {
     background: white !important; border-radius: 2rem !important; padding: 50px 20px 30px !important; border: 2px solid rgba(0,0,0,0.03) !important; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important; cursor: pointer; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02) !important;
 }
@@ -98,13 +92,11 @@ body {
 .card-frase h5, .card-frase p, .card-frase span, .card-frase h6 { font-weight: 800 !important; font-size: 1.25rem !important; color: var(--dark) !important; margin: 0 !important; transition: color 0.3s !important; line-height: 1.4 !important; }
 .card-frase:hover h5, .card-frase:hover p, .card-frase:hover span, .card-frase:hover h6 { color: var(--primary) !important; }
 
-/* Ações do Card (Lápis e Lixeira) */
 .acoes-card { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 10; }
 .btn-acao-card { width: 35px; height: 35px; border-radius: 50%; border: none; background: var(--light); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: all 0.3s; cursor: pointer; }
 .btn-acao-card.btn-editar:hover { background: var(--primary); color: white; }
 .btn-acao-card.btn-excluir:hover { background: #ef4444; color: white; }
 
-/* Overlay Tela Cheia */
 #overlayTelaCheia { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 9999; transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.4s; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .overlay-inativo { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
 .overlay-ativo { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
@@ -121,7 +113,6 @@ body {
 @keyframes scaleIn { 0% { opacity: 0; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes slideUp { 0% { opacity: 0; transform: translateY(40px); } 100% { opacity: 1; transform: translateY(0); } }
 
-/* Responsividade do Overlay */
 @media (max-width: 992px) { #overlayIcone, .icone-overlay { font-size: 9rem !important; } #overlayTexto, .texto-overlay { font-size: 4rem !important; } }
 @media (max-width: 768px) { #overlayIcone, .icone-overlay { font-size: 7rem !important; } #overlayTexto, .texto-overlay { font-size: 3rem !important; } #btnFecharOverlay { top: 20px; right: 20px; width: 55px; height: 55px; font-size: 1.8rem; } }
 @media (max-width: 576px) { #overlayIcone, .icone-overlay { font-size: 6rem !important; } #overlayTexto, .texto-overlay { font-size: 2.5rem !important; } #btnFecharOverlay { top: 15px; right: 15px; width: 50px; height: 50px; font-size: 1.5rem; } }

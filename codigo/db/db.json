@@ -432,6 +432,17 @@
       ],
       "comentario": "Fácil comunicação",
       "id": "RAp9C-64Mic"
+    },
+    {
+      "restauranteId": 3,
+      "nota": 5,
+      "tags": [
+        "Fácil comunicação",
+        "Sinalização visual",
+        "Estacionamento acessível"
+      ],
+      "comentario": "Sinalização visual, Fácil comunicação, Estacionamento acessível",
+      "id": "72-ERIknxdc"
     }
   ],
   "cardapio": [
