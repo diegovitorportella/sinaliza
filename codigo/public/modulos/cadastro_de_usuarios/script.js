@@ -8,8 +8,15 @@ const mensagem = document.getElementById("mensagem");
 
 let usuarios = [];
 
-form.addEventListener("submit", function(event) {
+let cadastroConcluido = false;
+
+form.addEventListener("submit", function (event) {
   event.preventDefault();
+
+  if (cadastroConcluido) {
+    window.location.href = "../../";
+    return;
+}
 
   const nome = nomeUsuario.value.trim();
   const email = emailUsuario.value.trim();
@@ -19,6 +26,15 @@ form.addEventListener("submit", function(event) {
     mostrarMensagem("Preencha todos os campos corretamente.", "erro");
     return;
   }
+
+  const usuarioExistente = usuarios.find(
+    u => u.email === email
+);
+
+if (usuarioExistente) {
+    mostrarMensagem("Este e-mail já está cadastrado.", "erro");
+    return;
+}
 
   if (email.includes(" ")) {
     mostrarMensagem("O email não pode conter espaços.", "erro");
@@ -55,11 +71,15 @@ form.addEventListener("submit", function(event) {
 
   usuarios.push(usuario);
 
-  console.log(usuarios);
+  console.log(usuario);
+
+  const botao = document.getElementById("botaoCadastro");
 
   mostrarMensagem("✓ Usuário cadastrado com sucesso!", "sucesso");
 
+  botao.textContent = "Voltar";
   limparCampos();
+  cadastroConcluido = true;
 });
 
 function limparCampos() {
