@@ -60,9 +60,9 @@
             </div>
         </div>
 
-        <div class="mb-5 d-flex gap-3 overflow-auto pb-3" id="containerCategorias">
+        <div class="mb-5 d-flex gap-3 flex-wrap justify-content-center pb-3" id="containerCategorias">
             <button class="btn btn-primary rounded-pill px-4 fw-medium text-nowrap flex-shrink-0 btn-categoria shadow-sm border-0" data-categoria="Todas">Todas</button>
-            </div>
+        </div>
 
         <div class="row g-4" id="gridFrases"></div>
     </div>
@@ -103,7 +103,16 @@
             </div>
         </div>
     </div>
-    
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
