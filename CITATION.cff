@@ -6,22 +6,26 @@ authors:
     given-names: Diego
   - family-names: Azevedo
     given-names: Rafael Mota
-  - family-names: 
-    given-names: 
-  - family-names: 
-    given-names: 
-  - family-names: 
+  - family-names: Marinho
+    given-names: Lucca
+  - family-names:
+    given-names:
+  - family-names:
     given-names: 
   - family-names: 
     given-names:
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Borlido Barcelos
+    given-names: Isabela
   - name-suffix: Professor
     affiliation: PUC Minas
-    family-names: 
-    given-names: 
+    family-names: Carlos da Silva
+    given-names: Luiz
+  - name-suffix: Professor
+    affiliation: PUC Minas
+    family-names: Bruno da Cruz Costa
+    given-names: Ricardo
 keywords:
   - Acessibilidade
   - Inclusão
