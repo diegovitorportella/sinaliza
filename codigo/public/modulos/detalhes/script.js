@@ -1,4 +1,5 @@
 const API = 'http://localhost:3000';
+let sessaoAtual = null; // Variável global para armazenar a sessão
 
 // EVENTO 1: Disparado assim que a página de Detalhes carrega
 document.addEventListener('DOMContentLoaded', async () => {
@@ -7,35 +8,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     const restauranteId = params.get('id') || params.get('restauranteId');
 
-    // Se o usuário tentar abrir a página direto sem clicar num restaurante (sem ID)
     if (!restauranteId) {
         document.getElementById('estado-carregando').classList.add('hidden');
         document.getElementById('estado-erro').classList.remove('hidden');
         return;
     }
 
-    // 2. Proteção de Rota: Ocultar o botão "Gerenciar Cardápio" por padrão
-    const btnCardapio = document.getElementById('link-gerenciar-cardapio');
-    btnCardapio.style.display = 'none';
-
-    // 3. Verifica a sessão para ver se é um restaurante logado
+    // 2. Busca a sessão atual PRIMEIRO
     try {
-        const respSessao = await fetch(`${API}/sessao/atual`);
-        const sessao = await respSessao.json();
-        
-        // Se for uma conta de restaurante, exibe o botão apontando para a pasta correta
-        if (sessao && sessao.tipo === 'restaurante') {
-            btnCardapio.style.display = 'inline-flex';
-            btnCardapio.href = `../cadastro_pratos_precos/index.html?restauranteId=${restauranteId}`;
-        }
+        const respSessao = await fetch(`${API}/sessao`);
+        const sessaoArray = await respSessao.json();
+        sessaoAtual = sessaoArray[0] || {};
     } catch(e) {
-        console.error("Erro ao verificar sessão do usuário:", e);
+        console.error("Sessão não encontrada", e);
     }
 
-    // 4. Atualizar o link de avaliações com o ID do restaurante atual
+    // 3. Atualizar o link de avaliações com o ID do restaurante atual
     document.getElementById('link-avaliar').href = `../formulario_avaliacoes/index.html?restauranteId=${restauranteId}`;
 
-    // 5. Chama as funções para buscar os dados em paralelo
+    // 4. Chama as funções para buscar os dados em paralelo
     carregarDetalhesRestaurante(restauranteId);
     carregarCardapio(restauranteId);
     carregarAvaliacoes(restauranteId);
@@ -53,6 +44,16 @@ async function carregarDetalhesRestaurante(id) {
         }
         
         const restaurante = await resposta.json();
+
+        // MÁGICA DA AUTORIZAÇÃO: Oculta ou mostra o botão "Gerenciar Cardápio"
+        const btnCardapio = document.getElementById('link-gerenciar-cardapio');
+        // Só exibe se for restaurante E se o usuarioId do Restaurante for igual ao da Sessão
+        if (sessaoAtual && sessaoAtual.tipo === 'restaurante' && String(restaurante.usuarioId) === String(sessaoAtual.usuarioId)) {
+            btnCardapio.style.display = 'inline-flex';
+            btnCardapio.href = `../cadastro_pratos_precos/index.html`;
+        } else {
+            btnCardapio.style.display = 'none';
+        }
         
         // Esconde o spinner de loading e mostra a tela principal
         document.getElementById('estado-carregando').classList.add('hidden');
@@ -69,7 +70,6 @@ async function carregarDetalhesRestaurante(id) {
 }
 
 function preencherDadosNaTela(restaurante) {
-    // Textos Básicos
     document.getElementById('det-nome').textContent = restaurante.nome;
     document.getElementById('det-descricao').textContent = restaurante.descricao || 'Nenhuma descrição cadastrada para este estabelecimento.';
     document.getElementById('det-endereco').textContent = restaurante.endereco || 'Endereço não cadastrado';
@@ -78,19 +78,14 @@ function preencherDadosNaTela(restaurante) {
     document.getElementById('det-horario').textContent = restaurante.horario || 'Não informado';
     document.getElementById('det-tipo-cozinha').textContent = restaurante.tipoCozinha || 'Culinária Mista';
 
-    // Foto da Capa com Fallback
     let fotoUrl = (restaurante.foto && restaurante.foto.length > 15) ? restaurante.foto : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80';
     document.getElementById('det-foto').src = fotoUrl;
 
-    // Badge de Libras no topo
     if (restaurante.checklist && restaurante.checklist.comunicacao && restaurante.checklist.comunicacao.libras) {
         document.getElementById('det-libras-badge').classList.remove('hidden');
     }
 
-    // Processa o selo e a barra de acessibilidade
     configurarPontuacaoVisual(restaurante.pontuacaoAcessibilidade || 0);
-    
-    // Adiciona os balões de checklist de acessibilidade na tela
     renderizarChecklist(restaurante.checklist);
 }
 
@@ -109,19 +104,19 @@ function configurarPontuacaoVisual(nota) {
     if (!seloContainer) return;
 
     if (nota >= 7) {
-        if(barraFill) barraFill.style.backgroundColor = '#15803d'; // Verde
+        if(barraFill) barraFill.style.backgroundColor = '#15803d'; 
         seloContainer.style.backgroundColor = '#dcfce7';
         seloContainer.style.color = '#15803d';
         if(seloIcon) seloIcon.innerHTML = '<i class="bi bi-star-fill"></i>';
         if(seloTexto) seloTexto.textContent = 'ALTA';
     } else if (nota >= 4) {
-        if(barraFill) barraFill.style.backgroundColor = '#b45309'; // Amarelo
+        if(barraFill) barraFill.style.backgroundColor = '#b45309'; 
         seloContainer.style.backgroundColor = '#fef3c7';
         seloContainer.style.color = '#b45309';
         if(seloIcon) seloIcon.innerHTML = '<i class="bi bi-star-half"></i>';
         if(seloTexto) seloTexto.textContent = 'MÉDIA';
     } else {
-        if(barraFill) barraFill.style.backgroundColor = '#b91c1c'; // Vermelho
+        if(barraFill) barraFill.style.backgroundColor = '#b91c1c'; 
         seloContainer.style.backgroundColor = '#fee2e2';
         seloContainer.style.color = '#b91c1c';
         if(seloIcon) seloIcon.innerHTML = '<i class="bi bi-star"></i>';
@@ -136,9 +131,8 @@ function renderizarChecklist(checklist) {
     const container = document.getElementById('det-checklist');
     if (!container) return;
     
-    container.innerHTML = ''; // Limpa o container
+    container.innerHTML = ''; 
 
-    // Se o restaurante não tiver checklist cadastrado, avisa na tela
     if (!checklist) {
         container.innerHTML = '<p class="text-muted small">Nenhum recurso de acessibilidade especificado.</p>';
         return;
@@ -146,7 +140,6 @@ function renderizarChecklist(checklist) {
 
     const recursos = [];
 
-    // Lógica para capturar os booleanos do JSON e transformar em visual
     if (checklist.comunicacao?.libras) recursos.push({ icone: 'bi-hands', texto: 'Atendimento em LIBRAS' });
     if (checklist.comunicacao?.menuLibras) recursos.push({ icone: 'bi-menu-button-wide-fill', texto: 'Cardápio em LIBRAS' });
     if (checklist.comunicacao?.sinalizacaoVisual) recursos.push({ icone: 'bi-eye-fill', texto: 'Sinalização Visual' });
@@ -174,13 +167,12 @@ function renderizarChecklist(checklist) {
 }
 
 // ==========================================
-// FUNÇÃO: CARREGAR O CARDÁPIO (Ajustado para o seu db.json)
+// FUNÇÃO: CARREGAR O CARDÁPIO
 // ==========================================
 async function carregarCardapio(id) {
     const container = document.getElementById('lista-cardapio');
     
     try {
-        // AJUSTE 1: A procurar na rota correta ("/cardapio" em vez de "/pratos")
         const resposta = await fetch(`${API}/cardapio?restauranteId=${id}`);
         
         if (!resposta.ok) {
@@ -196,12 +188,10 @@ async function carregarCardapio(id) {
         }
 
         pratos.forEach(prato => {
-            // AJUSTE 2: A ler a propriedade "urlFoto" do seu db.json
             let fotoPrato = (prato.urlFoto && prato.urlFoto.length > 10) 
                 ? prato.urlFoto 
                 : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&q=80';
 
-            // Formatação do Preço (R$ 00,00)
             let precoFormatado = parseFloat(prato.preco || 0).toFixed(2).replace('.', ',');
 
             const div = document.createElement('div');
@@ -244,7 +234,6 @@ async function carregarAvaliacoes(id) {
             return;
         }
 
-        // Calcula a média das notas para exibir o Resumo no topo
         const somaNotas = avaliacoes.reduce((acc, av) => acc + Number(av.nota), 0);
         const media = (somaNotas / avaliacoes.length).toFixed(1);
         
@@ -260,7 +249,6 @@ async function carregarAvaliacoes(id) {
             </div>
         `;
 
-        // Renderiza cada avaliação individualmente
         avaliacoes.forEach(av => {
             const div = document.createElement('div');
             div.className = 'card border border-light shadow-sm rounded-4 p-4 mb-3';
@@ -268,7 +256,6 @@ async function carregarAvaliacoes(id) {
             let estrelasHTML = '<i class="bi bi-star-fill text-warning me-1"></i>'.repeat(Number(av.nota));
             let tagsHTML = '';
             
-            // Se existirem tags de feedback
             if (av.tags && av.tags.length > 0) {
                 tagsHTML = av.tags.map(t => `<span class="badge bg-primary-subtle text-primary border border-primary-subtle me-2 rounded-pill">${t}</span>`).join('');
             }

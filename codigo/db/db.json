@@ -17,30 +17,6 @@
       "senha": "123",
       "nome": "Rommel",
       "email": "rommel@gmail.com"
-    },
-    {
-      "nome": "Didi",
-      "email": "diegopinto1610@gmail.com",
-      "senha": "didi1610@",
-      "tipo": "cliente",
-      "cnpj": null,
-      "id": "hQYYSMXXQo0"
-    },
-    {
-      "nome": "testando",
-      "email": "diego1610@gmail.com",
-      "senha": "didi1610@",
-      "tipo": "cliente",
-      "cnpj": null,
-      "id": "bI8CfJwiC58"
-    },
-    {
-      "nome": "testando",
-      "email": "diego@gmail.com",
-      "senha": "didi1610@",
-      "tipo": "restaurante",
-      "cnpj": "23.242.254/2352-52",
-      "id": "2BfLXopm4HQ"
     }
   ],
   "restaurantes": [
@@ -825,9 +801,9 @@
   "sessao": [
     {
       "id": "atual",
-      "usuarioId": "2BfLXopm4HQ",
-      "nome": "testando",
-      "tipo": "restaurante"
+      "usuarioId": null,
+      "nome": null,
+      "tipo": null
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
