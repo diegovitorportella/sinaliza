@@ -17,6 +17,30 @@
       "senha": "123",
       "nome": "Rommel",
       "email": "rommel@gmail.com"
+    },
+    {
+      "nome": "Didi",
+      "email": "diegopinto1610@gmail.com",
+      "senha": "didi1610@",
+      "tipo": "cliente",
+      "cnpj": null,
+      "id": "hQYYSMXXQo0"
+    },
+    {
+      "nome": "testando",
+      "email": "diego1610@gmail.com",
+      "senha": "didi1610@",
+      "tipo": "cliente",
+      "cnpj": null,
+      "id": "bI8CfJwiC58"
+    },
+    {
+      "nome": "testando",
+      "email": "diego@gmail.com",
+      "senha": "didi1610@",
+      "tipo": "restaurante",
+      "cnpj": "23.242.254/2352-52",
+      "id": "2BfLXopm4HQ"
     }
   ],
   "restaurantes": [
@@ -347,6 +371,24 @@
         }
       },
       "pontuacaoAcessibilidade": 9
+    },
+    {
+      "usuarioId": "2BfLXopm4HQ",
+      "nome": "Teste",
+      "culinaria": "Brasileira",
+      "endereco": "Rua Olimpus 71",
+      "cidade": "Belo Horizonte",
+      "urlFoto": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
+      "pontuacaoAcessibilidade": 6.3,
+      "coordenadas": {
+        "lat": -19.916,
+        "lng": -43.934
+      },
+      "acessibilidade": [
+        "LIBRAS"
+      ],
+      "cardapio": [],
+      "id": "9Z7cdjV9LGI"
     }
   ],
   "avaliacoes": [
@@ -601,6 +643,15 @@
       "categoria": "Prato Principal",
       "preco": 32,
       "urlFoto": "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=400"
+    },
+    {
+      "restauranteId": "9Z7cdjV9LGI",
+      "nome": "Teste",
+      "preco": 30,
+      "categoria": "Entrada",
+      "descricao": "Teste é uma opção leve e saborosa para iniciar a refeição, preparada para abrir o apetite com equilíbrio e qualidade.",
+      "urlFoto": "",
+      "id": "XkzJX7s8PlA"
     }
   ],
   "categorias_garcom": [
@@ -764,19 +815,19 @@
     },
     {
       "icone": "😉",
-      "texto": "Obrigado pelo atendimento!",
-      "categoria": "Apresentação",
+      "texto": "tewste",
+      "categoria": "Minhas Frases",
       "customizada": true,
       "favorita": false,
-      "id": "d_Iqy449GZc"
+      "id": "vRomDgqrHLc"
     }
   ],
   "sessao": [
     {
       "id": "atual",
-      "usuarioId": null,
-      "nome": null,
-      "tipo": null
+      "usuarioId": "2BfLXopm4HQ",
+      "nome": "testando",
+      "tipo": "restaurante"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
