@@ -232,6 +232,9 @@
                 </div>
                 
                 <div class="col-md-4 text-center">
+                    <div class="mb-3">
+                        <a href="about.html" class="text-secondary text-decoration-none fw-bold hover-primary">Sobre o Projeto</a>
+                    </div>
                     <div class="d-flex gap-3 justify-content-center">
                         <a href="#" class="social-circle"><i class="bi bi-instagram"></i></a>
                         <a href="#" class="social-circle"><i class="bi bi-facebook"></i></a>
@@ -362,7 +365,7 @@
                     const conteudoPopup = `
                         <h6>${rest.nome}</h6>
                         <p>${rest.tipoCozinha} • Nota: ${rest.pontuacaoAcessibilidade}/10</p>
-                        <button class="btn btn-primary btn-sm w-100" onclick="irParaDetalhes(${rest.id})">
+                        <button class="btn btn-primary btn-sm w-100" onclick="irParaDetalhes('${rest.id}')">
                             Ver Detalhes
                         </button>
                     `;
@@ -371,21 +374,35 @@
             });
         }
 
-        document.getElementById('inputBuscaHome').addEventListener('input', (e) => {
-            const termo = e.target.value.trim().toLowerCase();
+        function executarBusca() {
+            const termo = document.getElementById('inputBuscaHome').value.trim().toLowerCase();
+            
             if (termo.length === 0) {
                 const destaques = [...todosRestaurantes].sort((a, b) => b.pontuacaoAcessibilidade - a.pontuacaoAcessibilidade).slice(0, 4);
                 renderizarGrid(destaques, 'Destaques Acessíveis');
                 document.getElementById('txtResultados').textContent = '';
                 document.getElementById('secao-acesso-rapido').style.display = 'block';
-                return;
+            } else {
+                const filtrados = todosRestaurantes.filter(r =>
+                    r.nome.toLowerCase().includes(termo) || 
+                    r.tipoCozinha.toLowerCase().includes(termo) || 
+                    r.cidade.toLowerCase().includes(termo)
+                );
+                document.getElementById('secao-acesso-rapido').style.display = 'none';
+                renderizarGrid(filtrados, filtrados.length === 0 ? 'Nenhum resultado encontrado' : `${filtrados.length} restaurante(s) encontrado(s)`);
+                document.getElementById('txtResultados').textContent = filtrados.length > 0 ? `${filtrados.length} resultado(s)` : '';
             }
-            const filtrados = todosRestaurantes.filter(r =>
-                r.nome.toLowerCase().includes(termo) || r.tipoCozinha.toLowerCase().includes(termo) || r.cidade.toLowerCase().includes(termo)
-            );
-            document.getElementById('secao-acesso-rapido').style.display = 'none';
-            renderizarGrid(filtrados, filtrados.length === 0 ? 'Nenhum resultado encontrado' : `${filtrados.length} restaurante(s) encontrado(s)`);
-            document.getElementById('txtResultados').textContent = filtrados.length > 0 ? `${filtrados.length} resultado(s)` : '';
+
+            document.getElementById('secao-restaurantes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        document.querySelector('.search-btn').addEventListener('click', executarBusca);
+
+        document.getElementById('inputBuscaHome').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executarBusca();
+            }
         });
 
         function renderizarGrid(lista, titulo) {
@@ -408,7 +425,7 @@
                 col.className = 'col-sm-6 col-lg-3';
                 
                 col.innerHTML = `
-                    <div class="card card-restaurante" onclick="irParaDetalhes(${r.id})">
+                    <div class="card card-restaurante" onclick="irParaDetalhes('${r.id}')">
                         <img src="${fotoUrl}" alt="${r.nome}">
                         <div class="card-body">
                             <div>${librasTag}</div>
@@ -433,6 +450,17 @@
         function irParaDetalhes(id) {
             window.location.href = `./modulos/detalhes/index.html?restauranteId=${id}`;
         }
+    </script>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');    
     </script>
 </body>
 </html>
