@@ -771,5 +771,13 @@
       "id": "d_Iqy449GZc"
     }
   ],
+  "sessao": [
+    {
+      "id": "atual",
+      "usuarioId": null,
+      "nome": null,
+      "tipo": null
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
