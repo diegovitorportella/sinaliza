@@ -1,7 +1,7 @@
 const API = 'http://localhost:3000';
 
 // EVENTO 1: Disparado assim que a página de Detalhes carrega
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     
     // 1. A PASSAGEM DE BASTÃO: Ler a barra de endereços do navegador
     const params = new URLSearchParams(window.location.search);
@@ -14,11 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Atualizar os links dos botões com o ID do restaurante atual
-    document.getElementById('link-gerenciar-cardapio').href = `../cadastro_pratos_precos/index.html?restauranteId=${restauranteId}`;
+    // 2. Proteção de Rota: Ocultar o botão "Gerenciar Cardápio" por padrão
+    const btnCardapio = document.getElementById('link-gerenciar-cardapio');
+    btnCardapio.style.display = 'none';
+
+    // 3. Verifica a sessão para ver se é um restaurante logado
+    try {
+        const respSessao = await fetch(`${API}/sessao/atual`);
+        const sessao = await respSessao.json();
+        
+        // Se for uma conta de restaurante, exibe o botão apontando para a pasta correta
+        if (sessao && sessao.tipo === 'restaurante') {
+            btnCardapio.style.display = 'inline-flex';
+            btnCardapio.href = `../cadastro_pratos_precos/index.html?restauranteId=${restauranteId}`;
+        }
+    } catch(e) {
+        console.error("Erro ao verificar sessão do usuário:", e);
+    }
+
+    // 4. Atualizar o link de avaliações com o ID do restaurante atual
     document.getElementById('link-avaliar').href = `../formulario_avaliacoes/index.html?restauranteId=${restauranteId}`;
 
-    // 2. Chama as funções para buscar os dados em paralelo
+    // 5. Chama as funções para buscar os dados em paralelo
     carregarDetalhesRestaurante(restauranteId);
     carregarCardapio(restauranteId);
     carregarAvaliacoes(restauranteId);

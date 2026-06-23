@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
     
-    // Substitui a antiga variável usuarioLogado
     usuarioLogado = { id: sessao.usuarioId, nome: sessao.nome, tipo: sessao.tipo };
 
     // Verifica se é tipo "restaurante"
@@ -22,21 +21,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    // Exibe o nome do dono na Navbar
     document.getElementById('nomeUsuarioLogado').textContent = `Olá, ${usuarioLogado.nome.split(' ')[0]}`;
-
-    // 2. BUSCA OS DADOS DO RESTAURANTE DESTE USUÁRIO
     await carregarPerfilRestaurante();
 });
 
 async function carregarPerfilRestaurante() {
     try {
-        // Busca um restaurante onde o usuarioId seja igual ao ID de quem está logado
         const resp = await fetch(`${API_RESTAURANTES}?usuarioId=${usuarioLogado.id}`);
         const dados = await resp.json();
 
         if (dados.length > 0) {
-            // Se encontrou, preenche os campos do formulário para Edição
             const rest = dados[0];
             document.getElementById('restauranteId').value = rest.id;
             
@@ -46,13 +40,11 @@ async function carregarPerfilRestaurante() {
             document.getElementById('enderecoRest').value = rest.endereco || '';
             document.getElementById('cidadeRest').value = rest.cidade || '';
             
-            // Coordenadas
             if(rest.coordenadas) {
                 document.getElementById('latRest').value = rest.coordenadas.lat || '';
                 document.getElementById('lngRest').value = rest.coordenadas.lng || '';
             }
 
-            // Acessibilidade (Switches)
             const acess = rest.acessibilidade || [];
             document.getElementById('chkLibras').checked = acess.includes('LIBRAS');
             document.getElementById('chkBraille').checked = acess.includes('Braille');
@@ -64,45 +56,74 @@ async function carregarPerfilRestaurante() {
     }
 }
 
+// LÓGICA DO BOTÃO CARDÁPIO
+document.getElementById('btnTabCardapio').addEventListener('click', () => {
+    const rId = document.getElementById('restauranteId').value;
+    if(rId) {
+        window.location.href = `../cadastro_pratos_precos/index.html?restauranteId=${rId}`;
+    } else {
+        alert("Por favor, guarde o perfil do restaurante na aba 1 e 2 antes de acessar o cardápio.");
+    }
+});
+
+// LÓGICA DO BOTÃO VER PÁGINA PÚBLICA
+document.getElementById('btnVerPagina').addEventListener('click', () => {
+    const rId = document.getElementById('restauranteId').value;
+    if(rId) {
+        window.location.href = `../detalhes/index.html?restauranteId=${rId}`;
+    } else {
+        alert("Você precisa guardar o perfil do restaurante primeiro para gerar a página pública.");
+    }
+});
+
 // 3. LÓGICA DE SALVAR/ATUALIZAR (SUBMIT)
 document.getElementById('formRestaurante').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const nomeRest = document.getElementById('nomeRest').value.trim();
+    const especialidadeRest = document.getElementById('especialidadeRest').value;
+    const enderecoRest = document.getElementById('enderecoRest').value.trim();
+    const latRest = document.getElementById('latRest').value;
+    const lngRest = document.getElementById('lngRest').value;
+
+    if (!nomeRest || !especialidadeRest || !enderecoRest || !latRest || !lngRest) {
+        alert("Atenção: Por favor, volte à aba '1. Perfil e Localização' e preencha todos os campos obrigatórios antes de guardar.");
+        return; 
+    }
+
     const restId = document.getElementById('restauranteId').value;
     
-    // Monta o array de acessibilidade baseado nos switches marcados
     let facilidades = [];
     if(document.getElementById('chkLibras').checked) facilidades.push('LIBRAS');
     if(document.getElementById('chkBraille').checked) facilidades.push('Braille');
     if(document.getElementById('chkRampa').checked) facilidades.push('Rampa');
     if(document.getElementById('chkVisual').checked) facilidades.push('Sinalização Visual');
 
-    // Calcula uma nota "fictícia" baseada no número de itens (Para o frontend ficar bonito)
     const nota = facilidades.length > 0 ? 5 + (facilidades.length * 1.25) : 4;
 
     const dadosRestaurante = {
-        usuarioId: usuarioLogado.id, // Vínculo crucial!
-        nome: document.getElementById('nomeRest').value.trim(),
-        culinaria: document.getElementById('especialidadeRest').value,
-        endereco: document.getElementById('enderecoRest').value.trim(),
+        usuarioId: usuarioLogado.id, 
+        nome: nomeRest,
+        culinaria: especialidadeRest,
+        endereco: enderecoRest,
         cidade: document.getElementById('cidadeRest').value.trim(),
         urlFoto: document.getElementById('fotoRest').value.trim() || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
         pontuacaoAcessibilidade: parseFloat(nota.toFixed(1)),
         coordenadas: {
-            lat: parseFloat(document.getElementById('latRest').value),
-            lng: parseFloat(document.getElementById('lngRest').value)
+            lat: parseFloat(latRest),
+            lng: parseFloat(lngRest)
         },
         acessibilidade: facilidades,
-        cardapio: [] // Array vazio preparado para a próxima fase
+        cardapio: [] 
     };
 
     try {
         let url = API_RESTAURANTES;
-        let metodo = 'POST'; // Criar novo
+        let metodo = 'POST'; 
 
         if (restId) {
             url = `${API_RESTAURANTES}/${restId}`;
-            metodo = 'PUT'; // Atualizar existente
+            metodo = 'PUT'; 
         }
 
         const resp = await fetch(url, {
@@ -113,7 +134,7 @@ document.getElementById('formRestaurante').addEventListener('submit', async (e) 
 
         if (resp.ok) {
             alert("Perfil do restaurante guardado com sucesso! Já está visível na plataforma.");
-            await carregarPerfilRestaurante(); // Recarrega para pegar o ID caso tenha sido POST
+            await carregarPerfilRestaurante(); 
         }
     } catch (error) {
         console.error("Erro ao guardar restaurante:", error);
