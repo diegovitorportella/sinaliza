@@ -91,7 +91,21 @@ body {
 
 .pontuacao-bar-grande { height: 16px; background: var(--light); border-radius: 8px; overflow: hidden; width: 100%; border: 1px solid var(--border); }
 .pontuacao-fill-grande { height: 100%; border-radius: 8px; transition: width 1s ease-out; }
+.tags-comuns-container { display: flex; flex-direction: column; gap: 6px; }
+.tags-comuns-label { font-size: 0.75rem; font-weight: 700; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+.tag-comum-badge {
+    background: var(--primary-light); color: var(--primary-dark); padding: 6px 14px;
+    border-radius: 20px; font-weight: 800; font-size: 0.85rem; border: 1px solid rgba(37, 99, 235, 0.2);
+    display: inline-flex; align-items: center; gap: 6px;
+}
 
+.acoes-avaliacao { display: flex; gap: 10px; margin-top: 12px; }
+.edicao-avaliacao-form label { font-weight: 700; font-size: 0.85rem; color: var(--secondary); margin-bottom: 4px; display: block; }
+.edicao-tag-chip {
+    cursor: pointer; user-select: none; background: var(--light); color: var(--secondary);
+    border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-weight: 700; font-size: 0.8rem;
+}
+.edicao-tag-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
 /* Botões */
 .btn-secundario {
     background: white; color: var(--primary); border: 2px solid var(--primary);

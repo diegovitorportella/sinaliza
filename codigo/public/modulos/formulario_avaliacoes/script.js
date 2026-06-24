@@ -70,13 +70,22 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
         .filter(b => b.classList.contains('active'))
         .map(b => b.dataset.tag);
 
+    let usuarioId = null;
+    try {
+        const respSessao = await fetch(`${API}/sessao/atual`);
+        const sessaoAtual = await respSessao.json();
+        usuarioId = sessaoAtual ? sessaoAtual.usuarioId : null;
+    } catch (e) {
+        console.warn('Não foi possível identificar o usuário da sessão.');
+    }
+
     const avaliacao = {
         restauranteId: restauranteId ? Number(restauranteId) : null,
         nota:          Number(ratingSelected.value),
         tags:          activeTags,
-        comentario:    commentText
+        comentario:    commentText,
+        usuarioId:     usuarioId
     };
-
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Enviando...';
@@ -98,7 +107,6 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
         document.getElementById('feedbackForm').reset();
         tagButtons.forEach(b => b.classList.remove('active'));
 
-        // Volta para a página de detalhes após 2 segundos
         if (restauranteId) {
             setTimeout(() => {
                 window.location.href = `../detalhes/index.html?restauranteId=${restauranteId}`;

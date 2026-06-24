@@ -217,18 +217,24 @@ async function carregarCardapio(id) {
     }
 }
 
-// ==========================================
-// FUNÇÃO: CARREGAR AS AVALIAÇÕES DO JSON
-// ==========================================
+let avaliacoesCache = [];
+const TAGS_DISPONIVEIS = [
+    'Fácil comunicação', 'Rampa de acesso', 'Banheiro adaptado', 'Cardápio em Libras',
+    'Sinalização visual', 'Estacionamento acessível', 'Equipe capacitada', 'Piso tátil'
+];
+
 async function carregarAvaliacoes(id) {
     try {
         const resposta = await fetch(`${API}/avaliacoes?restauranteId=${id}`);
         const avaliacoes = await resposta.json();
+        avaliacoesCache = avaliacoes;
         const container = document.getElementById('lista-avaliacoes');
         const resumo = document.getElementById('resumo-avaliacoes');
 
         container.innerHTML = '';
-        
+
+        renderizarTagsComuns(avaliacoes);
+
         if (avaliacoes.length === 0) {
             resumo.innerHTML = '<p class="text-muted">Ainda não há avaliações para este local. Seja o primeiro a avaliar!</p>';
             return;
@@ -252,13 +258,25 @@ async function carregarAvaliacoes(id) {
         avaliacoes.forEach(av => {
             const div = document.createElement('div');
             div.className = 'card border border-light shadow-sm rounded-4 p-4 mb-3';
-            
+            div.id = `avaliacao-card-${av.id}`;
+
             let estrelasHTML = '<i class="bi bi-star-fill text-warning me-1"></i>'.repeat(Number(av.nota));
             let tagsHTML = '';
             
             if (av.tags && av.tags.length > 0) {
                 tagsHTML = av.tags.map(t => `<span class="badge bg-primary-subtle text-primary border border-primary-subtle me-2 rounded-pill">${t}</span>`).join('');
             }
+
+            const podeGerenciar = sessaoAtual && sessaoAtual.usuarioId &&
+                sessaoAtual.tipo !== 'admin' &&
+                String(av.usuarioId) === String(sessaoAtual.usuarioId);
+
+            const acoesHTML = podeGerenciar ? `
+                <div class="acoes-avaliacao">
+                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="iniciarEdicaoAvaliacao('${av.id}')"><i class="bi bi-pencil-fill"></i> Editar</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="excluirAvaliacao('${av.id}', '${id}')"><i class="bi bi-trash-fill"></i> Excluir</button>
+                </div>
+            ` : '';
 
             div.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start mb-3">
@@ -267,6 +285,7 @@ async function carregarAvaliacoes(id) {
                 </div>
                 <p class="mb-3 text-secondary fw-medium">"${av.comentario}"</p>
                 <div>${tagsHTML}</div>
+                ${acoesHTML}
             `;
             container.appendChild(div);
         });
@@ -274,5 +293,102 @@ async function carregarAvaliacoes(id) {
     } catch (erro) {
         console.error("Erro ao carregar avaliações:", erro);
         document.getElementById('lista-avaliacoes').innerHTML = '<p class="text-danger">Não foi possível carregar os depoimentos.</p>';
+    }
+}
+
+function renderizarTagsComuns(avaliacoes) {
+    const wrapper = document.getElementById('det-tags-comuns');
+    const lista = document.getElementById('det-tags-comuns-lista');
+    if (!wrapper || !lista) return;
+
+    const contagem = {};
+    avaliacoes.forEach(av => {
+        (av.tags || []).forEach(tag => {
+            contagem[tag] = (contagem[tag] || 0) + 1;
+        });
+    });
+
+    const tagsOrdenadas = Object.keys(contagem);
+    if (tagsOrdenadas.length === 0) {
+        wrapper.classList.add('hidden');
+        lista.innerHTML = '';
+        return;
+    }
+
+    const maiorContagem = Math.max(...tagsOrdenadas.map(t => contagem[t]));
+    const tagsMaisComuns = tagsOrdenadas.filter(t => contagem[t] === maiorContagem);
+
+    lista.innerHTML = tagsMaisComuns.map(tag => `
+        <span class="tag-comum-badge"><i class="bi bi-chat-square-quote-fill"></i> ${tag}</span>
+    `).join('');
+    wrapper.classList.remove('hidden');
+}
+
+function iniciarEdicaoAvaliacao(avaliacaoId) {
+    const av = avaliacoesCache.find(a => String(a.id) === String(avaliacaoId));
+    if (!av) return;
+
+    const card = document.getElementById(`avaliacao-card-${avaliacaoId}`);
+    if (!card) return;
+
+    const tagsHTML = TAGS_DISPONIVEIS.map(tag => {
+        const ativa = (av.tags || []).includes(tag) ? 'active' : '';
+        return `<span class="edicao-tag-chip ${ativa}" data-tag="${tag}" onclick="this.classList.toggle('active')">${tag}</span>`;
+    }).join('');
+
+    card.innerHTML = `
+        <div class="edicao-avaliacao-form">
+            <label for="edicao-nota-${avaliacaoId}">Nota</label>
+            <select id="edicao-nota-${avaliacaoId}" class="form-select mb-3" style="max-width: 160px;">
+                ${[5,4,3,2,1].map(n => `<option value="${n}" ${Number(av.nota) === n ? 'selected' : ''}>${n} estrela(s)</option>`).join('')}
+            </select>
+
+            <label for="edicao-comentario-${avaliacaoId}">Comentário</label>
+            <textarea id="edicao-comentario-${avaliacaoId}" class="form-control mb-3" rows="3">${av.comentario || ''}</textarea>
+
+            <label>Tags</label>
+            <div id="edicao-tags-${avaliacaoId}" class="d-flex flex-wrap gap-2 mb-3">${tagsHTML}</div>
+
+            <div class="acoes-avaliacao">
+                <button type="button" class="btn btn-sm btn-primary" onclick="salvarEdicaoAvaliacao('${avaliacaoId}', '${av.restauranteId}')"><i class="bi bi-check-lg"></i> Salvar</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="carregarAvaliacoes('${av.restauranteId}')"><i class="bi bi-x-lg"></i> Cancelar</button>
+            </div>
+        </div>
+    `;
+}
+
+async function salvarEdicaoAvaliacao(avaliacaoId, restauranteId) {
+    const novaNota = Number(document.getElementById(`edicao-nota-${avaliacaoId}`).value);
+    const novoComentario = document.getElementById(`edicao-comentario-${avaliacaoId}`).value.trim();
+    const novasTags = Array.from(document.querySelectorAll(`#edicao-tags-${avaliacaoId} .edicao-tag-chip.active`))
+        .map(chip => chip.dataset.tag);
+
+    try {
+        const resp = await fetch(`${API}/avaliacoes/${avaliacaoId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nota: novaNota, comentario: novoComentario, tags: novasTags })
+        });
+
+        if (!resp.ok) throw new Error('Erro ao salvar avaliação');
+
+        carregarAvaliacoes(restauranteId);
+    } catch (erro) {
+        console.error('Erro ao salvar edição da avaliação:', erro);
+        alert('Não foi possível salvar as alterações. Tente novamente.');
+    }
+}
+
+async function excluirAvaliacao(avaliacaoId, restauranteId) {
+    if (!confirm('Tem certeza que deseja excluir esta avaliação?')) return;
+
+    try {
+        const resp = await fetch(`${API}/avaliacoes/${avaliacaoId}`, { method: 'DELETE' });
+        if (!resp.ok) throw new Error('Erro ao excluir avaliação');
+
+        carregarAvaliacoes(restauranteId);
+    } catch (erro) {
+        console.error('Erro ao excluir avaliação:', erro);
+        alert('Não foi possível excluir a avaliação. Tente novamente.');
     }
 }
