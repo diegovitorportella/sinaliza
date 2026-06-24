@@ -240,14 +240,34 @@ textarea { resize: vertical; line-height: 1.5; }
     color: var(--primary);
 }
 
-.prato-remover {
-    background: none; border: none;
-    color: #dc2626; font-size: 0.78rem; font-weight: 700;
-    cursor: pointer; padding: 6px 0 0;
-    display: flex; align-items: center; gap: 4px;
-    transition: color 0.2s;
+/* ── Ajustes Adicionais (Botoes de Ação) ── */
+.btn-cancelar {
+    background: var(--secondary) !important;
+    margin-top: 8px !important;
 }
-.prato-remover:hover { color: #991b1b; }
+.btn-cancelar:hover {
+    background: #475569 !important;
+}
+
+.prato-editar {
+    background: #eff6ff; border: 1px solid #bfdbfe;
+    color: #1d4ed8; font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; padding: 8px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: all 0.2s;
+    border: none;
+}
+.prato-editar:hover { background: #dbeafe; }
+
+.prato-remover {
+    background: #fef2f2 !important; border: 1px solid #fecaca !important;
+    color: #dc2626 !important; font-size: 0.82rem !important; font-weight: 700 !important;
+    cursor: pointer; padding: 8px !important; border-radius: 8px !important;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    transition: all 0.2s !important; margin: 0 !important;
+    border: none;
+}
+.prato-remover:hover { background: #fee2e2 !important; color: #991b1b !important; }
 
 /* ── Empty state ── */
 .empty-state {

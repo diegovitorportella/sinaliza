@@ -20,7 +20,6 @@
     <nav class="navbar navbar-expand-lg fixed-top glass-nav">
         <div class="container-xl">
             <a class="navbar-brand d-flex align-items-center gap-3" href="index.html">
-                <!-- NOVA LOGO AQUI -->
                 <img src="./assets/images/logo_tiaw.png" alt="Logo Sinaliza" class="shadow-sm" style="width: 54px; height: 54px; border-radius: 12px; object-fit: contain;">
                 <span class="brand-text">Sinaliza<span class="text-primary">.</span></span>
             </a>
@@ -45,13 +44,13 @@
                             Gerenciamento
                         </a>
                         <ul class="dropdown-menu border-0 shadow-lg rounded-4 p-2 mt-2">
-                            <li><a class="dropdown-item rounded-3 py-2 fw-medium" href="./modulos/cadastro_de_usuarios/index.html"><i class="bi bi-person-gear text-primary me-2"></i> Perfil do Usuário</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 fw-medium" href="#" id="linkMenuPerfil"><i class="bi bi-person-gear text-primary me-2"></i> Perfil do Usuário</a></li>
                         </ul>
                     </li>
                 </ul>
-                <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
-                    <a href="#" class="text-decoration-none text-secondary fw-bold px-3 btn-hover-dark">Entrar</a>
-                    <a href="./modulos/cadastro_escolha/index.html" class="btn btn-dark rounded-4 px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2">
+                <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0" id="areaAutenticacao">
+                    <a href="./modulos/autenticacao/index.html#login" class="text-decoration-none text-secondary fw-bold px-3 btn-hover-dark">Entrar</a>
+                    <a href="./modulos/autenticacao/index.html#cadastro" class="btn btn-dark rounded-4 px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2">
                         Criar Conta <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -174,7 +173,7 @@
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="feature-card h-100" onclick="window.location.href='./modulos/cadastro_de_usuarios/index.html'">
+                        <div class="feature-card h-100" id="cardMeuPerfil" style="cursor: pointer;">
                             <div class="feature-icon bg-success-subtle text-success">
                                 <i class="bi bi-person-badge"></i>
                             </div>
@@ -226,7 +225,6 @@
             <div class="row align-items-center gy-4">
                 <div class="col-md-4 text-center text-md-start">
                     <a class="navbar-brand d-inline-flex align-items-center gap-2 mb-2 text-decoration-none" href="index.html">
-                        <!-- NOVA LOGO AQUI -->
                         <img src="./assets/images/logo_tiaw.png" alt="Logo Sinaliza" class="shadow-sm" style="width: 54px; height: 54px; border-radius: 12px; object-fit: contain;">
                         <span class="fs-4 fw-black text-dark">Sinaliza<span class="text-primary">.</span></span>
                     </a>
@@ -234,6 +232,9 @@
                 </div>
                 
                 <div class="col-md-4 text-center">
+                    <div class="mb-3">
+                        <a href="about.html" class="text-secondary text-decoration-none fw-bold hover-primary">Sobre o Projeto</a>
+                    </div>
                     <div class="d-flex gap-3 justify-content-center">
                         <a href="#" class="social-circle"><i class="bi bi-instagram"></i></a>
                         <a href="#" class="social-circle"><i class="bi bi-facebook"></i></a>
@@ -257,7 +258,6 @@
         let todosRestaurantes = [];
         let mapa;
 
-        // Animação de Expandir o Mapa (Adicionado pela IA)
         document.addEventListener('DOMContentLoaded', () => {
             const btnExpandir = document.getElementById('btnExpandirMapa');
             const mapWrapper = document.getElementById('mapContainerWrapper');
@@ -279,8 +279,8 @@
             }
         });
 
-        // Carregamento Inicial de Dados
         document.addEventListener('DOMContentLoaded', async () => {
+            verificarSessao();
             document.getElementById('loading-spinner').style.display = 'block';
             
             inicializarMapa();
@@ -302,7 +302,78 @@
             }
         });
 
-        // Lógica do Mapa Leaflet
+        async function verificarSessao() {
+            const areaAuth = document.getElementById('areaAutenticacao');
+            const cardPerfil = document.getElementById('cardMeuPerfil');
+            const linkMenuPerfil = document.getElementById('linkMenuPerfil');
+
+            try {
+                // Como configuramos no db.json, a sessão possui o id "atual", então a rota direta funciona
+                const resp = await fetch('http://localhost:3000/sessao/atual');
+                const sessao = await resp.json();
+
+                if (sessao && sessao.usuarioId && areaAuth) {
+                    const isRestaurante = sessao.tipo === 'restaurante';
+                    const linkPainel = isRestaurante 
+                        ? './modulos/painel_restaurante/index.html' 
+                        : './modulos/painel_cliente/index.html';
+
+                    // 1. ARRUMANDO A SAUDAÇÃO NO MENU SUPERIOR
+                    const textoSaudacao = isRestaurante ? 'Gestão:' : 'Olá,';
+
+                    areaAuth.innerHTML = `
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary rounded-pill px-4 fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi ${isRestaurante ? 'bi-shop-window' : 'bi-person-circle'} me-1"></i> ${textoSaudacao} ${sessao.nome.split(' ')[0]}
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 rounded-3">
+                                <li><a class="dropdown-item py-2 fw-medium" href="${linkPainel}"><i class="bi bi-grid text-primary me-2"></i> Meu Painel</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item py-2 fw-medium text-danger" href="#" onclick="fazerLogout()"><i class="bi bi-box-arrow-right me-2"></i> Sair da Conta</a></li>
+                            </ul>
+                        </div>
+                    `;
+
+                    // 2. ARRUMANDO O TEXTO DO CARD NA HOME DE FORMA DINÂMICA
+                    if(cardPerfil) {
+                        cardPerfil.onclick = () => { window.location.href = linkPainel; };
+                        
+                        if (isRestaurante) {
+                            cardPerfil.querySelector('.feature-icon').innerHTML = '<i class="bi bi-shop-window"></i>';
+                            cardPerfil.querySelector('h4').textContent = "Gestão do Restaurante";
+                            cardPerfil.querySelector('p').textContent = "Atualize o seu cardápio, dados de acessibilidade e acompanhe avaliações.";
+                        } else {
+                            cardPerfil.querySelector('.feature-icon').innerHTML = '<i class="bi bi-person-badge"></i>';
+                            cardPerfil.querySelector('h4').textContent = "O Meu Perfil";
+                            cardPerfil.querySelector('p').textContent = "Guarde as suas preferências, restrições e restaurantes favoritos num só lugar.";
+                        }
+                    }
+                    if(linkMenuPerfil) linkMenuPerfil.href = linkPainel; 
+
+                } else {
+                    // SE NÃO ESTIVER LOGADO
+                    if(cardPerfil) {
+                        cardPerfil.onclick = () => { window.location.href = './modulos/autenticacao/index.html#login'; };
+                        cardPerfil.querySelector('.feature-icon').innerHTML = '<i class="bi bi-person-badge"></i>';
+                        cardPerfil.querySelector('h4').textContent = "O Meu Perfil";
+                        cardPerfil.querySelector('p').textContent = "Guarde as suas preferências, restrições e restaurantes favoritos num só lugar.";
+                    }
+                    if(linkMenuPerfil) linkMenuPerfil.href = './modulos/autenticacao/index.html#login';
+                }
+            } catch(e) {
+                console.error("Erro ao verificar sessão via API:", e);
+            }
+        }
+
+        window.fazerLogout = async function() {
+            await fetch('http://localhost:3000/sessao/atual', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: "atual", usuarioId: null, nome: null, tipo: null })
+            });
+            window.location.reload();
+        };
+
         function inicializarMapa() {
             window.mapa = L.map('mapa-restaurantes').setView([-19.916681, -43.934493], 12);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -317,7 +388,7 @@
                     const conteudoPopup = `
                         <h6>${rest.nome}</h6>
                         <p>${rest.tipoCozinha} • Nota: ${rest.pontuacaoAcessibilidade}/10</p>
-                        <button class="btn btn-primary btn-sm w-100" onclick="irParaDetalhes(${rest.id})">
+                        <button class="btn btn-primary btn-sm w-100" onclick="irParaDetalhes('${rest.id}')">
                             Ver Detalhes
                         </button>
                     `;
@@ -326,25 +397,41 @@
             });
         }
 
-        // Sistema de Pesquisa
-        document.getElementById('inputBuscaHome').addEventListener('input', (e) => {
-            const termo = e.target.value.trim().toLowerCase();
+        function executarBusca() {
+            const termo = document.getElementById('inputBuscaHome').value.trim().toLowerCase();
+            
             if (termo.length === 0) {
-                const destaques = [...todosRestaurantes].sort((a, b) => b.pontuacaoAcessibilidade - a.pontuacaoAcessibilidade).slice(0, 4);
+                const destaques = [...todosRestaurantes].sort((a, b) => (b.pontuacaoAcessibilidade || 0) - (a.pontuacaoAcessibilidade || 0)).slice(0, 4);
                 renderizarGrid(destaques, 'Destaques Acessíveis');
                 document.getElementById('txtResultados').textContent = '';
-                document.getElementById('secao-acesso-rapido').style.display = 'block';
-                return;
+                document.getElementById('secao-acesso-rapido').style.display = 'block'; 
+            } else {
+                const filtrados = todosRestaurantes.filter(r => {
+                    const nomeStr = (r.nome || '').toLowerCase();
+                    const cozinhaStr = (r.tipoCozinha || r.culinaria || '').toLowerCase();
+                    const cidadeStr = (r.cidade || '').toLowerCase();
+
+                    return nomeStr.includes(termo) || 
+                           cozinhaStr.includes(termo) || 
+                           cidadeStr.includes(termo);
+                });
+                                
+                renderizarGrid(filtrados, filtrados.length === 0 ? 'Nenhum resultado encontrado' : `${filtrados.length} restaurante(s) encontrado(s)`);
+                document.getElementById('txtResultados').textContent = filtrados.length > 0 ? `${filtrados.length} resultado(s)` : '';
             }
-            const filtrados = todosRestaurantes.filter(r =>
-                r.nome.toLowerCase().includes(termo) || r.tipoCozinha.toLowerCase().includes(termo) || r.cidade.toLowerCase().includes(termo)
-            );
-            document.getElementById('secao-acesso-rapido').style.display = 'none';
-            renderizarGrid(filtrados, filtrados.length === 0 ? 'Nenhum resultado encontrado' : `${filtrados.length} restaurante(s) encontrado(s)`);
-            document.getElementById('txtResultados').textContent = filtrados.length > 0 ? `${filtrados.length} resultado(s)` : '';
+
+            document.getElementById('secao-restaurantes').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        document.querySelector('.search-btn').addEventListener('click', executarBusca);
+
+        document.getElementById('inputBuscaHome').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executarBusca();
+            }
         });
 
-        // Geração dos Cards
         function renderizarGrid(lista, titulo) {
             const grid = document.getElementById('gridRestaurantesHome');
             document.getElementById('tituloSecao').textContent = titulo || 'Destaques Acessíveis';
@@ -365,7 +452,7 @@
                 col.className = 'col-sm-6 col-lg-3';
                 
                 col.innerHTML = `
-                    <div class="card card-restaurante" onclick="irParaDetalhes(${r.id})">
+                    <div class="card card-restaurante" onclick="irParaDetalhes('${r.id}')">
                         <img src="${fotoUrl}" alt="${r.nome}">
                         <div class="card-body">
                             <div>${librasTag}</div>
@@ -387,10 +474,20 @@
             });
         }
 
-        // Roteamento
         function irParaDetalhes(id) {
             window.location.href = `./modulos/detalhes/index.html?restauranteId=${id}`;
         }
+    </script>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');    
     </script>
 </body>
 </html>

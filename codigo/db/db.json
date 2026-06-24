@@ -17,6 +17,14 @@
       "senha": "123",
       "nome": "Rommel",
       "email": "rommel@gmail.com"
+    },
+    {
+      "nome": "Didi",
+      "email": "diego26@gmail.com",
+      "senha": "didi1610@",
+      "tipo": "cliente",
+      "cnpj": null,
+      "id": "IgCWvbZQ-zM"
     }
   ],
   "restaurantes": [
@@ -347,6 +355,24 @@
         }
       },
       "pontuacaoAcessibilidade": 9
+    },
+    {
+      "usuarioId": "2BfLXopm4HQ",
+      "nome": "Teste",
+      "culinaria": "Brasileira",
+      "endereco": "Rua Olimpus 71",
+      "cidade": "Belo Horizonte",
+      "urlFoto": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
+      "pontuacaoAcessibilidade": 6.3,
+      "coordenadas": {
+        "lat": -19.916,
+        "lng": -43.934
+      },
+      "acessibilidade": [
+        "LIBRAS"
+      ],
+      "cardapio": [],
+      "id": "9Z7cdjV9LGI"
     }
   ],
   "avaliacoes": [
@@ -601,7 +627,7 @@
       "categoria": "Prato Principal",
       "preco": 32,
       "urlFoto": "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=400"
-    }
+    }    
   ],
   "categorias_garcom": [
     {
@@ -761,14 +787,14 @@
       "favorita": false,
       "customizada": false,
       "ordem": 14
-    },
+    }
+  ],
+  "sessao": [
     {
-      "icone": "😉",
-      "texto": "Obrigado pelo atendimento!",
-      "categoria": "Apresentação",
-      "customizada": true,
-      "favorita": false,
-      "id": "d_Iqy449GZc"
+      "id": "atual",
+      "usuarioId": "IgCWvbZQ-zM",
+      "nome": "Didi",
+      "tipo": "cliente"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

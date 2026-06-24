@@ -10,7 +10,6 @@ Para proporcionar mais autonomia aos usuários, o sistema conta com recursos vol
 
 * Diego Vitor Pinto Mariano Portella
 * Gustavo Emanuel Gonçalves de Sousa
-* Inácio Silva Parreiras
 * Lucca Marinho Eterovik Tavares Pereira
 * Nelson Buralli Dabes
 * Rafael Mota Azevedo

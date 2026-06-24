@@ -61,18 +61,11 @@ body {
 .search-input::placeholder { color: #94a3b8; }
 
 #containerCategorias {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
+    flex-wrap: wrap; 
+    justify-content: center; 
     padding-bottom: 10px;
     padding-left: 5px;
     padding-right: 5px;
-    scrollbar-width: none; 
-    -ms-overflow-style: none; 
-}
-#containerCategorias::-webkit-scrollbar {
-    display: none; 
 }
 
 .btn-categoria {

@@ -14,31 +14,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function carregarCategorias() {
-    try {
-        const resp = await fetch(`${API}/categorias_garcom`);
-        categoriasAtuais = await resp.json();
-        
-        categoriasAtuais.push({ id: 'custom', nome: 'Minhas Frases', icone: '🌟' });
-
-        const container = document.getElementById('containerCategorias');
-
-        categoriasAtuais.forEach(cat => {
-            const btn = document.createElement('button');
-            btn.className = 'btn btn-outline-primary rounded-pill px-4 fw-medium text-nowrap flex-shrink-0 btn-categoria bg-white shadow-sm border-0';
-            btn.dataset.categoria = cat.nome;
-            btn.innerHTML = `${cat.icone} ${cat.nome}`;
-            btn.onclick = () => selecionarCategoria(cat.nome, btn);
+        try {
+            const resp = await fetch(`${API}/categorias_garcom`);
+            categoriasAtuais = await resp.json();
             
-            if (cat.nome === 'Minhas Frases') {
-                btn.classList.add('border-primary', 'text-primary'); 
+            categoriasAtuais.push({ id: 'custom', nome: 'Minhas Frases', icone: '💡' });
+            const container = document.getElementById('containerCategorias');
+
+            const btnTodas = document.querySelector('[data-categoria="Todas"]');
+            if (btnTodas) {
+                btnTodas.onclick = () => selecionarCategoria('Todas', btnTodas);
             }
             
-            container.appendChild(btn);
-        });
-    } catch (erro) {
-        console.error("Erro ao carregar categorias", erro);
+            categoriasAtuais.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-outline-primary rounded-pill px-4 fw-medium text-nowrap flex-shrink-0 btn-categoria bg-white shadow-sm border-0';
+                btn.dataset.categoria = cat.nome;
+                btn.innerHTML = `${cat.icone} ${cat.nome}`;
+                btn.onclick = () => selecionarCategoria(cat.nome, btn);
+                
+                if (cat.nome === 'Minhas Frases') {
+                    btn.classList.add('border-primary', 'text-primary'); 
+                }
+                
+                container.appendChild(btn);
+            });
+        } catch (erro) {
+            console.error("Erro ao carregar categorias", erro);
+        }
     }
-}
 
 async function carregarFrases() {
     try {
