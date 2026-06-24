@@ -17,6 +17,14 @@
       "senha": "123",
       "nome": "Rommel",
       "email": "rommel@gmail.com"
+    },
+    {
+      "nome": "Didi",
+      "email": "diego26@gmail.com",
+      "senha": "didi1610@",
+      "tipo": "cliente",
+      "cnpj": null,
+      "id": "IgCWvbZQ-zM"
     }
   ],
   "restaurantes": [
@@ -619,16 +627,7 @@
       "categoria": "Prato Principal",
       "preco": 32,
       "urlFoto": "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=400"
-    },
-    {
-      "restauranteId": "9Z7cdjV9LGI",
-      "nome": "Teste",
-      "preco": 30,
-      "categoria": "Entrada",
-      "descricao": "Teste é uma opção leve e saborosa para iniciar a refeição, preparada para abrir o apetite com equilíbrio e qualidade.",
-      "urlFoto": "",
-      "id": "XkzJX7s8PlA"
-    }
+    }    
   ],
   "categorias_garcom": [
     {
@@ -788,22 +787,14 @@
       "favorita": false,
       "customizada": false,
       "ordem": 14
-    },
-    {
-      "icone": "😉",
-      "texto": "tewste",
-      "categoria": "Minhas Frases",
-      "customizada": true,
-      "favorita": false,
-      "id": "vRomDgqrHLc"
     }
   ],
   "sessao": [
     {
       "id": "atual",
-      "usuarioId": null,
-      "nome": null,
-      "tipo": null
+      "usuarioId": "IgCWvbZQ-zM",
+      "nome": "Didi",
+      "tipo": "cliente"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

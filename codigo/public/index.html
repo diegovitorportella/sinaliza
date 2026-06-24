@@ -44,7 +44,7 @@
                             Gerenciamento
                         </a>
                         <ul class="dropdown-menu border-0 shadow-lg rounded-4 p-2 mt-2">
-                            <li><a class="dropdown-item rounded-3 py-2 fw-medium" href="./modulos/cadastro_de_usuarios/index.html"><i class="bi bi-person-gear text-primary me-2"></i> Perfil do Usuário</a></li>
+                            <li><a class="dropdown-item rounded-3 py-2 fw-medium" href="#" id="linkMenuPerfil"><i class="bi bi-person-gear text-primary me-2"></i> Perfil do Usuário</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -305,21 +305,26 @@
         async function verificarSessao() {
             const areaAuth = document.getElementById('areaAutenticacao');
             const cardPerfil = document.getElementById('cardMeuPerfil');
+            const linkMenuPerfil = document.getElementById('linkMenuPerfil');
 
             try {
-                
+                // Como configuramos no db.json, a sessão possui o id "atual", então a rota direta funciona
                 const resp = await fetch('http://localhost:3000/sessao/atual');
                 const sessao = await resp.json();
 
                 if (sessao && sessao.usuarioId && areaAuth) {
-                    const linkPainel = sessao.tipo === 'restaurante' 
+                    const isRestaurante = sessao.tipo === 'restaurante';
+                    const linkPainel = isRestaurante 
                         ? './modulos/painel_restaurante/index.html' 
                         : './modulos/painel_cliente/index.html';
+
+                    // 1. ARRUMANDO A SAUDAÇÃO NO MENU SUPERIOR
+                    const textoSaudacao = isRestaurante ? 'Gestão:' : 'Olá,';
 
                     areaAuth.innerHTML = `
                         <div class="dropdown">
                             <button class="btn btn-outline-primary rounded-pill px-4 fw-bold dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person-circle me-1"></i> Olá, ${sessao.nome.split(' ')[0]}
+                                <i class="bi ${isRestaurante ? 'bi-shop-window' : 'bi-person-circle'} me-1"></i> ${textoSaudacao} ${sessao.nome.split(' ')[0]}
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 rounded-3">
                                 <li><a class="dropdown-item py-2 fw-medium" href="${linkPainel}"><i class="bi bi-grid text-primary me-2"></i> Meu Painel</a></li>
@@ -329,13 +334,31 @@
                         </div>
                     `;
 
+                    // 2. ARRUMANDO O TEXTO DO CARD NA HOME DE FORMA DINÂMICA
                     if(cardPerfil) {
                         cardPerfil.onclick = () => { window.location.href = linkPainel; };
+                        
+                        if (isRestaurante) {
+                            cardPerfil.querySelector('.feature-icon').innerHTML = '<i class="bi bi-shop-window"></i>';
+                            cardPerfil.querySelector('h4').textContent = "Gestão do Restaurante";
+                            cardPerfil.querySelector('p').textContent = "Atualize o seu cardápio, dados de acessibilidade e acompanhe avaliações.";
+                        } else {
+                            cardPerfil.querySelector('.feature-icon').innerHTML = '<i class="bi bi-person-badge"></i>';
+                            cardPerfil.querySelector('h4').textContent = "O Meu Perfil";
+                            cardPerfil.querySelector('p').textContent = "Guarde as suas preferências, restrições e restaurantes favoritos num só lugar.";
+                        }
                     }
+                    if(linkMenuPerfil) linkMenuPerfil.href = linkPainel; 
+
                 } else {
+                    // SE NÃO ESTIVER LOGADO
                     if(cardPerfil) {
                         cardPerfil.onclick = () => { window.location.href = './modulos/autenticacao/index.html#login'; };
+                        cardPerfil.querySelector('.feature-icon').innerHTML = '<i class="bi bi-person-badge"></i>';
+                        cardPerfil.querySelector('h4').textContent = "O Meu Perfil";
+                        cardPerfil.querySelector('p').textContent = "Guarde as suas preferências, restrições e restaurantes favoritos num só lugar.";
                     }
+                    if(linkMenuPerfil) linkMenuPerfil.href = './modulos/autenticacao/index.html#login';
                 }
             } catch(e) {
                 console.error("Erro ao verificar sessão via API:", e);
@@ -378,17 +401,21 @@
             const termo = document.getElementById('inputBuscaHome').value.trim().toLowerCase();
             
             if (termo.length === 0) {
-                const destaques = [...todosRestaurantes].sort((a, b) => b.pontuacaoAcessibilidade - a.pontuacaoAcessibilidade).slice(0, 4);
+                const destaques = [...todosRestaurantes].sort((a, b) => (b.pontuacaoAcessibilidade || 0) - (a.pontuacaoAcessibilidade || 0)).slice(0, 4);
                 renderizarGrid(destaques, 'Destaques Acessíveis');
                 document.getElementById('txtResultados').textContent = '';
-                document.getElementById('secao-acesso-rapido').style.display = 'block';
+                document.getElementById('secao-acesso-rapido').style.display = 'block'; 
             } else {
-                const filtrados = todosRestaurantes.filter(r =>
-                    r.nome.toLowerCase().includes(termo) || 
-                    r.tipoCozinha.toLowerCase().includes(termo) || 
-                    r.cidade.toLowerCase().includes(termo)
-                );
-                document.getElementById('secao-acesso-rapido').style.display = 'none';
+                const filtrados = todosRestaurantes.filter(r => {
+                    const nomeStr = (r.nome || '').toLowerCase();
+                    const cozinhaStr = (r.tipoCozinha || r.culinaria || '').toLowerCase();
+                    const cidadeStr = (r.cidade || '').toLowerCase();
+
+                    return nomeStr.includes(termo) || 
+                           cozinhaStr.includes(termo) || 
+                           cidadeStr.includes(termo);
+                });
+                                
                 renderizarGrid(filtrados, filtrados.length === 0 ? 'Nenhum resultado encontrado' : `${filtrados.length} restaurante(s) encontrado(s)`);
                 document.getElementById('txtResultados').textContent = filtrados.length > 0 ? `${filtrados.length} resultado(s)` : '';
             }
