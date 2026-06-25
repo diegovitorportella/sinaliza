@@ -1,9 +1,7 @@
-const API_URL = 'http://localhost:3000/usuarios';
+const API_USUARIOS = 'http://localhost:3000/usuarios';
+const API_RESTAURANTES = 'http://localhost:3000/restaurantes';
 
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // 0. VERIFICA A URL PARA ABRIR A ABA CORRETA AUTOMATICAMENTE
-    // Se o link contiver #cadastro, aciona o clique na aba de Criar Conta
     if (window.location.hash === '#cadastro') {
         const tabCadastro = document.getElementById('cadastro-tab');
         if (tabCadastro) tabCadastro.click();
@@ -12,70 +10,129 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tabLogin) tabLogin.click();
     }
 
-    // 1. MÁSCARA DE CNPJ (Usando a biblioteca IMask inclusa no HTML)
-    const cnpjInput = document.getElementById('cadastroCnpj');
-    if (cnpjInput) {
-        IMask(cnpjInput, { mask: '00.000.000/0000-00' });
+    const cnpjInputCadastro = document.getElementById('cadastroCnpj');
+    if (cnpjInputCadastro) {
+        IMask(cnpjInputCadastro, { mask: '00.000.000/0000-00' });
     }
 
-    // 2. ALTERNAR CAMPOS (Cliente vs Restaurante)
+    const loginInput = document.getElementById('loginIdentificador');
+    let mascaraLogin = null;
+    if (loginInput) {
+        mascaraLogin = IMask(loginInput, { mask: String }); 
+    }
+
     const radiosTipo = document.querySelectorAll('input[name="tipoConta"]');
     const divCnpj = document.getElementById('divCnpj');
     const labelNome = document.getElementById('labelNome');
+    const divEmailCadastro = document.getElementById('divEmailCadastro');
+    const cadastroCnpj = document.getElementById('cadastroCnpj');
+    const cadastroEmail = document.getElementById('cadastroEmail');
 
     radiosTipo.forEach(radio => {
         radio.addEventListener('change', (e) => {
             if (e.target.value === 'restaurante') {
                 divCnpj.classList.remove('d-none');
+                divEmailCadastro.classList.add('d-none');
                 cadastroCnpj.setAttribute('required', 'true');
+                cadastroEmail.removeAttribute('required');
+                cadastroEmail.value = '';
                 labelNome.textContent = 'Nome do Restaurante';
-            } else {
+            }
+            else {
                 divCnpj.classList.add('d-none');
+                divEmailCadastro.classList.remove('d-none');
                 cadastroCnpj.removeAttribute('required');
+                cadastroEmail.setAttribute('required', 'true');
                 labelNome.textContent = 'Nome Completo';
-                cnpjInput.value = ''; // Limpa o CNPJ se o utilizador voltar para a opção Cliente
+                if(cnpjInputCadastro) cnpjInputCadastro.value = '';
             }
         });
     });
 
-    // 3. LÓGICA DE CADASTRO (POST)
+    const radiosLogin = document.querySelectorAll('input[name="tipoLogin"]');
+    const labelLogin = document.getElementById('labelLogin');
+
+    radiosLogin.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            if (e.target.value === 'restaurante') {
+                labelLogin.textContent = 'CNPJ';
+                loginInput.placeholder = '00.000.000/0000-00';
+                loginInput.value = '';
+                if (mascaraLogin) {
+                    mascaraLogin.updateOptions({ mask: '00.000.000/0000-00' });
+                }
+            } 
+            else {
+                labelLogin.textContent = 'Email';
+                loginInput.placeholder = 'exemplo@email.com';
+                loginInput.value = '';
+                if (mascaraLogin) {
+                    mascaraLogin.updateOptions({ mask: String });
+                }
+            }
+        });
+    });
+
     const formCadastro = document.getElementById('formCadastro');
     if (formCadastro) {
         formCadastro.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
+
             const tipo = document.querySelector('input[name="tipoConta"]:checked').value;
-            const novoUsuario = {
-                nome: document.getElementById('cadastroNome').value.trim(),
-                email: document.getElementById('cadastroEmail').value.trim(),
-                senha: document.getElementById('cadastroSenha').value,
-                tipo: tipo,
-                cnpj: tipo === 'restaurante' ? document.getElementById('cadastroCnpj').value : null
-            };
+            let dadosCadastro;
+            let apiCadastro;
+            if (tipo === 'cliente') {
+                dadosCadastro = {
+                    nome: document.getElementById('cadastroNome').value.trim(),
+                    email: document.getElementById('cadastroEmail').value.trim(),
+                    senha: document.getElementById('cadastroSenha').value
+                };
+
+                apiCadastro = API_USUARIOS;
+            }
+            else {
+                dadosCadastro = {
+                    nome: document.getElementById('cadastroNome').value.trim(),
+                    cnpj: document.getElementById('cadastroCnpj').value.trim(),
+                    senha: document.getElementById('cadastroSenha').value
+                };
+
+                apiCadastro = API_RESTAURANTES;
+            }
+
+            let campoBusca;
+            if (tipo === 'cliente') {
+                campoBusca = `email=${dadosCadastro.email}`;
+            }
+            else {
+                campoBusca = `cnpj=${dadosCadastro.cnpj}`;
+            }
 
             try {
-                // Verifica no banco se o email já existe
-                const respCheck = await fetch(`${API_URL}?email=${novoUsuario.email}`);
+                const respCheck = await fetch(`${apiCadastro}?${campoBusca}`);
                 const existe = await respCheck.json();
-                
+
                 if (existe.length > 0) {
-                    alert("Este email já está cadastrado!");
+                    if (tipo === 'cliente') {
+                        alert("Este email já está cadastrado!");
+                    }
+                    else {
+                        alert("Este CNPJ já está cadastrado!");
+                    }
                     return;
                 }
 
-                // Salva o novo utilizador no JSON Server
-                const resp = await fetch(API_URL, {
+                const resp = await fetch(apiCadastro, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(novoUsuario)
+                    body: JSON.stringify(dadosCadastro)
                 });
 
                 if (resp.ok) {
                     alert("Conta criada com sucesso! Faça login para continuar.");
-                    // Muda automaticamente para a aba de Login e limpa o formulário
                     document.getElementById('login-tab').click();
                     formCadastro.reset();
-                    window.location.hash = '#login'; // Atualiza a URL para não voltar ao cadastro por engano
+                    window.location.hash = '#login';
                 }
             } catch (error) {
                 console.error("Erro ao cadastrar:", error);
@@ -84,48 +141,64 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 4. LÓGICA DE LOGIN (Substituindo o LocalStorage por JSON Server)
     const formLogin = document.getElementById('formLogin');
     if (formLogin) {
         formLogin.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value.trim();
-            const senha = document.getElementById('loginSenha').value;
+
+            const tipoLogin = document.querySelector('input[name="tipoLogin"]:checked').value;
+            const identificador = document.getElementById('loginIdentificador').value.trim();
+            const senhaDigitada = document.getElementById('loginSenha').value;
+
+            let apiLogin;
+            let campoBusca;
+
+            if (tipoLogin === 'cliente') {
+                apiLogin = API_USUARIOS;
+                campoBusca = `email=${encodeURIComponent(identificador)}`;
+            }
+            else {
+                apiLogin = API_RESTAURANTES;
+                campoBusca = `cnpj=${encodeURIComponent(identificador)}`;
+            }
 
             try {
-                // Procura o utilizador com aquele email e senha exatos
-                const resp = await fetch(`${API_URL}?email=${email}&senha=${senha}`);
+                const resp = await fetch(`${apiLogin}?${campoBusca}`);
                 const users = await resp.json();
 
                 if (users.length > 0) {
                     const usuarioLogado = users[0];
-                    
-                    // GUARDA A SESSÃO NO JSON SERVER (FIM DO LOCALSTORAGE!)
-                    await fetch('http://localhost:3000/sessao/atual', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            id: "atual",
-                            usuarioId: usuarioLogado.id,
-                            nome: usuarioLogado.nome,
-                            tipo: usuarioLogado.tipo
-                        })
-                    });
 
-                    // Sistema de Roteamento Inteligente
-                    if (usuarioLogado.tipo === 'restaurante') {
-                        window.location.href = '../painel_restaurante/index.html';
+                    if (String(usuarioLogado.senha) === String(senhaDigitada)) {
+
+                        await fetch('http://localhost:3000/sessao/atual', {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: "atual",
+                                usuarioId: usuarioLogado.id,
+                                nome: usuarioLogado.nome,
+                                tipo: tipoLogin
+                            })
+                        });
+
+                        if (tipoLogin === 'restaurante') {
+                            window.location.href = '../painel_restaurante/index.html';
+                        }
+                        else {
+                            window.location.href = '../../index.html';
+                        }
                     } else {
-                        window.location.href = '../../index.html'; 
+                        alert("Dados de acesso incorretos (Senha inválida).");
                     }
-
-                } else {
-                    alert("Email ou palavra-passe incorretos.");
                 }
-            } catch (error) {
+                else {
+                    alert("Dados de acesso incorretos (Usuário/CNPJ não encontrado).");
+                }
+            }
+            catch (error) {
                 console.error("Erro ao fazer login:", error);
-                alert("Erro de conexão com o servidor. O JSON Server está a correr?");
+                alert("Erro de conexão com o servidor. O JSON Server está rodando?");
             }
         });
     }

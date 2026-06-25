@@ -357,22 +357,29 @@
       "pontuacaoAcessibilidade": 9
     },
     {
-      "usuarioId": "2BfLXopm4HQ",
-      "nome": "Teste",
+      "nome": "Restauras",
+      "cnpj": "11.111.111/1111-11",
+      "senha": "123",
+      "id": "yX2b1R6dp-s"
+    },
+    {
+      "usuarioId": "yX2b1R6dp-s",
+      "nome": "Restauras",
       "culinaria": "Brasileira",
-      "endereco": "Rua Olimpus 71",
+      "endereco": "Rua Exemplo de Restaurante",
       "cidade": "Belo Horizonte",
       "urlFoto": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80",
-      "pontuacaoAcessibilidade": 6.3,
+      "pontuacaoAcessibilidade": 7.5,
       "coordenadas": {
-        "lat": -19.916,
-        "lng": -43.934
+        "lat": -19.92333,
+        "lng": -43.99028
       },
       "acessibilidade": [
-        "LIBRAS"
+        "LIBRAS",
+        "Rampa"
       ],
       "cardapio": [],
-      "id": "9Z7cdjV9LGI"
+      "id": "hvWk0GUQFNY"
     }
   ],
   "avaliacoes": [
@@ -627,7 +634,7 @@
       "categoria": "Prato Principal",
       "preco": 32,
       "urlFoto": "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?w=400"
-    }    
+    }
   ],
   "categorias_garcom": [
     {
@@ -792,9 +799,9 @@
   "sessao": [
     {
       "id": "atual",
-      "usuarioId": "IgCWvbZQ-zM",
-      "nome": "Didi",
-      "tipo": "cliente"
+      "usuarioId": null,
+      "nome": null,
+      "tipo": null
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
