@@ -1,4 +1,5 @@
 let restaurantesData = [];
+let avaliacoesData = [];
 let tagsAtivas = []; // Array que guarda os IDs dos botões clicados
 let termoBusca = ""; // Guarda o texto da barra de pesquisa
 
@@ -15,8 +16,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderizarFiltros(); // Desenha os botões na tela primeiro
     
     try {
-        const resposta = await fetch('http://localhost:3000/restaurantes');
-        restaurantesData = await resposta.json();
+        const [respostaRestaurantes, respostaAvaliacoes] = await Promise.all([
+            fetch('http://localhost:3000/restaurantes'),
+            fetch('http://localhost:3000/avaliacoes')
+        ]);
+        restaurantesData = await respostaRestaurantes.json();
+        avaliacoesData = await respostaAvaliacoes.json();
         aplicarFiltros(); // Roda a renderização inicial
     } catch (erro) {
         console.error("Erro ao carregar dados:", erro);
@@ -24,6 +29,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// Retorna até 3 tags mais frequentes nas avaliações de um restaurante
+function obterTagsMaisComuns(restauranteId, limite = 3) {
+    const contagem = {};
+    avaliacoesData
+        .filter(av => String(av.restauranteId) === String(restauranteId))
+        .forEach(av => {
+            (av.tags || []).forEach(tag => {
+                contagem[tag] = (contagem[tag] || 0) + 1;
+            });
+        });
+
+    return Object.keys(contagem)
+        .sort((a, b) => contagem[b] - contagem[a])
+        .slice(0, limite);
+}
 // 1. GERA OS BOTÕES NA TELA
 function renderizarFiltros() {
     const container = document.getElementById('filtros-container');
@@ -113,11 +133,22 @@ function renderizarCards(lista) {
         article.className = 'card';
         article.tabIndex = 0;
 
-        let seloLibras = '';
+    let seloLibras = '';
         if (restaurante.checklist?.comunicacao?.libras) {
             seloLibras = `
                 <div class="badge-libras" aria-label="Atendimento em LIBRAS disponível" style="color: var(--primary); font-weight: bold; margin-bottom: 0.5rem;">
                     <span class="icon">🤟</span> LIBRAS
+                </div>
+            `;
+        }
+
+        // Monta até 3 badges com as tags mais comuns nas avaliações do restaurante
+        const tagsComuns = obterTagsMaisComuns(restaurante.id);
+        let tagsComunsHTML = '';
+        if (tagsComuns.length > 0) {
+            tagsComunsHTML = `
+                <div class="tags-comuns-card">
+                    ${tagsComuns.map(tag => `<span class="tag-comum-mini">${tag}</span>`).join('')}
                 </div>
             `;
         }
@@ -129,6 +160,7 @@ function renderizarCards(lista) {
             <div class="card-content">
                 ${seloLibras}
                 <h3 class="card-title">${restaurante.nome}</h3>
+                ${tagsComunsHTML}
                 <p class="card-description">
                     <strong>${restaurante.tipoCozinha || 'Culinária variada'}</strong> <br>
                     📍 ${restaurante.cidade || 'Belo Horizonte'} <br>

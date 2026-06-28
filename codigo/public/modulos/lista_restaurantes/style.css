@@ -98,6 +98,12 @@ body {
     border: 1px solid rgba(37, 99, 235, 0.2); font-size: 0.75rem; font-weight: 800;
     padding: 6px 12px; border-radius: 8px; display: inline-flex; align-items: center; width: fit-content;
 }
+.tags-comuns-card { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.tag-comum-mini {
+    background: var(--light); color: var(--secondary);
+    border: 1px solid var(--border); font-size: 0.7rem; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center;
+}
 
 .btn-action {
     background-color: var(--light); color: var(--dark);
