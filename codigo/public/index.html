@@ -444,7 +444,7 @@
             }
             
             lista.forEach(r => {
-                const corPontuacao = r.pontuacaoAcessibilidade >= 7 ? '#10b981' : r.pontuacaoAcessibilidade >= 4 ? '#f59e0b' : '#ef4444';
+                const corPontuacao = r.pontuacaoAcessibilidade >= 4 ? '#10b981' : r.pontuacaoAcessibilidade >= 3 ? '#f59e0b' : '#ef4444';
                 const librasTag = r.checklist?.comunicacao?.libras ? `<span class="badge-libras"><i class="bi bi-check-circle-fill me-1"></i> LIBRAS</span>` : '';
                 let fotoUrl = (r.foto && r.foto.length > 15) ? r.foto : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400';
                 
@@ -461,9 +461,9 @@
                             
                             <div class="mt-auto">
                                 <div class="pontuacao-bar">
-                                    <div class="pontuacao-fill" style="width:${r.pontuacaoAcessibilidade * 10}%; background:${corPontuacao}"></div>
+                                    <div class="pontuacao-fill" style="width:${r.pontuacaoAcessibilidade * 20}%; background:${corPontuacao}"></div>
                                 </div>
-                                <small class="text-muted">Acessibilidade: ${r.pontuacaoAcessibilidade}/10</small>
+                                <small class="text-muted">Acessibilidade: ${r.pontuacaoAcessibilidade}/5</small>
                             </div>
                         </div>
                         <div class="card-footer">

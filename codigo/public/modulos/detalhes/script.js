@@ -96,20 +96,20 @@ function configurarPontuacaoVisual(nota) {
     const seloTexto = document.getElementById('det-selo-texto');
     const seloContainer = document.getElementById('det-selo');
 
-    let percentual = (nota / 10) * 100;
+    let percentual = (nota / 5) * 100;
     
     if (barraFill) barraFill.style.width = `${percentual}%`;
-    if (label) label.textContent = `Pontuação Geral: ${nota}/10`;
+    if (label) label.textContent = `Pontuação Geral: ${nota}/5`;
 
     if (!seloContainer) return;
 
-    if (nota >= 7) {
+    if (nota >= 4) {
         if(barraFill) barraFill.style.backgroundColor = '#15803d'; 
         seloContainer.style.backgroundColor = '#dcfce7';
         seloContainer.style.color = '#15803d';
         if(seloIcon) seloIcon.innerHTML = '<i class="bi bi-star-fill"></i>';
         if(seloTexto) seloTexto.textContent = 'ALTA';
-    } else if (nota >= 4) {
+    } else if (nota >= 3) {
         if(barraFill) barraFill.style.backgroundColor = '#b45309'; 
         seloContainer.style.backgroundColor = '#fef3c7';
         seloContainer.style.color = '#b45309';
@@ -245,7 +245,7 @@ async function carregarAvaliacoes(id) {
         
         resumo.innerHTML = `
             <div class="d-flex align-items-center gap-3 bg-light p-3 rounded-4 border">
-                <h2 class="display-4 fw-black text-dark mb-0">${media}</h2>
+                <h2 class="display-4 fw-black text-dark mb-0">${media}<span class="fs-4 text-muted">/5</span></h2>
                 <div>
                     <div class="text-warning fs-5">
                         ${'<i class="bi bi-star-fill"></i>'.repeat(Math.round(media))}

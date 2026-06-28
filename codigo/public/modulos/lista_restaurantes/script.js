@@ -133,7 +133,7 @@ function renderizarCards(lista) {
                 <p class="card-description">
                     <strong>${restaurante.tipoCozinha || 'Culinária variada'}</strong> <br>
                     📍 ${restaurante.cidade || 'Belo Horizonte'} <br>
-                    ⭐ Nota de Acessibilidade: ${restaurante.pontuacaoAcessibilidade || 'N/A'}/10
+                    ⭐ Nota de Acessibilidade: ${restaurante.pontuacaoAcessibilidade || 'N/A'}/5
                 </p>
                 <button class="btn-action" aria-label="Ver detalhes do ${restaurante.nome}" onclick="irParaDetalhes('${restaurante.id}')">Ver Detalhes</button>
             </div>

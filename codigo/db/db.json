@@ -59,7 +59,7 @@
           "sinalizacao": false
         }
       },
-      "pontuacaoAcessibilidade": 0
+      "pontuacaoAcessibilidade": 2
     },
     {
       "id": "2",
@@ -100,7 +100,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 10
+      "pontuacaoAcessibilidade": 4.7
     },
     {
       "id": "3",
@@ -141,7 +141,7 @@
           "sinalizacao": false
         }
       },
-      "pontuacaoAcessibilidade": 6
+      "pontuacaoAcessibilidade": 4
     },
     {
       "id": "4",
@@ -182,7 +182,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 6
+      "pontuacaoAcessibilidade": 3
     },
     {
       "id": "5",
@@ -223,7 +223,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 10
+      "pontuacaoAcessibilidade": 5
     },
     {
       "id": "6",
@@ -264,7 +264,7 @@
           "sinalizacao": false
         }
       },
-      "pontuacaoAcessibilidade": 6
+      "pontuacaoAcessibilidade": 3
     },
     {
       "id": "7",
@@ -305,7 +305,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 3
+      "pontuacaoAcessibilidade": 1.5
     },
     {
       "id": "8",
@@ -346,7 +346,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 9
+      "pontuacaoAcessibilidade": 4
     }
   ],
   "avaliacoes": [
@@ -464,6 +464,36 @@
       ],
       "comentario": "Sinalização visual, Fácil comunicação, Estacionamento acessível",
       "id": "72-ERIknxdc"
+    },
+    {
+      "restauranteId": 6,
+      "nota": 3,
+      "tags": [
+        "Rampa de acesso",
+        "Banheiro adaptado",
+        "Piso tátil"
+      ],
+      "comentario": "Tem rampa de acesso, banheiro adaptado e piso tátil, mas falta acessibilidade para outras deficiências, como a auditiva.",
+      "usuarioId": null,
+      "id": "mKBePaM-nis"
+    },
+    {
+      "restauranteId": 7,
+      "nota": 1,
+      "tags": [],
+      "comentario": "Não há praticamente nenhuma acessibilidade.",
+      "usuarioId": null,
+      "id": "0hUxxXmBXfU"
+    },
+    {
+      "restauranteId": 7,
+      "nota": 2,
+      "tags": [
+        "Equipe capacitada"
+      ],
+      "comentario": "Equipe capacitada... Mas tirando isso, não ouve nenhuma acessibilidade num geral.",
+      "usuarioId": null,
+      "id": "5MTymzi7EdM"
     }
   ],
   "cardapio": [

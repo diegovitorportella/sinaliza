@@ -79,28 +79,63 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
         console.warn('Não foi possível identificar o usuário da sessão.');
     }
 
+    // Criamos o objeto convertendo o ID do restaurante de forma consistente
+    const idRestauranteNumerico = restauranteId ? Number(restauranteId) : null;
+
     const avaliacao = {
-        restauranteId: restauranteId ? Number(restauranteId) : null,
+        restauranteId: idRestauranteNumerico,
         nota:          Number(ratingSelected.value),
         tags:          activeTags,
         comentario:    commentText,
         usuarioId:     usuarioId
     };
+
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Enviando...';
 
     try {
+        // 1. Envia a nova avaliação
         const resp = await fetch(`${API}/avaliacoes`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(avaliacao)
         });
 
-        if (!resp.ok) throw new Error('Erro na resposta do servidor');
+        if (!resp.ok) throw new Error('Erro na resposta do servidor ao postar avaliação');
 
+        // 2. Se a avaliação foi salva e temos o ID do restaurante, recalculamos a média global dele
+        if (idRestauranteNumerico) {
+            try {
+                // Busca todas as avaliações existentes para este restaurante
+                const respTodas = await fetch(`${API}/avaliacoes?restauranteId=${idRestauranteNumerico}`);
+                if (respTodas.ok) {
+                    const listaAvaliacoes = await respTodas.json();
+                    
+                    if (listaAvaliacoes.length > 0) {
+                        // Soma todas as notas (já na escala de 5)
+                        const somaNotas = listaAvaliacoes.reduce((acumulador, item) => acumulador + Number(item.nota || 0), 0);
+                        // Calcula a média e fixa em 1 casa decimal (ex: 4.3)
+                        const novaMedia = parseFloat((somaNotas / listaAvaliacoes.length).toFixed(1));
+
+                        // Atualiza a nota geral de acessibilidade diretamente no cadastro do restaurante
+                        await fetch(`${API}/restaurantes/${idRestauranteNumerico}`, {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                pontuacaoAcessibilidade: novaMedia
+                            })
+                        });
+                    }
+                }
+            } catch (erroMedia) {
+                console.error('Erro ao atualizar a média do restaurante no banco:', erroMedia);
+            }
+        }
+
+        // Exibe mensagem de sucesso para o usuário
         const messageDiv = document.getElementById('message');
-        messageDiv.innerHTML = '✓ Avaliação enviada com sucesso! Obrigado.';
+        messageDiv.innerHTML = '✓ Avaliação enviada com sucesso! Nota geral atualizada.';
         messageDiv.className = 'success-msg';
         messageDiv.classList.remove('hidden');
 
