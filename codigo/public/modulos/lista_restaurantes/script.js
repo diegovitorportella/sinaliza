@@ -107,7 +107,6 @@ function renderizarCards(lista) {
     }
 
     lista.forEach(restaurante => {
-        // Pula restaurantes mal formatados no banco de testes
         if(!restaurante.nome) return; 
 
         const article = document.createElement('article');
