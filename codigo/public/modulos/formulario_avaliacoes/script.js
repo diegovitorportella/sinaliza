@@ -1,11 +1,27 @@
 const API = 'http://localhost:3000';
 
-// ── Lê o restauranteId da URL ─────────────────────────────────────────────────
 const params = new URLSearchParams(window.location.search);
 const restauranteId = params.get('restauranteId');
 
-// ── EVENTO 1: carregamento — ajusta header e link de voltar ──────────────────
 document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const respSessao = await fetch(`${API}/sessao/atual`);
+        const sessao = await respSessao.json();
+        if (!sessao || !sessao.usuarioId || sessao.tipo === 'restaurante') {
+            const aviso = document.getElementById('message');
+            aviso.innerHTML = '⚠️ Você precisa estar logado para enviar uma avaliação.';
+            aviso.className = 'error-msg';
+            aviso.classList.remove('hidden');
+            document.getElementById('feedbackForm').style.display = 'none';
+            setTimeout(() => {
+                window.location.href = `../autenticacao/index.html`;
+            }, 2500);
+            return;
+        }
+    } catch (e) {
+        console.warn('Erro ao verificar sessão.');
+    }
+
     if (restauranteId) {
         try {
             const resp = await fetch(`${API}/restaurantes/${restauranteId}`);
@@ -27,7 +43,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// ── EVENTO 2: tags rápidas (toggle) ──────────────────────────────────────────
 const tagButtons = document.querySelectorAll('.tag-btn');
 const commentTextarea = document.getElementById('comment');
 
@@ -54,7 +69,6 @@ function escapeRegex(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// ── EVENTO 3: submit do formulário — POST ao JSON Server ─────────────────────
 document.getElementById('feedbackForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 

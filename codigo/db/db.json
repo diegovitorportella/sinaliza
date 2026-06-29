@@ -4,19 +4,22 @@
       "id": "1",
       "senha": "123",
       "nome": "Administrador do Sistema",
-      "email": "admin@abc.com"
+      "email": "admin@abc.com",
+      "tipo": "admin"
     },
     {
       "id": "2",
       "senha": "123",
       "nome": "Usuario Comum",
-      "email": "user@abc.com"
+      "email": "user@abc.com",
+      "tipo": "cliente"
     },
     {
       "id": "3",
       "senha": "123",
       "nome": "Rommel",
-      "email": "rommel@gmail.com"
+      "email": "rommel@gmail.com",
+      "tipo": "cliente"
     }
   ],
   "restaurantes": [
@@ -100,7 +103,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 4.7
+      "pontuacaoAcessibilidade": 4.5
     },
     {
       "id": "3",
@@ -494,6 +497,18 @@
       "comentario": "Equipe capacitada... Mas tirando isso, não ouve nenhuma acessibilidade num geral.",
       "usuarioId": null,
       "id": "5MTymzi7EdM"
+    },
+    {
+      "restauranteId": 2,
+      "nota": 4,
+      "tags": [
+        "Banheiro adaptado",
+        "Estacionamento acessível"
+      ],
+      "comentario": "teste, Estacionamento acessível, Banheiro adaptado",
+      "usuarioId": "1",
+      "id": "KZ9uucW",
+      "removida": true
     }
   ],
   "cardapio": [
@@ -796,10 +811,9 @@
   "sessao": [
     {
       "id": "atual",
-      "usuarioId": null,
-      "nome": null,
-      "tipo": null
+      "usuarioId": "1",
+      "nome": "Administrador do Sistema",
+      "tipo": "admin"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }

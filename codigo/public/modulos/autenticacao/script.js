@@ -175,10 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                id: "atual",
-                                usuarioId: usuarioLogado.id,
-                                nome: usuarioLogado.nome,
-                                tipo: tipoLogin
+                            id: "atual",
+                            usuarioId: usuarioLogado.id,
+                            nome: usuarioLogado.nome,
+                            tipo: usuarioLogado.tipo || tipoLogin
                             })
                         });
 
