@@ -32,7 +32,7 @@
       "telefone": "(31) 3496-6198",
       "tipoCozinha": "Brasileira",
       "horario": "Ter-Dom 12h-23h",
-      "foto": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600",
+      "foto": "http://localhost:3000/assets/images/xapuri.jpg",
       "lat": -19.860634,
       "lng": -44.004112,
       "cardapioDigital": false,
@@ -59,23 +59,23 @@
           "sinalizacao": false
         }
       },
-      "pontuacaoAcessibilidade": 0
+      "pontuacaoAcessibilidade": 10
     },
     {
       "id": "2",
       "senha": "123",
       "cnpj": "25.834.722/0001-72",
-      "nome": "Cantina do Lucas",
-      "descricao": "Tradicional cantina italiana no Edifício Maletta, tombada pelo patrimônio histórico. Conta com cardápio digital acessível e equipe muito atenciosa.",
-      "endereco": "Av. Augusto de Lima, 233 - Loja 18 - Centro",
+      "nome": "O Italiano",
+      "descricao": "Restaurante italiano sofisticado no Olhos D'Água. Focado em acessibilidade, conta com cardápio digital visual, pratos autênticos e equipe super capacitada para um atendimento inclusivo.",
+      "endereco": "Rua São Vicente, 155 - Olhos D'Água",
       "cidade": "Belo Horizonte",
       "estado": "MG",
-      "telefone": "(31) 3226-7153",
+      "telefone": "(31) 3288-3212",
       "tipoCozinha": "Italiana",
-      "horario": "Seg-Dom 11h-02h",
-      "foto": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600",
-      "lat": -19.923831,
-      "lng": -43.938645,
+      "horario": "Ter-Dom 11h-23h",
+      "foto": "http://localhost:3000/assets/images/italiano.jpg",
+      "lat": -19.981885,
+      "lng": -43.957545,
       "cardapioDigital": true,
       "qrCodeMesas": true,
       "checklist": {
@@ -114,7 +114,7 @@
       "telefone": "(31) 3243-8004",
       "tipoCozinha": "Japonesa",
       "horario": "Ter-Dom 18h-23h",
-      "foto": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=600",
+      "foto": "http://localhost:3000/assets/images/udon.png",
       "lat": -19.928154,
       "lng": -43.944421,
       "cardapioDigital": true,
@@ -155,7 +155,7 @@
       "telefone": "(31) 3293-8787",
       "tipoCozinha": "Churrasco",
       "horario": "Seg-Dom 11h-23h",
-      "foto": "https://images.unsplash.com/photo-1544025162-d76694265947?w=600",
+      "foto": "http://localhost:3000/assets/images/porcao.png",
       "lat": -19.948212,
       "lng": -43.949247,
       "cardapioDigital": false,
@@ -182,7 +182,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 6
+      "pontuacaoAcessibilidade": 8
     },
     {
       "id": "5",
@@ -196,7 +196,7 @@
       "telefone": "(31) 99900-5555",
       "tipoCozinha": "Vegetariana",
       "horario": "Seg-Sab 11h-22h",
-      "foto": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600",
+      "foto": "http://localhost:3000/assets/images/vegas.png",
       "lat": -19.923761,
       "lng": -43.938532,
       "cardapioDigital": true,
@@ -223,23 +223,23 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 10
+      "pontuacaoAcessibilidade": 7
     },
     {
       "id": "6",
       "senha": "123",
       "cnpj": "28.389.268/0001-86",
-      "nome": "Duke 'n' Duke",
-      "descricao": "Hamburgueria artesanal renomada na Savassi com pedidos por tablet e cardápio digital acessível. Ótima opção para quem busca praticidade.",
-      "endereco": "Rua Alagoas, 1470 - Savassi",
+      "nome": "Coreu Burguer",
+      "descricao": "A hamburgueria queridinha do Coração Eucarístico. Famosa pelos blends artesanais, oferece um ambiente descontraído com totens de autoatendimento e cardápio visual prático.",
+      "endereco": "Rua Coração Eucarístico de Jesus, 397 - Coração Eucarístico",
       "cidade": "Belo Horizonte",
       "estado": "MG",
-      "telefone": "(31) 3264-9857",
+      "telefone": "(31) 3375-1234",
       "tipoCozinha": "Hambúrguer",
       "horario": "Seg-Dom 18h-23h",
-      "foto": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600",
-      "lat": -19.937241,
-      "lng": -43.935105,
+      "foto": "http://localhost:3000/assets/images/coreu.png",
+      "lat": -19.923485,
+      "lng": -43.988015,
       "cardapioDigital": true,
       "qrCodeMesas": false,
       "checklist": {
@@ -278,7 +278,7 @@
       "telefone": "(31) 3491-1111",
       "tipoCozinha": "Nordestina",
       "horario": "Seg-Dom 11h-23h",
-      "foto": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600",
+      "foto": "http://localhost:3000/assets/images/macaxeira.png",
       "lat": -19.839842,
       "lng": -43.968712,
       "cardapioDigital": false,
@@ -310,18 +310,18 @@
     {
       "id": "8",
       "senha": "123",
-      "cnpj": "13.203.483/0001-73",
-      "nome": "Academia do Café",
-      "descricao": "Uma das cafeterias mais premiadas de BH, localizada na Funcionários. Atendimento cuidadoso com avisos visuais integrados.",
-      "endereco": "Rua Grão Pará, 1024 - Funcionários",
+      "cnpj": "14.555.999/0001-10",
+      "nome": "O Granulado",
+      "descricao": "Uma doceria e cafeteria afetiva no bairro Anchieta. Famosa por seus doces artesanais, possui um cardápio visualmente intuitivo e ambiente acolhedor para toda a comunidade.",
+      "endereco": "Rua Passa Tempo, 550 - Anchieta",
       "cidade": "Belo Horizonte",
       "estado": "MG",
-      "telefone": "(31) 3223-8565",
-      "tipoCozinha": "Cafeteria",
-      "horario": "Seg-Sex 9h-19h",
-      "foto": "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600",
-      "lat": -19.932845,
-      "lng": -43.928921,
+      "telefone": "(31) 3225-4433",
+      "tipoCozinha": "Cafeteria e Doceria",
+      "horario": "Seg-Sab 10h-20h",
+      "foto": "http://localhost:3000/assets/images/granulado.png",
+      "lat": -19.946352,
+      "lng": -43.923845,
       "cardapioDigital": true,
       "qrCodeMesas": true,
       "checklist": {
@@ -347,8 +347,49 @@
         }
       },
       "pontuacaoAcessibilidade": 9
+    },
+    {
+      "id": "9",
+      "senha": "123",
+      "cnpj": "18.342.923/0001-21",
+      "nome": "Outback Steakhouse",
+      "descricao": "Famosa rede de steakhouses localizada no Pátio Savassi. Excelente infraestrutura, cardápios visuais detalhados em tablets e equipe proativa e muito bem treinada.",
+      "endereco": "Av. do Contorno, 6061 - São Pedro (Pátio Savassi)",
+      "cidade": "Belo Horizonte",
+      "estado": "MG",
+      "telefone": "(31) 3288-3763",
+      "tipoCozinha": "Australiana",
+      "horario": "Seg-Dom 11h-23h",
+      "foto": "http://localhost:3000/assets/images/outback.png",
+      "lat": -19.940562,
+      "lng": -43.933833,
+      "cardapioDigital": true,
+      "qrCodeMesas": true,
+      "checklist": {
+        "comunicacao": {
+          "libras": false,
+          "cardapioImagens": true,
+          "cardapioDigitalAcessivel": true,
+          "chatTexto": false
+        },
+        "tecnologia": {
+          "qrCode": true,
+          "tabletPedidos": true,
+          "pedidoVisual": true
+        },
+        "atendimento": {
+          "chamadaVisual": true,
+          "funcionariosTreinados": true,
+          "tempoRespostaRapido": true
+        },
+        "inclusao": {
+          "ambienteVisual": true,
+          "sinalizacao": true
+        }
+      },
+      "pontuacaoAcessibilidade": 8
     }
-  ],
+],
   "avaliacoes": [
     {
       "id": "1",
