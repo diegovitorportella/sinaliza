@@ -5,11 +5,13 @@ const restauranteId = params.get('restauranteId');
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const respSessao = await fetch(`${API}/sessao/atual`);
-        const sessao = await respSessao.json();
+        const respSessao = await fetch(`${API}/sessao`);
+        const sessaoArray = await respSessao.json();
+        const sessao = sessaoArray[0];
+
         if (!sessao || !sessao.usuarioId || sessao.tipo === 'restaurante') {
             const aviso = document.getElementById('message');
-            aviso.innerHTML = '⚠️ Você precisa estar logado para enviar uma avaliação.';
+            aviso.innerHTML = '⚠️ Você precisa estar logado como cliente para enviar uma avaliação.';
             aviso.className = 'error-msg';
             aviso.classList.remove('hidden');
             document.getElementById('feedbackForm').style.display = 'none';
@@ -19,7 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
     } catch (e) {
-        console.warn('Erro ao verificar sessão.');
+        console.warn('Erro ao verificar sessão.', e);
     }
 
     if (restauranteId) {
@@ -27,19 +29,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const resp = await fetch(`${API}/restaurantes/${restauranteId}`);
             if (resp.ok) {
                 const restaurante = await resp.json();
-                document.getElementById('titulo-pagina').textContent =
-                    `Avaliar: ${restaurante.nome}`;
-                document.getElementById('subtitulo-pagina').textContent =
-                    `${restaurante.tipoCozinha} · ${restaurante.cidade}`;
-                document.getElementById('link-voltar').href =
-                    `../detalhes/index.html?restauranteId=${restauranteId}`;
+                document.getElementById('titulo-pagina').textContent = `Avaliar: ${restaurante.nome}`;
+                document.getElementById('subtitulo-pagina').textContent = `${restaurante.tipoCozinha} · ${restaurante.cidade}`;
+                document.getElementById('link-voltar').href = `../detalhes/index.html?id=${restauranteId}`;
             }
         } catch (e) {
             console.warn('Não foi possível carregar o nome do restaurante.');
         }
     } else {
-        document.getElementById('subtitulo-pagina').textContent =
-            'Restaurante não identificado';
+        document.getElementById('subtitulo-pagina').textContent = 'Restaurante não identificado';
     }
 });
 
@@ -86,21 +84,19 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
 
     let usuarioId = null;
     try {
-        const respSessao = await fetch(`${API}/sessao/atual`);
-        const sessaoAtual = await respSessao.json();
-        usuarioId = sessaoAtual ? sessaoAtual.usuarioId : null;
-    } catch (e) {
+        const respSessao = await fetch(`${API}/sessao`);
+        const sessaoArray = await respSessao.json();
+        usuarioId = sessaoArray[0] ? sessaoArray[0].usuarioId : null;
+    }
+    catch (e) {
         console.warn('Não foi possível identificar o usuário da sessão.');
     }
 
-    const idRestauranteNumerico = restauranteId ? Number(restauranteId) : null;
-    const avaliacao = {
-        restauranteId: idRestauranteNumerico,
-        nota:          Number(ratingSelected.value),
-        tags:          activeTags,
-        comentario:    commentText,
-        usuarioId:     usuarioId
-    };
+    if (restauranteId) {
+        setTimeout(() => {
+            window.location.href = `../detalhes/index.html?id=${restauranteId}`;
+        }, 2000);
+    }
 
     const submitBtn = document.getElementById('submitBtn');
     submitBtn.disabled = true;
@@ -120,7 +116,7 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
                 const respTodas = await fetch(`${API}/avaliacoes?restauranteId=${idRestauranteNumerico}`);
                 if (respTodas.ok) {
                     const listaAvaliacoes = await respTodas.json();
-                    
+
                     if (listaAvaliacoes.length > 0) {
                         const somaNotas = listaAvaliacoes.reduce((acumulador, item) => acumulador + Number(item.nota || 0), 0);
                         const novaMedia = parseFloat((somaNotas / listaAvaliacoes.length).toFixed(1));
@@ -134,7 +130,8 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
                         });
                     }
                 }
-            } catch (erroMedia) {
+            }
+            catch (erroMedia) {
                 console.error('Erro ao atualizar a média do restaurante no banco:', erroMedia);
             }
         }
@@ -152,15 +149,16 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
                 window.location.href = `../detalhes/index.html?restauranteId=${restauranteId}`;
             }, 2000);
         }
-
-    } catch (e) {
+    }
+    catch (e) {
         console.error('Erro ao enviar avaliação:', e);
         const messageDiv = document.getElementById('message');
         messageDiv.innerHTML = '✗ Erro ao enviar. Verifique se o JSON Server está rodando.';
         messageDiv.className = 'error-msg';
         messageDiv.classList.remove('hidden');
-    } finally {
+    }
+    finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Enviar Avaliação';
     }
-});
+})

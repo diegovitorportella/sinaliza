@@ -3,9 +3,9 @@ let usuarioLogado = null;
 let dadosCompletos = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. GUARDA DE AUTENTICAÇÃO (Via JSON Server)
-    const respSessao = await fetch('http://localhost:3000/sessao/atual');
-    const sessao = await respSessao.json();
+    const respSessao = await fetch('http://localhost:3000/sessao');
+    const sessaoArray = await respSessao.json();
+    const sessao = sessaoArray[0] || {};
     
     if (!sessao.usuarioId) {
         alert("Acesso negado. Faça login primeiro.");
@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
     
-    // Substitui a antiga variável usuarioLogado
     usuarioLogado = { id: sessao.usuarioId, nome: sessao.nome, tipo: sessao.tipo };
 
     // 2. BUSCAR DADOS COMPLETOS DO UTILIZADOR

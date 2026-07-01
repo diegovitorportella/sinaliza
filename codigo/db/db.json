@@ -40,6 +40,7 @@
       "lng": -44.004112,
       "cardapioDigital": false,
       "qrCodeMesas": false,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -81,6 +82,7 @@
       "lng": -43.938645,
       "cardapioDigital": true,
       "qrCodeMesas": true,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": true,
@@ -122,6 +124,7 @@
       "lng": -43.944421,
       "cardapioDigital": true,
       "qrCodeMesas": false,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -144,7 +147,7 @@
           "sinalizacao": false
         }
       },
-      "pontuacaoAcessibilidade": 4
+      "pontuacaoAcessibilidade": 3.3
     },
     {
       "id": "4",
@@ -163,6 +166,7 @@
       "lng": -43.949247,
       "cardapioDigital": false,
       "qrCodeMesas": true,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -204,6 +208,7 @@
       "lng": -43.938532,
       "cardapioDigital": true,
       "qrCodeMesas": true,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": true,
@@ -245,6 +250,7 @@
       "lng": -43.935105,
       "cardapioDigital": true,
       "qrCodeMesas": false,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -286,6 +292,7 @@
       "lng": -43.968712,
       "cardapioDigital": false,
       "qrCodeMesas": false,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -327,6 +334,7 @@
       "lng": -43.928921,
       "cardapioDigital": true,
       "qrCodeMesas": true,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": true,
@@ -811,9 +819,10 @@
   "sessao": [
     {
       "id": "atual",
-      "usuarioId": "1",
-      "nome": "Administrador do Sistema",
-      "tipo": "admin"
+      "usuarioId": null,
+      "nome": null,
+      "tipo": null
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

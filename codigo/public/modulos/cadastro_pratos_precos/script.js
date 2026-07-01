@@ -1,7 +1,7 @@
 const API = 'http://localhost:3000';
 
 // ── Estado da Sessão e Dados ──────────────────────────────────────────
-let restauranteLogadoId = null; // Agora guarda o ID real do restaurante
+let restauranteLogadoId = null; 
 let pratos = [];
 let filtroAtivo = 'Todos';
 
@@ -20,7 +20,7 @@ const filtroBtns       = document.querySelectorAll('.filtro-btn');
 const btnSubmit        = document.getElementById('btnSubmit');
 const btnCancelarEdicao = document.getElementById('btnCancelarEdicao');
 
-// ── 1. AUTENTICAÇÃO "STATE-DRIVEN" E CARREGAMENTO DA CHAVE DO RESTAURANTE
+// ── 1. AUTENTICAÇÃO E CARREGAMENTO DO RESTAURANTE ─────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const resposta = await fetch(`${API}/sessao`);
@@ -32,21 +32,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location.href = '../autenticacao/index.html'; 
             return;
         }
-
-        // BUSCA O RESTAURANTE QUE PERTENCE A ESTE USUÁRIO LOGADO
-        const respRestaurante = await fetch(`${API}/restaurantes?usuarioId=${sessao.usuarioId}`);
-        const restaurantes = await respRestaurante.json();
-
-        if (restaurantes.length === 0) {
+        const respRestaurante = await fetch(`${API}/restaurantes/${sessao.usuarioId}`);
+        
+        if (!respRestaurante.ok) {
             alert("Erro: Você precisa criar o perfil do seu restaurante antes de cadastrar o cardápio!");
             window.location.href = '../painel_restaurante/index.html';
             return;
         }
 
-        // O segredo está aqui: Guardamos o ID do restaurante (ex: "9Z7cdjV9LGI") e não do usuário
-        restauranteLogadoId = restaurantes[0].id;
+        const restaurante = await respRestaurante.json();
+
+        restauranteLogadoId = String(restaurante.id);
         
-        document.getElementById('tituloPagina').textContent = 'Cardápio: ' + restaurantes[0].nome;
+        document.getElementById('tituloPagina').textContent = 'Cardápio: ' + restaurante.nome;
         
         carregarPratos();
 
@@ -56,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// ── 2. INCLUSÃO (POST) e ALTERAÇÃO (PUT) ─────────────────────────────
+// ── 2. SALVAR DADOS (POST / PUT) ──────────────────────────────────────
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -74,15 +72,14 @@ form.addEventListener('submit', async (e) => {
 
     let urlFoto = '';
     if (idExistente && !arquivo) {
-        const pratoAtual = pratos.find(p => String(p.id) === idExistente);
-        urlFoto = pratoAtual.urlFoto;
+        const pratoAtual = pratos.find(p => String(p.id) === String(idExistente));
+        urlFoto = pratoAtual ? pratoAtual.urlFoto : '';
     } else if (arquivo) {
         urlFoto = await lerImagemBase64(arquivo);
     }
 
-    // Amarra a propriedade do prato ao ID do restaurante
     const dadosPrato = {
-        restauranteId: isNaN(Number(restauranteLogadoId)) ? restauranteLogadoId : Number(restauranteLogadoId),
+        restauranteId: restauranteLogadoId,
         nome,
         preco,
         categoria,
@@ -117,7 +114,7 @@ form.addEventListener('submit', async (e) => {
     }
 });
 
-// ── 3. LEITURA (GET FILTRADO) ─────────────────────────────────────────
+// ── 3. BUSCAR DADOS (GET) ─────────────────────────────────────────────
 async function carregarPratos() {
     try {
         const resposta = await fetch(`${API}/cardapio?restauranteId=${restauranteLogadoId}`);
@@ -131,7 +128,7 @@ async function carregarPratos() {
     }
 }
 
-// ── 4. PREPARAR EDIÇÃO E EXCLUSÃO (DELETE) ────────────────────────────
+// ── 4. EDIÇÃO E REMOÇÃO ───────────────────────────────────────────────
 window.prepararEdicao = function(id) {
     const prato = pratos.find(p => String(p.id) === String(id));
     if (!prato) return;
@@ -152,7 +149,7 @@ window.prepararEdicao = function(id) {
     btnCancelarEdicao.style.display = 'flex';
     
     window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+};
 
 window.removerPrato = async function(id) {
     if(!confirm("Tem certeza que deseja remover este prato?")) return;
@@ -167,9 +164,9 @@ window.removerPrato = async function(id) {
         console.error('Erro ao remover prato:', erro);
         mostrarMensagem('Não foi possível remover o prato.', 'erro');
     }
-}
+};
 
-// ── 5. RENDERIZAÇÃO DO DOM ────────────────────────────────────────────
+// ── 5. RENDERIZAÇÃO DO LAYOUT ─────────────────────────────────────────
 function renderizarPratos() {
     const lista = filtroAtivo === 'Todos' ? pratos : pratos.filter(p => p.categoria === filtroAtivo);
     listaPratos.innerHTML = '';
@@ -190,7 +187,7 @@ function renderizarPratos() {
         card.setAttribute('role', 'article');
 
         const fotoHtml = (prato.urlFoto && prato.urlFoto.length > 10)
-            ? `<img src="${prato.urlFoto}" alt="Foto" class="prato-img">`
+            ? `<img src="${prato.urlFoto}" alt="Foto de ${prato.nome}" class="prato-img">`
             : `<div class="prato-img-placeholder">${emojiCategoria(prato.categoria)}</div>`;
 
         const preco = Number(prato.preco) || 0;
@@ -217,7 +214,7 @@ function renderizarPratos() {
     });
 }
 
-// ── 6. UTILITÁRIOS, BOTÕES E IA ───────────────────────────────────────
+// ── 6. CONTROLADORES DE EVENTO E UTILITÁRIOS ──────────────────────────
 filtroBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         filtroBtns.forEach(b => b.classList.remove('active'));
@@ -254,16 +251,18 @@ function mostrarMensagem(texto, tipo) {
 
 function gerarDescricao(nome, categoria) {
     const descricoes = {
-        'Entrada': `${nome} é uma opção leve e saborosa para iniciar a refeição, preparada para abrir o apetite com equilíbrio.`,
-        'Prato Principal': `${nome} é um prato principal completo, pensado para oferecer sabor e uma experiência marcante.`,
-        'Sobremesa': `${nome} é uma sobremesa deliciosa, ideal para finalizar a refeição com um toque especial.`,
-        'Bebida': `${nome} é uma bebida refrescante e agradável, perfeita para acompanhar diferentes momentos.`
+        'Entrada': `${nome} é uma opção leve e saborosa para iniciar a refeição.`,
+        'Prato Principal': `${nome} é um prato principal completo e marcante.`,
+        'Sobremesa': `${nome} é uma sobremesa deliciosa para adoçar seu dia.`,
+        'Bebida': `${nome} é uma opção refrescante ideal para acompanhar seu prato.`,
     };
-    return descricoes[categoria] || `${nome} é uma opção especial do cardápio, com qualidade garantida.`;
+    return descricoes[categoria] || `${nome} é uma opção especial do nosso cardápio.`;
 }
 
 function emojiCategoria(cat) {
-    const map = { 'Entrada': '🥗', 'Prato Principal': '🍽️', 'Sobremesa': '🍰', 'Bebida': '🥤' };
+    const map = { 
+        'Entrada': '🥗', 'Prato Principal': '🍽️', 'Sobremesa': '🍰', 'Bebida': '🥤'
+    };
     return map[cat] || '🍴';
 }
 
