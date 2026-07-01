@@ -315,7 +315,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 1.5
+      "pontuacaoAcessibilidade": 2
     },
     {
       "id": "8",
@@ -517,6 +517,19 @@
       "usuarioId": "1",
       "id": "KZ9uucW",
       "removida": true
+    },
+    {
+      "restauranteId": 7,
+      "usuarioId": "2",
+      "nota": 3,
+      "comentario": "Rampa de acesso, Banheiro adaptado, Estacionamento acessível.",
+      "tags": [
+        "Rampa de acesso",
+        "Banheiro adaptado",
+        "Estacionamento acessível"
+      ],
+      "data": "01/07/2026",
+      "id": "e4tT695iIqM"
     }
   ],
   "cardapio": [
@@ -819,9 +832,9 @@
   "sessao": [
     {
       "id": "atual",
-      "usuarioId": null,
-      "nome": null,
-      "tipo": null
+      "usuarioId": "2",
+      "nome": "Usuario Comum",
+      "tipo": "cliente"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

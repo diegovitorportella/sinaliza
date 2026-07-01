@@ -1,77 +1,80 @@
 const API = 'http://localhost:3000';
-let sessaoAtual = null; // Variável global para armazenar a sessão
+let sessaoAtual = null; 
+let avaliacoesCache = [];
+const TAGS_DISPONIVEIS = [
+    'Fácil comunicação', 'Rampa de acesso', 'Banheiro adaptado', 'Cardápio em Libras',
+    'Sinalização visual', 'Estacionamento acessível', 'Equipe capacitada', 'Piso tátil'
+];
 
-// EVENTO 1: Disparado assim que a página de Detalhes carrega
 document.addEventListener('DOMContentLoaded', async () => {
-    
-    // 1. A PASSAGEM DE BASTÃO: Ler a barra de endereços do navegador
     const params = new URLSearchParams(window.location.search);
     const restauranteId = params.get('id') || params.get('restauranteId');
 
     if (!restauranteId) {
-        document.getElementById('estado-carregando').classList.add('hidden');
-        document.getElementById('estado-erro').classList.remove('hidden');
+        document.getElementById('estado-carregando')?.classList.add('hidden');
+        document.getElementById('estado-erro')?.classList.remove('hidden');
         return;
     }
 
-    // 2. Busca a sessão atual PRIMEIRO
+    // 1. Busca a sessão atual primeiro
     try {
         const respSessao = await fetch(`${API}/sessao`);
         const sessaoArray = await respSessao.json();
         sessaoAtual = sessaoArray[0] || {};
     } catch(e) {
         console.error("Sessão não encontrada", e);
+        sessaoAtual = {};
     }
 
-    // 3. Atualizar o link de avaliações com o ID do restaurante atual
-    document.getElementById('link-avaliar').href = `../formulario_avaliacoes/index.html?restauranteId=${restauranteId}`;
+    // 2. Atualiza o link de avaliação
+    const linkAvaliar = document.getElementById('link-avaliar');
+    if (linkAvaliar) {
+        linkAvaliar.href = `../formulario_avaliacoes/index.html?restauranteId=${restauranteId}`;
+    }
 
-    // 4. Chama as funções para buscar os dados em paralelo
-    carregarDetalhesRestaurante(restauranteId);
-    carregarCardapio(restauranteId);
-    carregarAvaliacoes(restauranteId);
+    // 3. Executa as buscas em paralelo de forma segura
+    await Promise.all([
+        carregarDetalhesRestaurante(restauranteId),
+        carregarCardapio(restauranteId),
+        carregarAvaliacoes(restauranteId)
+    ]);
 });
 
 // ==========================================
-// FUNÇÃO: CARREGAR DADOS PRINCIPAIS DO RESTAURANTE
+// RESTAURANTE
 // ==========================================
 async function carregarDetalhesRestaurante(id) {
     try {
         const resposta = await fetch(`${API}/restaurantes/${id}`);
-        
-        if (!resposta.ok) {
-            throw new Error('Restaurante não encontrado no banco de dados');
-        }
+        if (!resposta.ok) throw new Error('Restaurante não encontrado');
         
         const restaurante = await resposta.json();
 
-        // MÁGICA DA AUTORIZAÇÃO: Oculta ou mostra o botão "Gerenciar Cardápio"
+        // Controle do botão gerenciar
         const btnCardapio = document.getElementById('link-gerenciar-cardapio');
-        // Só exibe se for restaurante E se o usuarioId do Restaurante for igual ao da Sessão
-        if (sessaoAtual && sessaoAtual.tipo === 'restaurante' && String(restaurante.usuarioId) === String(sessaoAtual.usuarioId)) {
-            btnCardapio.style.display = 'inline-flex';
-            btnCardapio.href = `../cadastro_pratos_precos/index.html`;
-        } else {
-            btnCardapio.style.display = 'none';
+        if (btnCardapio) {
+            if (sessaoAtual?.tipo === 'restaurante' && String(restaurante.usuarioId) === String(sessaoAtual.usuarioId)) {
+                btnCardapio.style.display = 'inline-flex';
+                btnCardapio.href = `../cadastro_pratos_precos/index.html`;
+            } else {
+                btnCardapio.style.display = 'none';
+            }
         }
         
-        // Esconde o spinner de loading e mostra a tela principal
-        document.getElementById('estado-carregando').classList.add('hidden');
-        document.getElementById('conteudo-principal').classList.remove('hidden');
+        document.getElementById('estado-carregando')?.classList.add('hidden');
+        document.getElementById('conteudo-principal')?.classList.remove('hidden');
 
-        // Joga os dados capturados na tela (DOM)
         preencherDadosNaTela(restaurante);
-
     } catch (erro) {
         console.error("Erro na busca do restaurante:", erro);
-        document.getElementById('estado-carregando').classList.add('hidden');
-        document.getElementById('estado-erro').classList.remove('hidden');
+        document.getElementById('estado-carregando')?.classList.add('hidden');
+        document.getElementById('estado-erro')?.classList.remove('hidden');
     }
 }
 
 function preencherDadosNaTela(restaurante) {
     document.getElementById('det-nome').textContent = restaurante.nome;
-    document.getElementById('det-descricao').textContent = restaurante.descricao || 'Nenhuma descrição cadastrada para este estabelecimento.';
+    document.getElementById('det-descricao').textContent = restaurante.descricao || 'Nenhuma descrição cadastrada.';
     document.getElementById('det-endereco').textContent = restaurante.endereco || 'Endereço não cadastrado';
     document.getElementById('det-cidade').textContent = restaurante.cidade || '';
     document.getElementById('det-telefone').textContent = restaurante.telefone || 'Não informado';
@@ -81,8 +84,8 @@ function preencherDadosNaTela(restaurante) {
     let fotoUrl = (restaurante.foto && restaurante.foto.length > 15) ? restaurante.foto : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80';
     document.getElementById('det-foto').src = fotoUrl;
 
-    if (restaurante.checklist && restaurante.checklist.comunicacao && restaurante.checklist.comunicacao.libras) {
-        document.getElementById('det-libras-badge').classList.remove('hidden');
+    if (restaurante.checklist?.comunicacao?.libras) {
+        document.getElementById('det-libras-badge')?.classList.remove('hidden');
     }
 
     configurarPontuacaoVisual(restaurante.pontuacaoAcessibilidade || 0);
@@ -97,7 +100,6 @@ function configurarPontuacaoVisual(nota) {
     const seloContainer = document.getElementById('det-selo');
 
     let percentual = (nota / 5) * 100;
-    
     if (barraFill) barraFill.style.width = `${percentual}%`;
     if (label) label.textContent = `Pontuação Geral: ${nota}/5`;
 
@@ -124,9 +126,6 @@ function configurarPontuacaoVisual(nota) {
     }
 }
 
-// ==========================================
-// FUNÇÃO: CARREGAR OS BALÕES DO CHECKLIST
-// ==========================================
 function renderizarChecklist(checklist) {
     const container = document.getElementById('det-checklist');
     if (!container) return;
@@ -139,11 +138,9 @@ function renderizarChecklist(checklist) {
     }
 
     const recursos = [];
-
     if (checklist.comunicacao?.libras) recursos.push({ icone: 'bi-hands', texto: 'Atendimento em LIBRAS' });
     if (checklist.comunicacao?.menuLibras) recursos.push({ icone: 'bi-menu-button-wide-fill', texto: 'Cardápio em LIBRAS' });
     if (checklist.comunicacao?.sinalizacaoVisual) recursos.push({ icone: 'bi-eye-fill', texto: 'Sinalização Visual' });
-    
     if (checklist.fisica?.rampa) recursos.push({ icone: 'bi-triangle-fill', texto: 'Rampa de Acesso' });
     if (checklist.fisica?.banheiro) recursos.push({ icone: 'bi-badge-wc-fill', texto: 'Banheiro Adaptado' });
     if (checklist.fisica?.estacionamento) recursos.push({ icone: 'bi-p-circle-fill', texto: 'Vaga Acessível' });
@@ -167,17 +164,15 @@ function renderizarChecklist(checklist) {
 }
 
 // ==========================================
-// FUNÇÃO: CARREGAR O CARDÁPIO
+// CARDÁPIO
 // ==========================================
 async function carregarCardapio(id) {
     const container = document.getElementById('lista-cardapio');
+    if (!container) return;
     
     try {
         const resposta = await fetch(`${API}/cardapio?restauranteId=${id}`);
-        
-        if (!resposta.ok) {
-            throw new Error(`A rota /cardapio não foi encontrada. Status: ${resposta.status}`);
-        }
+        if (!resposta.ok) throw new Error('Falha ao buscar cardápio');
 
         const pratos = await resposta.json();
         container.innerHTML = '';
@@ -201,7 +196,7 @@ async function carregarCardapio(id) {
                     <img src="${fotoPrato}" alt="${prato.nome}" class="card-img-top" style="height: 200px; object-fit: cover;">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title fw-bold text-dark mb-2">${prato.nome}</h5>
-                        <p class="card-text text-secondary small flex-grow-1">${prato.descricao}</p>
+                        <p class="card-text text-secondary small flex-grow-1">${prato.descricao || ''}</p>
                         <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
                             <span class="text-muted small fw-bold text-uppercase">${prato.categoria || 'Prato'}</span>
                             <span class="fw-black text-primary fs-5">R$ ${precoFormatado}</span>
@@ -217,34 +212,31 @@ async function carregarCardapio(id) {
     }
 }
 
-let avaliacoesCache = [];
-const TAGS_DISPONIVEIS = [
-    'Fácil comunicação', 'Rampa de acesso', 'Banheiro adaptado', 'Cardápio em Libras',
-    'Sinalização visual', 'Estacionamento acessível', 'Equipe capacitada', 'Piso tátil'
-];
-
+// ==========================================
+// AVALIAÇÕES
+// ==========================================
 async function carregarAvaliacoes(id) {
+    const container = document.getElementById('lista-avaliacoes');
+    const resumo = document.getElementById('resumo-avaliacoes');
+    if (!container || !resumo) return;
+
     try {
         const resposta = await fetch(`${API}/avaliacoes?restauranteId=${id}`);
-        const avaliacoes = await resposta.json();
-        avaliacoesCache = avaliacoes.filter(av => !av.removida);
-        const avaliacoesAntesDoFiltro = avaliacoes;
-        avaliacoes.length = 0;
-        avaliacoesCache.forEach(av => avaliacoes.push(av));
-        const container = document.getElementById('lista-avaliacoes');
-        const resumo = document.getElementById('resumo-avaliacoes');
-
+        const todasAvaliacoes = await resposta.json();
+        
+        // Correção do bug de mutação: Apenas filtramos direto para o cache
+        avaliacoesCache = todasAvaliacoes.filter(av => !av.removida);
         container.innerHTML = '';
 
-        renderizarTagsComuns(avaliacoes);
+        renderizarTagsComuns(avaliacoesCache);
 
-        if (avaliacoes.length === 0) {
+        if (avaliacoesCache.length === 0) {
             resumo.innerHTML = '<p class="text-muted">Ainda não há avaliações para este local. Seja o primeiro a avaliar!</p>';
             return;
         }
 
-        const somaNotas = avaliacoes.reduce((acc, av) => acc + Number(av.nota), 0);
-        const media = (somaNotas / avaliacoes.length).toFixed(1);
+        const somaNotas = avaliacoesCache.reduce((acc, av) => acc + Number(av.nota), 0);
+        const media = (somaNotas / avaliacoesCache.length).toFixed(1);
         
         resumo.innerHTML = `
             <div class="d-flex align-items-center gap-3 bg-light p-3 rounded-4 border">
@@ -253,39 +245,33 @@ async function carregarAvaliacoes(id) {
                     <div class="text-warning fs-5">
                         ${'<i class="bi bi-star-fill"></i>'.repeat(Math.round(media))}
                     </div>
-                    <span class="text-secondary small fw-medium">Baseado em ${avaliacoes.length} avaliação(ões)</span>
+                    <span class="text-secondary small fw-medium">Baseado em ${avaliacoesCache.length} avaliação(ões)</span>
                 </div>
             </div>
         `;
 
-        avaliacoes.forEach(av => {
+        avaliacoesCache.forEach(av => {
             const div = document.createElement('div');
             div.className = 'card border border-light shadow-sm rounded-4 p-4 mb-3';
             div.id = `avaliacao-card-${av.id}`;
 
             let estrelasHTML = '<i class="bi bi-star-fill text-warning me-1"></i>'.repeat(Number(av.nota));
-            let tagsHTML = '';
-            
-            if (av.tags && av.tags.length > 0) {
-                tagsHTML = av.tags.map(t => `<span class="badge bg-primary-subtle text-primary border border-primary-subtle me-2 rounded-pill">${t}</span>`).join('');
-            }
+            let tagsHTML = (av.tags || []).map(t => `<span class="badge bg-primary-subtle text-primary border border-primary-subtle me-2 rounded-pill">${t}</span>`).join('');
 
-            const ehAutor = sessaoAtual && sessaoAtual.usuarioId &&
-                sessaoAtual.tipo !== 'restaurante' &&
-                String(av.usuarioId) === String(sessaoAtual.usuarioId);
-            const ehAdmin = sessaoAtual && sessaoAtual.tipo === 'admin';
+            const ehAutor = sessaoAtual?.usuarioId && sessaoAtual.tipo !== 'restaurante' && String(av.usuarioId) === String(sessaoAtual.usuarioId);
+            const ehAdmin = sessaoAtual?.tipo === 'admin';
 
             let acoesHTML = '';
             if (ehAutor) {
                 acoesHTML = `
-                    <div class="acoes-avaliacao">
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="iniciarEdicaoAvaliacao('${av.id}')"><i class="bi bi-pencil-fill"></i> Editar</button>
+                    <div class="acoes-avaliacao mt-3">
+                        <button type="button" class="btn btn-sm btn-outline-primary me-2" onclick="iniciarEdicaoAvaliacao('${av.id}')"><i class="bi bi-pencil-fill"></i> Editar</button>
                         <button type="button" class="btn btn-sm btn-outline-danger" onclick="excluirAvaliacao('${av.id}', '${av.restauranteId}')"><i class="bi bi-trash-fill"></i> Excluir</button>
                     </div>
                 `;
             } else if (ehAdmin) {
                 acoesHTML = `
-                    <div class="acoes-avaliacao">
+                    <div class="acoes-avaliacao mt-3">
                         <button type="button" class="btn btn-sm btn-outline-danger" onclick="excluirAvaliacao('${av.id}', '${av.restauranteId}')"><i class="bi bi-trash-fill"></i> Excluir</button>
                     </div>
                 `;
@@ -297,7 +283,7 @@ async function carregarAvaliacoes(id) {
                     <span class="badge bg-dark text-white rounded-pill"><i class="bi bi-person-fill"></i> Usuário</span>
                 </div>
                 <p class="mb-3 text-secondary fw-medium">"${av.comentario}"</p>
-                <div>${tagsHTML}</div>
+                <div class="mb-2">${tagsHTML}</div>
                 ${acoesHTML}
             `;
             container.appendChild(div);
@@ -305,7 +291,7 @@ async function carregarAvaliacoes(id) {
 
     } catch (erro) {
         console.error("Erro ao carregar avaliações:", erro);
-        document.getElementById('lista-avaliacoes').innerHTML = '<p class="text-danger">Não foi possível carregar os depoimentos.</p>';
+        container.innerHTML = '<p class="text-danger">Não foi possível carregar os depoimentos.</p>';
     }
 }
 
@@ -322,6 +308,7 @@ function renderizarTagsComuns(avaliacoes) {
     });
 
     const tagsOrdenadas = Object.keys(contagem);
+    // Correção do bug do Math.max em array vazio:
     if (tagsOrdenadas.length === 0) {
         wrapper.classList.add('hidden');
         lista.innerHTML = '';
@@ -351,19 +338,19 @@ function iniciarEdicaoAvaliacao(avaliacaoId) {
 
     card.innerHTML = `
         <div class="edicao-avaliacao-form">
-            <label for="edicao-nota-${avaliacaoId}">Nota</label>
+            <label class="fw-bold mb-1" for="edicao-nota-${avaliacaoId}">Nota</label>
             <select id="edicao-nota-${avaliacaoId}" class="form-select mb-3" style="max-width: 160px;">
                 ${[5,4,3,2,1].map(n => `<option value="${n}" ${Number(av.nota) === n ? 'selected' : ''}>${n} estrela(s)</option>`).join('')}
             </select>
 
-            <label for="edicao-comentario-${avaliacaoId}">Comentário</label>
+            <label class="fw-bold mb-1" for="edicao-comentario-${avaliacaoId}">Comentário</label>
             <textarea id="edicao-comentario-${avaliacaoId}" class="form-control mb-3" rows="3">${av.comentario || ''}</textarea>
 
-            <label>Tags</label>
+            <label class="fw-bold mb-1">Tags de Acessibilidade</label>
             <div id="edicao-tags-${avaliacaoId}" class="d-flex flex-wrap gap-2 mb-3">${tagsHTML}</div>
 
             <div class="acoes-avaliacao">
-                <button type="button" class="btn btn-sm btn-primary" onclick="salvarEdicaoAvaliacao('${avaliacaoId}', '${av.restauranteId}')"><i class="bi bi-check-lg"></i> Salvar</button>
+                <button type="button" class="btn btn-sm btn-primary me-2" onclick="salvarEdicaoAvaliacao('${avaliacaoId}', '${av.restauranteId}')"><i class="bi bi-check-lg"></i> Salvar</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary" onclick="carregarAvaliacoes('${av.restauranteId}')"><i class="bi bi-x-lg"></i> Cancelar</button>
             </div>
         </div>
@@ -384,8 +371,8 @@ async function salvarEdicaoAvaliacao(avaliacaoId, restauranteId) {
         });
 
         if (!resp.ok) throw new Error('Erro ao salvar avaliação');
-
-        carregarAvaliacoes(restauranteId);
+        await atualizarMediaRestaurante(restauranteId, avaliacaoId, novaNota, false);
+        await carregarAvaliacoes(restauranteId);
     } catch (erro) {
         console.error('Erro ao salvar edição da avaliação:', erro);
         alert('Não foi possível salvar as alterações. Tente novamente.');
@@ -402,10 +389,51 @@ async function excluirAvaliacao(avaliacaoId, restauranteId) {
             body: JSON.stringify({ removida: true })
         });
         if (!resp.ok) throw new Error('Erro ao excluir avaliação');
-
-        carregarAvaliacoes(restauranteId);
+        await atualizarMediaRestaurante(restauranteId, avaliacaoId, 0, true);
+        await carregarAvaliacoes(restauranteId);
     } catch (erro) {
         console.error('Erro ao excluir avaliação:', erro);
         alert('Não foi possível excluir a avaliação. Tente novamente.');
+    }
+}
+
+async function atualizarMediaRestaurante(restauranteId, avaliacaoId, novaNota, ehExclusao) {
+    try {
+        // Busca todas as avaliações direto do servidor para calcular com dados reais
+        const respAvaliacoes = await fetch(`${API}/avaliacoes?restauranteId=${restauranteId}`);
+        const todas = await respAvaliacoes.json();
+        
+        // Filtra tirando as removidas e aplicando a alteração caso ela ainda não tenha sido processada no GET
+        const validas = todas.filter(av => {
+            if (String(av.id) === String(avaliacaoId)) {
+                return !ehExclusao; // Se for exclusão, remove ela do cálculo
+            }
+            return !av.removida;
+        });
+
+        let novaMedia = 0;
+        if (validas.length > 0) {
+            const soma = validas.reduce((acc, av) => {
+                // Se for a avaliação atual sendo editada, usa a nova nota informada
+                const nota = String(av.id) === String(avaliacaoId) ? novaNota : Number(av.nota);
+                return acc + nota;
+            }, 0);
+            // Salva a média arredondada com 1 casa decimal (ex: 4.5)
+            novaMedia = Number((soma / validas.length).toFixed(1));
+        }
+
+        // Faz o PATCH no endpoint do restaurante para persistir a nota geral no seu db.json
+        const respRestaurante = await fetch(`${API}/restaurantes/${restauranteId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pontuacaoAcessibilidade: novaMedia })
+        });
+
+        if (respRestaurante.ok) {
+            // Atualiza imediatamente os elementos visuais do topo da tela
+            configurarPontuacaoVisual(novaMedia);
+        }
+    } catch (erro) {
+        console.error("Erro ao atualizar a média do restaurante no banco de dados:", erro);
     }
 }
