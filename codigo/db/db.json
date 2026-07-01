@@ -4,19 +4,22 @@
       "id": "1",
       "senha": "123",
       "nome": "Administrador do Sistema",
-      "email": "admin@abc.com"
+      "email": "admin@abc.com",
+      "tipo": "admin"
     },
     {
       "id": "2",
       "senha": "123",
       "nome": "Usuario Comum",
-      "email": "user@abc.com"
+      "email": "user@abc.com",
+      "tipo": "cliente"
     },
     {
       "id": "3",
       "senha": "123",
       "nome": "Rommel",
-      "email": "rommel@gmail.com"
+      "email": "rommel@gmail.com",
+      "tipo": "cliente"
     }
   ],
   "restaurantes": [
@@ -37,6 +40,7 @@
       "lng": -44.004112,
       "cardapioDigital": false,
       "qrCodeMesas": false,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -59,7 +63,11 @@
           "sinalizacao": false
         }
       },
+<<<<<<< HEAD
       "pontuacaoAcessibilidade": 10
+=======
+      "pontuacaoAcessibilidade": 2
+>>>>>>> 7e98f5f0385c7d296fe619d6498a3be572e2709a
     },
     {
       "id": "2",
@@ -78,6 +86,7 @@
       "lng": -43.957545,
       "cardapioDigital": true,
       "qrCodeMesas": true,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": true,
@@ -100,7 +109,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 10
+      "pontuacaoAcessibilidade": 4.5
     },
     {
       "id": "3",
@@ -119,6 +128,7 @@
       "lng": -43.944421,
       "cardapioDigital": true,
       "qrCodeMesas": false,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -141,7 +151,7 @@
           "sinalizacao": false
         }
       },
-      "pontuacaoAcessibilidade": 6
+      "pontuacaoAcessibilidade": 3.3
     },
     {
       "id": "4",
@@ -160,6 +170,7 @@
       "lng": -43.949247,
       "cardapioDigital": false,
       "qrCodeMesas": true,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -182,7 +193,11 @@
           "sinalizacao": true
         }
       },
+<<<<<<< HEAD
       "pontuacaoAcessibilidade": 8
+=======
+      "pontuacaoAcessibilidade": 3
+>>>>>>> 7e98f5f0385c7d296fe619d6498a3be572e2709a
     },
     {
       "id": "5",
@@ -201,6 +216,7 @@
       "lng": -43.938532,
       "cardapioDigital": true,
       "qrCodeMesas": true,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": true,
@@ -223,7 +239,11 @@
           "sinalizacao": true
         }
       },
+<<<<<<< HEAD
       "pontuacaoAcessibilidade": 7
+=======
+      "pontuacaoAcessibilidade": 5
+>>>>>>> 7e98f5f0385c7d296fe619d6498a3be572e2709a
     },
     {
       "id": "6",
@@ -242,6 +262,7 @@
       "lng": -43.988015,
       "cardapioDigital": true,
       "qrCodeMesas": false,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -264,7 +285,7 @@
           "sinalizacao": false
         }
       },
-      "pontuacaoAcessibilidade": 6
+      "pontuacaoAcessibilidade": 3
     },
     {
       "id": "7",
@@ -283,6 +304,7 @@
       "lng": -43.968712,
       "cardapioDigital": false,
       "qrCodeMesas": false,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": false,
@@ -305,7 +327,7 @@
           "sinalizacao": true
         }
       },
-      "pontuacaoAcessibilidade": 3
+      "pontuacaoAcessibilidade": 1.5
     },
     {
       "id": "8",
@@ -324,6 +346,7 @@
       "lng": -43.923845,
       "cardapioDigital": true,
       "qrCodeMesas": true,
+      "cardapio": [],
       "checklist": {
         "comunicacao": {
           "libras": true,
@@ -346,6 +369,7 @@
           "sinalizacao": true
         }
       },
+<<<<<<< HEAD
       "pontuacaoAcessibilidade": 9
     },
     {
@@ -388,6 +412,9 @@
         }
       },
       "pontuacaoAcessibilidade": 8
+=======
+      "pontuacaoAcessibilidade": 4
+>>>>>>> 7e98f5f0385c7d296fe619d6498a3be572e2709a
     }
 ],
   "avaliacoes": [
@@ -505,6 +532,48 @@
       ],
       "comentario": "Sinalização visual, Fácil comunicação, Estacionamento acessível",
       "id": "72-ERIknxdc"
+    },
+    {
+      "restauranteId": 6,
+      "nota": 3,
+      "tags": [
+        "Rampa de acesso",
+        "Banheiro adaptado",
+        "Piso tátil"
+      ],
+      "comentario": "Tem rampa de acesso, banheiro adaptado e piso tátil, mas falta acessibilidade para outras deficiências, como a auditiva.",
+      "usuarioId": null,
+      "id": "mKBePaM-nis"
+    },
+    {
+      "restauranteId": 7,
+      "nota": 1,
+      "tags": [],
+      "comentario": "Não há praticamente nenhuma acessibilidade.",
+      "usuarioId": null,
+      "id": "0hUxxXmBXfU"
+    },
+    {
+      "restauranteId": 7,
+      "nota": 2,
+      "tags": [
+        "Equipe capacitada"
+      ],
+      "comentario": "Equipe capacitada... Mas tirando isso, não ouve nenhuma acessibilidade num geral.",
+      "usuarioId": null,
+      "id": "5MTymzi7EdM"
+    },
+    {
+      "restauranteId": 2,
+      "nota": 4,
+      "tags": [
+        "Banheiro adaptado",
+        "Estacionamento acessível"
+      ],
+      "comentario": "teste, Estacionamento acessível, Banheiro adaptado",
+      "usuarioId": "1",
+      "id": "KZ9uucW",
+      "removida": true
     }
   ],
   "cardapio": [

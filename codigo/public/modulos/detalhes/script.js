@@ -96,20 +96,20 @@ function configurarPontuacaoVisual(nota) {
     const seloTexto = document.getElementById('det-selo-texto');
     const seloContainer = document.getElementById('det-selo');
 
-    let percentual = (nota / 10) * 100;
+    let percentual = (nota / 5) * 100;
     
     if (barraFill) barraFill.style.width = `${percentual}%`;
-    if (label) label.textContent = `Pontuação Geral: ${nota}/10`;
+    if (label) label.textContent = `Pontuação Geral: ${nota}/5`;
 
     if (!seloContainer) return;
 
-    if (nota >= 7) {
+    if (nota >= 4) {
         if(barraFill) barraFill.style.backgroundColor = '#15803d'; 
         seloContainer.style.backgroundColor = '#dcfce7';
         seloContainer.style.color = '#15803d';
         if(seloIcon) seloIcon.innerHTML = '<i class="bi bi-star-fill"></i>';
         if(seloTexto) seloTexto.textContent = 'ALTA';
-    } else if (nota >= 4) {
+    } else if (nota >= 3) {
         if(barraFill) barraFill.style.backgroundColor = '#b45309'; 
         seloContainer.style.backgroundColor = '#fef3c7';
         seloContainer.style.color = '#b45309';
@@ -227,7 +227,10 @@ async function carregarAvaliacoes(id) {
     try {
         const resposta = await fetch(`${API}/avaliacoes?restauranteId=${id}`);
         const avaliacoes = await resposta.json();
-        avaliacoesCache = avaliacoes;
+        avaliacoesCache = avaliacoes.filter(av => !av.removida);
+        const avaliacoesAntesDoFiltro = avaliacoes;
+        avaliacoes.length = 0;
+        avaliacoesCache.forEach(av => avaliacoes.push(av));
         const container = document.getElementById('lista-avaliacoes');
         const resumo = document.getElementById('resumo-avaliacoes');
 
@@ -245,7 +248,7 @@ async function carregarAvaliacoes(id) {
         
         resumo.innerHTML = `
             <div class="d-flex align-items-center gap-3 bg-light p-3 rounded-4 border">
-                <h2 class="display-4 fw-black text-dark mb-0">${media}</h2>
+                <h2 class="display-4 fw-black text-dark mb-0">${media}<span class="fs-4 text-muted">/5</span></h2>
                 <div>
                     <div class="text-warning fs-5">
                         ${'<i class="bi bi-star-fill"></i>'.repeat(Math.round(media))}
@@ -267,16 +270,26 @@ async function carregarAvaliacoes(id) {
                 tagsHTML = av.tags.map(t => `<span class="badge bg-primary-subtle text-primary border border-primary-subtle me-2 rounded-pill">${t}</span>`).join('');
             }
 
-            const podeGerenciar = sessaoAtual && sessaoAtual.usuarioId &&
-                sessaoAtual.tipo !== 'admin' &&
+            const ehAutor = sessaoAtual && sessaoAtual.usuarioId &&
+                sessaoAtual.tipo !== 'restaurante' &&
                 String(av.usuarioId) === String(sessaoAtual.usuarioId);
+            const ehAdmin = sessaoAtual && sessaoAtual.tipo === 'admin';
 
-            const acoesHTML = podeGerenciar ? `
-                <div class="acoes-avaliacao">
-                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="iniciarEdicaoAvaliacao('${av.id}')"><i class="bi bi-pencil-fill"></i> Editar</button>
-                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="excluirAvaliacao('${av.id}', '${id}')"><i class="bi bi-trash-fill"></i> Excluir</button>
-                </div>
-            ` : '';
+            let acoesHTML = '';
+            if (ehAutor) {
+                acoesHTML = `
+                    <div class="acoes-avaliacao">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="iniciarEdicaoAvaliacao('${av.id}')"><i class="bi bi-pencil-fill"></i> Editar</button>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="excluirAvaliacao('${av.id}', '${av.restauranteId}')"><i class="bi bi-trash-fill"></i> Excluir</button>
+                    </div>
+                `;
+            } else if (ehAdmin) {
+                acoesHTML = `
+                    <div class="acoes-avaliacao">
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="excluirAvaliacao('${av.id}', '${av.restauranteId}')"><i class="bi bi-trash-fill"></i> Excluir</button>
+                    </div>
+                `;
+            }
 
             div.innerHTML = `
                 <div class="d-flex justify-content-between align-items-start mb-3">
@@ -383,7 +396,11 @@ async function excluirAvaliacao(avaliacaoId, restauranteId) {
     if (!confirm('Tem certeza que deseja excluir esta avaliação?')) return;
 
     try {
-        const resp = await fetch(`${API}/avaliacoes/${avaliacaoId}`, { method: 'DELETE' });
+        const resp = await fetch(`${API}/avaliacoes/${avaliacaoId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ removida: true })
+        });
         if (!resp.ok) throw new Error('Erro ao excluir avaliação');
 
         carregarAvaliacoes(restauranteId);

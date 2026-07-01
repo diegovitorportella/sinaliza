@@ -2,9 +2,9 @@ const API_RESTAURANTES = 'http://localhost:3000/restaurantes';
 let usuarioLogado = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. GUARDA DE AUTENTICAÇÃO (Via JSON Server)
-    const respSessao = await fetch('http://localhost:3000/sessao/atual');
-    const sessao = await respSessao.json();
+    const respSessao = await fetch('http://localhost:3000/sessao');
+    const sessaoArray = await respSessao.json();
+    const sessao = sessaoArray[0] || {};
     
     if (!sessao.usuarioId) {
         alert("Acesso negado. Faça login primeiro.");
@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     usuarioLogado = { id: sessao.usuarioId, nome: sessao.nome, tipo: sessao.tipo };
 
-    // Verifica se é tipo "restaurante"
     if (usuarioLogado.tipo !== 'restaurante') {
         alert("Acesso restrito para contas de Restaurante.");
         window.location.href = '../../index.html';
@@ -27,36 +26,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function carregarPerfilRestaurante() {
     try {
-        const resp = await fetch(`${API_RESTAURANTES}?usuarioId=${usuarioLogado.id}`);
-        const dados = await resp.json();
-
-        if (dados.length > 0) {
-            const rest = dados[0];
-            document.getElementById('restauranteId').value = rest.id;
-            
-            document.getElementById('nomeRest').value = rest.nome || '';
-            document.getElementById('especialidadeRest').value = rest.culinaria || '';
-            document.getElementById('fotoRest').value = rest.urlFoto || '';
-            document.getElementById('enderecoRest').value = rest.endereco || '';
-            document.getElementById('cidadeRest').value = rest.cidade || '';
-            
-            if(rest.coordenadas) {
-                document.getElementById('latRest').value = rest.coordenadas.lat || '';
-                document.getElementById('lngRest').value = rest.coordenadas.lng || '';
-            }
-
-            const acess = rest.acessibilidade || [];
-            document.getElementById('chkLibras').checked = acess.includes('LIBRAS');
-            document.getElementById('chkBraille').checked = acess.includes('Braille');
-            document.getElementById('chkRampa').checked = acess.includes('Rampa');
-            document.getElementById('chkVisual').checked = acess.includes('Sinalização Visual');
+        const resp = await fetch(`${API_RESTAURANTES}/${usuarioLogado.id}`);
+        
+        if (!resp.ok) {
+            console.error("Restaurante não encontrado no banco de dados.");
+            return;
         }
+
+        const rest = await resp.json();
+
+        document.getElementById('restauranteId').value = rest.id;
+        document.getElementById('nomeRest').value = rest.nome || '';
+        document.getElementById('especialidadeRest').value = rest.tipoCozinha || '';
+        document.getElementById('fotoRest').value = rest.foto || '';
+        document.getElementById('enderecoRest').value = rest.endereco || '';
+        document.getElementById('cidadeRest').value = rest.cidade || '';
+        
+        document.getElementById('latRest').value = rest.lat !== null ? rest.lat : '';
+        document.getElementById('lngRest').value = rest.lng !== null ? rest.lng : '';
+
+        if (rest.checklist) {
+            document.getElementById('chkLibras').checked = !!rest.checklist.comunicacao?.libras;
+            document.getElementById('chkBraille').checked = !!rest.checklist.comunicacao?.cardapioImagens;
+            document.getElementById('chkRampa').checked = !!rest.checklist.tecnologia?.tabletPedidos;
+            document.getElementById('chkVisual').checked = !!rest.checklist.inclusao?.ambienteVisual;
+        }
+        
     } catch (error) {
         console.error("Erro ao carregar dados do restaurante:", error);
     }
 }
-
-// LÓGICA DO BOTÃO CARDÁPIO
 document.getElementById('btnTabCardapio').addEventListener('click', () => {
     const rId = document.getElementById('restauranteId').value;
     if(rId) {
@@ -66,7 +65,6 @@ document.getElementById('btnTabCardapio').addEventListener('click', () => {
     }
 });
 
-// LÓGICA DO BOTÃO VER PÁGINA PÚBLICA
 document.getElementById('btnVerPagina').addEventListener('click', () => {
     const rId = document.getElementById('restauranteId').value;
     if(rId) {
@@ -76,69 +74,74 @@ document.getElementById('btnVerPagina').addEventListener('click', () => {
     }
 });
 
-// 3. LÓGICA DE SALVAR/ATUALIZAR (SUBMIT)
 document.getElementById('formRestaurante').addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const nomeRest = document.getElementById('nomeRest').value.trim();
-    const especialidadeRest = document.getElementById('especialidadeRest').value;
+    const BlacklistCozinha = document.getElementById('especialidadeRest').value; // especialidadeRest
     const enderecoRest = document.getElementById('enderecoRest').value.trim();
     const latRest = document.getElementById('latRest').value;
     const lngRest = document.getElementById('lngRest').value;
 
-    if (!nomeRest || !especialidadeRest || !enderecoRest || !latRest || !lngRest) {
-        alert("Atenção: Por favor, volte à aba '1. Perfil e Localização' e preencha todos os campos obrigatórios antes de guardar.");
+    if (!nomeRest || !BlacklistCozinha || !enderecoRest) {
+        alert("Por favor, certifique-se de que o Nome, Especialidade e Endereço estão preenchidos no Perfil.");
         return; 
     }
 
-    const restId = document.getElementById('restauranteId').value;
-    
-    let facilidades = [];
-    if(document.getElementById('chkLibras').checked) facilidades.push('LIBRAS');
-    if(document.getElementById('chkBraille').checked) facilidades.push('Braille');
-    if(document.getElementById('chkRampa').checked) facilidades.push('Rampa');
-    if(document.getElementById('chkVisual').checked) facilidades.push('Sinalização Visual');
+    const restId = usuarioLogado.id; 
+    const chkLibras = document.getElementById('chkLibras').checked;
+    const chkBraille = document.getElementById('chkBraille').checked;
+    const chkRampa = document.getElementById('chkRampa').checked;
+    const chkVisual = document.getElementById('chkVisual').checked;
 
-    const nota = facilidades.length > 0 ? 5 + (facilidades.length * 1.25) : 4;
-
+    // CORREÇÃO: Removemos o cálculo da variável "nota" e retiramos a linha "pontuacaoAcessibilidade"
     const dadosRestaurante = {
-        usuarioId: usuarioLogado.id, 
         nome: nomeRest,
-        culinaria: especialidadeRest,
+        tipoCozinha: BlacklistCozinha,
         endereco: enderecoRest,
         cidade: document.getElementById('cidadeRest').value.trim(),
-        urlFoto: document.getElementById('fotoRest').value.trim() || 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80',
-        pontuacaoAcessibilidade: parseFloat(nota.toFixed(1)),
-        coordenadas: {
-            lat: parseFloat(latRest),
-            lng: parseFloat(lngRest)
-        },
-        acessibilidade: facilidades,
-        cardapio: [] 
+        foto: document.getElementById('fotoRest').value.trim(),
+        lat: latRest ? parseFloat(latRest) : null,
+        lng: lngRest ? parseFloat(lngRest) : null,
+        checklist: {
+            comunicacao: {
+                libras: chkLibras,
+                cardapioImagens: chkBraille,
+                cardapioDigitalAcessivel: false,
+                chatTexto: false
+            },
+            tecnologia: {
+                qrCode: false,
+                tabletPedidos: chkRampa,
+                pedidoVisual: false
+            },
+            atendimento: {
+                chamadaVisual: false,
+                funcionariosTreinados: false,
+                tempoRespostaRapido: false
+            },
+            inclusao: {
+                ambienteVisual: chkVisual,
+                sinalizacao: false
+            }
+        }
     };
 
     try {
-        let url = API_RESTAURANTES;
-        let metodo = 'POST'; 
-
-        if (restId) {
-            url = `${API_RESTAURANTES}/${restId}`;
-            metodo = 'PUT'; 
-        }
-
+        const url = `${API_RESTAURANTES}/${restId}`;
         const resp = await fetch(url, {
-            method: metodo,
+            method: 'PATCH', 
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dadosRestaurante)
         });
 
         if (resp.ok) {
-            alert("Perfil do restaurante guardado com sucesso! Já está visível na plataforma.");
+            alert("Alterações salvas com sucesso!");
             await carregarPerfilRestaurante(); 
         }
     } catch (error) {
-        console.error("Erro ao guardar restaurante:", error);
-        alert("Ocorreu um erro de conexão ao tentar guardar.");
+        console.error("Erro ao atualizar restaurante:", error);
+        alert("Ocorreu um erro de conexão ao tentar salvar.");
     }
 });
 

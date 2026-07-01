@@ -85,16 +85,55 @@ document.addEventListener('DOMContentLoaded', () => {
                 dadosCadastro = {
                     nome: document.getElementById('cadastroNome').value.trim(),
                     email: document.getElementById('cadastroEmail').value.trim(),
-                    senha: document.getElementById('cadastroSenha').value
+                    senha: document.getElementById('cadastroSenha').value,
+                    tipo: 'cliente'
                 };
 
                 apiCadastro = API_USUARIOS;
             }
             else {
+                // ALTERAÇÃO CRUCIAL AQUI: Monta o esqueleto perfeito seguindo o padrão dos 8 primeiros do db.json
                 dadosCadastro = {
                     nome: document.getElementById('cadastroNome').value.trim(),
                     cnpj: document.getElementById('cadastroCnpj').value.trim(),
-                    senha: document.getElementById('cadastroSenha').value
+                    senha: document.getElementById('cadastroSenha').value,
+                    tipo: 'restaurante',
+                    descricao: "",
+                    endereco: "",
+                    cidade: "Belo Horizonte",
+                    estado: "MG",
+                    telefone: "",
+                    tipoCozinha: "",
+                    horario: "",
+                    foto: "",
+                    lat: null,
+                    lng: null,
+                    cardapioDigital: false,
+                    qrCodeMesas: false,
+                    cardapio: [],
+                    checklist: {
+                        comunicacao: {
+                            libras: false,
+                            cardapioImagens: false,
+                            cardapioDigitalAcessivel: false,
+                            chatTexto: false
+                        },
+                        tecnologia: {
+                            qrCode: false,
+                            tabletPedidos: false,
+                            pedidoVisual: false
+                        },
+                        atendimento: {
+                            chamadaVisual: false,
+                            funcionariosTreinados: false,
+                            tempoRespostaRapido: false
+                        },
+                        inclusao: {
+                            ambienteVisual: false,
+                            sinalizacao: false
+                        }
+                    },
+                    pontuacaoAcessibilidade: 0
                 };
 
                 apiCadastro = API_RESTAURANTES;
@@ -178,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 id: "atual",
                                 usuarioId: usuarioLogado.id,
                                 nome: usuarioLogado.nome,
-                                tipo: tipoLogin
+                                tipo: usuarioLogado.tipo || tipoLogin
                             })
                         });
 
