@@ -63,11 +63,7 @@
           "sinalizacao": false
         }
       },
-<<<<<<< HEAD
-      "pontuacaoAcessibilidade": 10
-=======
       "pontuacaoAcessibilidade": 2
->>>>>>> 7e98f5f0385c7d296fe619d6498a3be572e2709a
     },
     {
       "id": "2",
@@ -193,11 +189,7 @@
           "sinalizacao": true
         }
       },
-<<<<<<< HEAD
-      "pontuacaoAcessibilidade": 8
-=======
       "pontuacaoAcessibilidade": 3
->>>>>>> 7e98f5f0385c7d296fe619d6498a3be572e2709a
     },
     {
       "id": "5",
@@ -239,11 +231,7 @@
           "sinalizacao": true
         }
       },
-<<<<<<< HEAD
-      "pontuacaoAcessibilidade": 7
-=======
       "pontuacaoAcessibilidade": 5
->>>>>>> 7e98f5f0385c7d296fe619d6498a3be572e2709a
     },
     {
       "id": "6",
@@ -369,52 +357,7 @@
           "sinalizacao": true
         }
       },
-<<<<<<< HEAD
-      "pontuacaoAcessibilidade": 9
-    },
-    {
-      "id": "9",
-      "senha": "123",
-      "cnpj": "18.342.923/0001-21",
-      "nome": "Outback Steakhouse",
-      "descricao": "Famosa rede de steakhouses localizada no Pátio Savassi. Excelente infraestrutura, cardápios visuais detalhados em tablets e equipe proativa e muito bem treinada.",
-      "endereco": "Av. do Contorno, 6061 - São Pedro (Pátio Savassi)",
-      "cidade": "Belo Horizonte",
-      "estado": "MG",
-      "telefone": "(31) 3288-3763",
-      "tipoCozinha": "Australiana",
-      "horario": "Seg-Dom 11h-23h",
-      "foto": "http://localhost:3000/assets/images/outback.png",
-      "lat": -19.940562,
-      "lng": -43.933833,
-      "cardapioDigital": true,
-      "qrCodeMesas": true,
-      "checklist": {
-        "comunicacao": {
-          "libras": false,
-          "cardapioImagens": true,
-          "cardapioDigitalAcessivel": true,
-          "chatTexto": false
-        },
-        "tecnologia": {
-          "qrCode": true,
-          "tabletPedidos": true,
-          "pedidoVisual": true
-        },
-        "atendimento": {
-          "chamadaVisual": true,
-          "funcionariosTreinados": true,
-          "tempoRespostaRapido": true
-        },
-        "inclusao": {
-          "ambienteVisual": true,
-          "sinalizacao": true
-        }
-      },
-      "pontuacaoAcessibilidade": 8
-=======
       "pontuacaoAcessibilidade": 4
->>>>>>> 7e98f5f0385c7d296fe619d6498a3be572e2709a
     }
 ],
   "avaliacoes": [
