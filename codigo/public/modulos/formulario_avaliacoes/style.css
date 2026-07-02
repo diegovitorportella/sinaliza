@@ -1,175 +1,325 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f6f9;
-    color: #334155;
-    padding-bottom: 60px;
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #eff6ff;
+    --secondary: #64748b;
+    --dark: #0f172a;
+    --light: #f8fafc;
+    --success: #10b981;
+    --error: #ef4444;
+    --border: rgba(0,0,0,0.08);
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+body {
+    font-family: var(--font-sans);
+    color: var(--dark);
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+    box-sizing: border-box;
+    
+    background-color: #f0f7ff;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.18) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.18) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(59, 130, 246, 0.12) 0px, transparent 50%);
+    background-attachment: fixed;
+}
+
+/* =========================================
+   CABEÇALHO DA PÁGINA
+   ========================================= */
 .page-header {
-    background: linear-gradient(135deg, #093070, #0d6efd);
-    color: white;
-    padding: 24px 20px 20px;
-    margin-bottom: 0;
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    text-align: center;
+    position: relative;
 }
 
 .btn-voltar {
-    display: inline-block;
-    color: rgba(255,255,255,.8);
-    font-size: 13px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
     text-decoration: none;
-    margin-bottom: 8px;
-}
-.btn-voltar:hover { color: white; text-decoration: underline; }
-
-.page-header h1 {
-    font-size: 22px;
+    color: var(--secondary);
     font-weight: 700;
-    margin-bottom: 2px;
+    font-size: 0.9rem;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    transition: all 0.3s ease;
 }
 
-.subtitulo { font-size: 13px; opacity: .75; }
+.btn-voltar:hover {
+    color: var(--primary);
+    border-color: var(--primary-light);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
 
+#titulo-pagina {
+    font-weight: 900;
+    font-size: 1.75rem;
+    color: var(--dark);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.02em;
+}
+
+.subtitulo {
+    color: var(--secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* =========================================
+   CONTAINER DO FORMULÁRIO (CARD)
+   ========================================= */
 .form-container {
-    max-width: 640px;
-    margin: 28px auto;
-    padding: 0 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 2rem;
+    padding: 2.5rem;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px -5px rgba(0,0,0,0.05);
 }
 
 .form-container > p {
-    font-size: 14px;
-    color: #64748b;
-    margin-bottom: 24px;
+    color: var(--secondary);
     line-height: 1.6;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+    text-align: center;
 }
 
-/* Fieldset de estrelas */
+/* =========================================
+   SISTEMA DE ESTRELAS
+   ========================================= */
 .rating-fieldset {
     border: none;
-    margin-bottom: 24px;
     padding: 0;
+    margin: 0 0 2rem 0;
+    text-align: center;
 }
 
 .rating-fieldset legend {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 10px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
+    width: 100%;
 }
 
-/* Estrelas reversas (CSS trick) */
 .star-rating {
     display: flex;
     flex-direction: row-reverse;
-    justify-content: flex-end;
-    gap: 4px;
+    justify-content: center;
+    gap: 8px;
 }
 
-.star-rating input { display: none; }
+.star-rating input {
+    display: none;
+}
 
 .star-rating label {
-    font-size: 34px;
-    color: #cbd5e1;
+    font-size: 3rem;
+    color: #e2e8f0; /* Estrela vazia (cinza claro) */
     cursor: pointer;
-    transition: color .15s;
+    transition: color 0.2s ease, transform 0.2s ease;
+    line-height: 1;
 }
 
-.star-rating input:checked ~ label,
+/* Hover e Seleção das Estrelas */
 .star-rating label:hover,
-.star-rating label:hover ~ label { color: #eab308; }
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #f59e0b; /* Amarelo ouro (Warning color) */
+}
 
-/* Tags */
-.tags-group { margin-bottom: 20px; }
+.star-rating label:hover {
+    transform: scale(1.15);
+}
+
+/* =========================================
+   TAGS DE ACESSIBILIDADE
+   ========================================= */
+.tags-group {
+    margin-bottom: 2rem;
+}
 
 .tags-label {
     display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 8px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
 }
 
-.tags-container { display: flex; flex-wrap: wrap; gap: 8px; }
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 
+/* Reutilizando seu estilo de "filter-pill" / "btn-categoria" */
 .tag-btn {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-    color: #475569;
-    font-size: 13px;
-    padding: 6px 14px;
-    border-radius: 20px;
+    background-color: white;
+    color: var(--secondary);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: all .15s;
+    transition: all 0.3s ease;
+    user-select: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    font-family: var(--font-sans);
 }
 
-.tag-btn:hover { background: #e7f1ff; border-color: #bfdbfe; color: #1d4ed8; }
-.tag-btn.active { background: #2563eb; border-color: #2563eb; color: white; }
+.tag-btn:hover {
+    border-color: var(--primary-light);
+    color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+}
 
-/* Textarea */
-.input-group { margin-bottom: 20px; }
+.tag-btn.active {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+    border-color: var(--primary);
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+/* =========================================
+   CAMPO DE TEXTO
+   ========================================= */
+.input-group {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+}
 
 .input-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: #1e293b;
-    margin-bottom: 8px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
 }
 
 .input-group textarea {
     width: 100%;
-    padding: 12px 14px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
-    color: #334155;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    border-radius: 16px;
+    padding: 1rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--dark);
     resize: vertical;
+    transition: all 0.3s ease;
     outline: none;
-    transition: border-color .2s;
+    min-height: 120px;
 }
 
 .input-group textarea:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+    background: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
-/* Botão submit */
+/* =========================================
+   BOTÃO DE SUBMIT
+   ========================================= */
 #submitBtn {
     width: 100%;
-    background: #2563eb;
+    background-color: var(--primary);
     color: white;
     border: none;
-    padding: 13px;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: 600;
+    border-radius: 50px;
+    padding: 16px;
+    font-size: 1.1rem;
+    font-weight: 800;
     cursor: pointer;
-    transition: background .2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+    font-family: var(--font-sans);
 }
-#submitBtn:hover:not(:disabled) { background: #1d4ed8; }
-#submitBtn:disabled { opacity: .65; cursor: not-allowed; }
 
-/* Mensagens de feedback */
+#submitBtn:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px -5px rgba(37, 99, 235, 0.5);
+    background-color: var(--primary-dark);
+}
+
+#submitBtn:disabled {
+    background-color: var(--secondary);
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* =========================================
+   MENSAGENS DE FEEDBACK (JS usa essas classes)
+   ========================================= */
+.hidden {
+    display: none !important;
+}
+
+#message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-align: center;
+    animation: slideUp 0.3s ease;
+}
+
 .success-msg {
-    margin-top: 16px;
-    padding: 12px 16px;
-    background: #dcfce7;
-    color: #166534;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #34d399;
 }
 
 .error-msg {
-    margin-top: 16px;
-    padding: 12px 16px;
-    background: #fee2e2;
-    color: #b91c1c;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
+    background-color: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #f87171;
 }
 
-.hidden { display: none !important; }
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   RESPONSIVIDADE
+   ========================================= */
+@media (max-width: 640px) {
+    .form-container {
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+    }
+    
+    .btn-voltar {
+        position: static;
+        display: inline-block;
+        margin-bottom: 1rem;
+        transform: none;
+    }
+    
+    .star-rating label {
+        font-size: 2.5rem;
+    }
+}
