@@ -1,25 +1,42 @@
 const API = 'http://localhost:3000';
-
 const params = new URLSearchParams(window.location.search);
-const restauranteId = params.get('restauranteId');
+
+// 🌟 CORREÇÃO 1: Aceita tanto 'restauranteId' quanto 'id' para nunca perder a referência
+const restauranteId = params.get('restauranteId') || params.get('id');
+let avaliacaoExistenteId = null;
+let isProcessing = false;
+
+const tagButtons = document.querySelectorAll('.tag-btn');
+const commentTextarea = document.getElementById('comment');
 
 document.addEventListener('DOMContentLoaded', async () => {
+    let usuarioLogadoId = null;
+    
+    // 🌟 CORREÇÃO 2: Garante a escuta do evento de submit travando o refresh nativo do HTML
+    const form = document.getElementById('feedbackForm');
+    if (form) {
+        form.addEventListener('submit', processarEnvioAvaliacao);
+    }
+    
     try {
         const respSessao = await fetch(`${API}/sessao`);
         const sessaoArray = await respSessao.json();
         const sessao = sessaoArray[0];
-
+        
         if (!sessao || !sessao.usuarioId || sessao.tipo === 'restaurante') {
             const aviso = document.getElementById('message');
-            aviso.innerHTML = '⚠️ Você precisa estar logado como cliente para enviar uma avaliação.';
-            aviso.className = 'error-msg';
-            aviso.classList.remove('hidden');
-            document.getElementById('feedbackForm').style.display = 'none';
+            if (aviso) {
+                aviso.innerHTML = '⚠️ Você precisa estar logado como cliente para enviar uma avaliação.';
+                aviso.className = 'error-msg';
+                aviso.classList.remove('hidden');
+            }
+            if (form) form.style.display = 'none';
             setTimeout(() => {
                 window.location.href = `../autenticacao/index.html`;
             }, 2500);
             return;
         }
+        usuarioLogadoId = sessao.usuarioId;
     } catch (e) {
         console.warn('Erro ao verificar sessão.', e);
     }
@@ -31,35 +48,50 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const restaurante = await resp.json();
                 document.getElementById('titulo-pagina').textContent = `Avaliar: ${restaurante.nome}`;
                 document.getElementById('subtitulo-pagina').textContent = `${restaurante.tipoCozinha} · ${restaurante.cidade}`;
-                document.getElementById('link-voltar').href = `../detalhes/index.html?restauranteId=${restauranteId}`;
+                
+                // Garante que o botão voltar físico da página sempre tenha o ID correto
+                const linkVoltar = document.getElementById('link-voltar');
+                if (linkVoltar) {
+                    linkVoltar.href = `../detalhes/index.html?id=${restauranteId}`;
+                }
+            }
+
+            if (usuarioLogadoId) {
+                const respBusca = await fetch(`${API}/avaliacoes?restauranteId=${Number(restauranteId)}&usuarioId=${usuarioLogadoId}`);
+                if (respBusca.ok) {
+                    const dadosF = await respBusca.json();
+                    if (dadosF.length > 0) {
+                        const av = dadosF[0];
+                        avaliacaoExistenteId = av.id;
+                        
+                        const estrela = document.querySelector(`input[name="rating"][value="${av.nota}"]`);
+                        if (estrela) estrela.checked = true;
+                        
+                        commentTextarea.value = av.comentario || '';
+                        
+                        if (av.tags && Array.isArray(av.tags)) {
+                            tagButtons.forEach(btn => {
+                                if (av.tags.includes(btn.dataset.tag)) {
+                                    btn.classList.add('active');
+                                }
+                            });
+                        }
+                        document.getElementById('submitBtn').textContent = 'Atualizar Avaliação';
+                    }
+                }
             }
         } catch (e) {
-            console.warn('Não foi possível carregar o nome do restaurante.');
+            console.warn('Não foi possível carregar os dados prévios do restaurante.');
         }
     } else {
         document.getElementById('subtitulo-pagina').textContent = 'Restaurante não identificado';
     }
 });
 
-const tagButtons = document.querySelectorAll('.tag-btn');
-const commentTextarea = document.getElementById('comment');
-
+// Reconstrução da função de clique nas tags que estava cortada
 tagButtons.forEach(function (btn) {
     btn.addEventListener('click', function () {
-        const tag = btn.dataset.tag;
         btn.classList.toggle('active');
-
-        const current = commentTextarea.value;
-        if (btn.classList.contains('active')) {
-            commentTextarea.value = current ? current.trimEnd() + ', ' + tag : tag;
-        } else {
-            const pattern = new RegExp('(,\\s*)?' + escapeRegex(tag) + '(\\s*,)?', 'g');
-            commentTextarea.value = commentTextarea.value
-                .replace(pattern, (match, before, after) => (before && after) ? ',' : '')
-                .replace(/^,\s*/, '')
-                .replace(/,\s*$/, '')
-                .trim();
-        }
     });
 });
 
@@ -67,32 +99,57 @@ function escapeRegex(str) {
     return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-document.getElementById('feedbackForm').addEventListener('submit', async function (event) {
+async function processarEnvioAvaliacao(event) {
     event.preventDefault();
-
+    
+    if (window.jaEstaEnviandoObanco) return;
+    
     const ratingSelected = document.querySelector('input[name="rating"]:checked');
-    const commentText = commentTextarea.value.trim();
-
+    const commentText = commentTextarea ? commentTextarea.value.trim() : '';
+    
     if (!ratingSelected) {
         alert('Por favor, selecione uma nota em estrelas.');
         return;
     }
-
+    
+    if (!restauranteId) {
+        alert('Erro: ID do restaurante não encontrado na URL.');
+        return;
+    }
+    
+    window.jaEstaEnviandoObanco = true;
+    const submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Processando...';
+    }
+    
     const activeTags = Array.from(tagButtons)
         .filter(b => b.classList.contains('active'))
         .map(b => b.dataset.tag);
 
-    let usuarioId = null;
+    // CORREÇÃO: Variável usuarioId agora é declarada corretamente
+    let usuarioId = null; 
     try {
         const respSessao = await fetch(`${API}/sessao`);
         const sessaoArray = await respSessao.json();
-        usuarioId = sessaoArray[0] ? sessaoArray[0].usuarioId : null;
-    }
-    catch (e) {
-        console.warn('Não foi possível identificar o usuário da sessão.');
+        if (sessaoArray[0] && sessaoArray[0].usuarioId) {
+            usuarioId = String(sessaoArray[0].usuarioId);
+        } else {
+            throw new Error("Usuário não logado");
+        }
+    } catch (e) {
+        console.warn('Não foi possível identificar o usuário da sessão.', e);
+        window.jaEstaEnviandoObanco = false;
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Enviar Avaliação';
+        }
+        alert('Erro: Você precisa estar logado para avaliar.');
+        return;
     }
 
-    const avaliacao = {
+    const dadosAvaliacao = {
         restauranteId: Number(restauranteId),
         usuarioId: usuarioId,
         nota: Number(ratingSelected.value),
@@ -101,69 +158,73 @@ document.getElementById('feedbackForm').addEventListener('submit', async functio
         data: new Date().toLocaleDateString('pt-BR')
     };
 
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Enviando...';
-
-    const idRestauranteNumerico = Number(restauranteId);
-
     try {
-        const resp = await fetch(`${API}/avaliacoes`, {
-            method: 'POST',
+        const respTodas = await fetch(`${API}/avaliacoes`);
+        if (!respTodas.ok) throw new Error('Erro ao checar duplicatas');
+        const todasAvaliacoes = await respTodas.json();
+        
+        const avaliacaoExistente = todasAvaliacoes.find(av =>
+            av && av.restauranteId && av.usuarioId &&
+            String(av.restauranteId) === String(restauranteId) &&
+            String(av.usuarioId) === String(usuarioId)
+        );
+
+        let urlFetch = `${API}/avaliacoes`;
+        let metodo = 'POST';
+
+        if (avaliacaoExistente) {
+            urlFetch = `${API}/avaliacoes/${avaliacaoExistente.id}`;
+            metodo = 'PUT';
+        }
+
+        const resp = await fetch(urlFetch, {
+            method: metodo,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(avaliacao) 
+            body: JSON.stringify(dadosAvaliacao)
         });
 
-        if (!resp.ok) throw new Error('Erro na resposta do servidor ao postar avaliação');
+        if (!resp.ok) throw new Error('Erro ao salvar avaliação');
 
-        if (idRestauranteNumerico) {
-            try {
-                const respTodas = await fetch(`${API}/avaliacoes?restauranteId=${idRestauranteNumerico}`);
-                if (respTodas.ok) {
-                    const listaAvaliacoes = await respTodas.json();
-
-                    if (listaAvaliacoes.length > 0) {
-                        const somaNotas = listaAvaliacoes.reduce((acumulador, item) => acumulador + Number(item.nota || 0), 0);
-                        const novaMedia = parseFloat((somaNotas / listaAvaliacoes.length).toFixed(1));
-
-                        await fetch(`${API}/restaurantes/${idRestauranteNumerico}`, {
-                            method: 'PATCH',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                pontuacaoAcessibilidade: novaMedia
-                            })
-                        });
-                    }
+        try {
+            const respRecalculo = await fetch(`${API}/avaliacoes`);
+            if (respRecalculo.ok) {
+                const listaAtualizada = await respRecalculo.json();
+                const filtradas = listaAtualizada.filter(item =>
+                    item && item.restauranteId && String(item.restauranteId) === String(restauranteId)
+                );
+                if (filtradas.length > 0) {
+                    const somaNotas = filtradas.reduce((acc, item) => acc + Number(item.nota || 0), 0);
+                    const novaMedia = parseFloat((somaNotas / filtradas.length).toFixed(1));
+                    await fetch(`${API}/restaurantes/${restauranteId}`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ pontuacaoAcessibilidade: novaMedia })
+                    });
                 }
             }
-            catch (erroMedia) {
-                console.error('Erro ao atualizar a média do restaurante no banco:', erroMedia);
-            }
+        } catch (erroMedia) {
+            console.error('Erro ao atualizar média:', erroMedia);
         }
 
         const messageDiv = document.getElementById('message');
-        messageDiv.innerHTML = '✓ Avaliação enviada com sucesso! Nota geral atualizada.';
-        messageDiv.className = 'success-msg';
-        messageDiv.classList.remove('hidden');
+        if (messageDiv) {
+            messageDiv.innerHTML = avaliacaoExistente
+                ? '✓ Avaliação alterada com sucesso!'
+                : '✓ Avaliação criada com sucesso!';
+            messageDiv.className = 'success-msg';
+            messageDiv.classList.remove('hidden');
+        }
 
-        document.getElementById('feedbackForm').reset();
-        tagButtons.forEach(b => b.classList.remove('active'));
+        setTimeout(() => {
+            window.location.href = `../detalhes/index.html?id=${restauranteId}`;
+        }, 1200);
 
-        if (restauranteId) {
-            setTimeout(() => {
-                window.location.href = `../detalhes/index.html?restauranteId=${restauranteId}`;
-            }, 2000);
+    } catch (e) {
+        console.error('Erro geral no envio:', e);
+        window.jaEstaEnviandoObanco = false;
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Tentar Novamente';
         }
     }
-    catch (e) {
-        console.error('Erro ao enviar avaliação:', e);
-        const messageDiv = document.getElementById('message');
-        messageDiv.innerHTML = '✗ Erro ao enviar. Verifique se o JSON Server está rodando.';
-        messageDiv.className = 'error-msg';
-        messageDiv.classList.remove('hidden');
-    }
-    finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar Avaliação';
-    }
-});
+}
