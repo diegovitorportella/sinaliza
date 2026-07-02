@@ -6,6 +6,8 @@ O **Sinaliza** é uma plataforma web colaborativa projetada para conectar pessoa
 
 Para proporcionar mais autonomia aos usuários, o sistema conta com recursos voltados especificamente para esse público, incluindo um mapa interativo de locais, sistema de avaliações da própria comunidade, cardápio visual simplificado e o "Modo Garçom", uma ferramenta de comunicação assistida em tempo real projetada para facilitar o momento do pedido e do atendimento nas mesas. 
 
+🎥 **[Assista ao vídeo de apresentação do projeto](https://drive.google.com/file/d/1tKagnHgEUMDz0UT9XIL0c_77RU1GvZgP/view?usp=sharing)**
+
 ## Alunos integrantes da equipe
 
 * Diego Vitor Pinto Mariano Portella
