@@ -1,0 +1,13 @@
+{
+  "outputDirectory": "public",
+  "rewrites": [
+    {
+      "source": "/:resource(usuarios|restaurantes|avaliacoes|cardapio|categorias_garcom|frases_garcom|sessao)/:path*",
+      "destination": "/api"
+    },
+    {
+      "source": "/:resource(usuarios|restaurantes|avaliacoes|cardapio|categorias_garcom|frases_garcom|sessao)",
+      "destination": "/api"
+    }
+  ]
+}

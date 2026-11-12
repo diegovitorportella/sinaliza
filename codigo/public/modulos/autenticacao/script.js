@@ -1,5 +1,5 @@
-const API_USUARIOS = 'http://localhost:3000/usuarios';
-const API_RESTAURANTES = 'http://localhost:3000/restaurantes';
+const API_USUARIOS = '/usuarios';
+const API_RESTAURANTES = '/restaurantes';
 
 document.addEventListener('DOMContentLoaded', () => {
     if (window.location.hash === '#cadastro') {
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (String(usuarioLogado.senha) === String(senhaDigitada)) {
 
-                        await fetch('http://localhost:3000/sessao/atual', {
+                        await fetch('/sessao/atual', {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({

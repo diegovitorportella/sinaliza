@@ -1,9 +1,9 @@
-const API_USUARIOS = 'http://localhost:3000/usuarios';
+const API_USUARIOS = '/usuarios';
 let usuarioLogado = null;
 let dadosCompletos = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const respSessao = await fetch('http://localhost:3000/sessao');
+    const respSessao = await fetch('/sessao');
     const sessaoArray = await respSessao.json();
     const sessao = sessaoArray[0] || {};
     
@@ -53,7 +53,7 @@ document.getElementById('formCliente').addEventListener('submit', async (e) => {
 
         if (resp.ok) {
             // Segundo: Atualiza o nome na "Sessão" da API (Zero LocalStorage!)
-            await fetch('http://localhost:3000/sessao/atual', {
+            await fetch('/sessao/atual', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -79,7 +79,7 @@ document.getElementById('formCliente').addEventListener('submit', async (e) => {
 // 4. LÓGICA DE LOGOUT
 async function fazerLogout() {
     // Limpa a sessão no JSON Server
-    await fetch('http://localhost:3000/sessao/atual', {
+    await fetch('/sessao/atual', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: "atual", usuarioId: null, nome: null, tipo: null })

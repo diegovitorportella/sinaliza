@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000';
+const API = '';
 const params = new URLSearchParams(window.location.search);
 
 // 🌟 CORREÇÃO 1: Aceita tanto 'restauranteId' quanto 'id' para nunca perder a referência

@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000';
+const API = '';
 
 // ── Estado da Sessão e Dados ──────────────────────────────────────────
 let restauranteLogadoId = null; 

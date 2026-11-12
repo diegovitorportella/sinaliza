@@ -273,7 +273,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        const API = 'http://localhost:3000';
+        const API = '';
         let todosRestaurantes = [];
         let mapa;
 
@@ -326,7 +326,7 @@
             const cardPerfil = document.getElementById('cardMeuPerfil');
 
             try {
-                const resp = await fetch('http://localhost:3000/sessao/atual');
+                const resp = await fetch('/sessao/atual');
                 const sessao = await resp.json();
 
                 if (sessao && sessao.usuarioId && areaAuth) {
@@ -388,7 +388,7 @@
         }
 
         window.fazerLogout = async function () {
-            await fetch('http://localhost:3000/sessao/atual', {
+            await fetch('/sessao/atual', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: "atual", usuarioId: null, nome: null, tipo: null })

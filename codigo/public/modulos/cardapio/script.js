@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000';
+const API = '';
 
 // ── Lê parâmetros da URL ──────────────────────────────────────────────
 // O link "Gerenciar Cardápio" da página de Detalhes envia ?restauranteId=...

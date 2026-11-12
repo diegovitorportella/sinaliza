@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000';
+const API = '';
 let sessaoAtual = null; 
 let avaliacoesCache = [];
 const TAGS_DISPONIVEIS = [

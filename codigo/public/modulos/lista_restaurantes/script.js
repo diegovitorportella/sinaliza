@@ -17,8 +17,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     try {
         const [respostaRestaurantes, respostaAvaliacoes] = await Promise.all([
-            fetch('http://localhost:3000/restaurantes'),
-            fetch('http://localhost:3000/avaliacoes')
+            fetch('/restaurantes'),
+            fetch('/avaliacoes')
         ]);
         restaurantesData = await respostaRestaurantes.json();
         avaliacoesData = await respostaAvaliacoes.json();
