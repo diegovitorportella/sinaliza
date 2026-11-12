@@ -48,6 +48,52 @@ HTML + CSS + JS (public/)  →  JSON Server REST API  →  db.json
 
 ---
 
+## 🖼️ Telas
+
+<p align="center">
+  <img src="docs/screenshots/01-home.png" alt="Página inicial do Sinaliza" width="820">
+</p>
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/02-lista-restaurantes.png" alt="Lista de restaurantes"></td>
+    <td><img src="docs/screenshots/06-modo-garcom.png" alt="Modo Garçom"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Lista de restaurantes</b></td>
+    <td align="center"><b>Modo Garçom</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/05-avaliacao.png" alt="Formulário de avaliação"></td>
+    <td><img src="docs/screenshots/04-cardapio.png" alt="Gestão do cardápio do restaurante"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Avaliação de acessibilidade</b></td>
+    <td align="center"><b>Cardápio do restaurante</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/08-painel-restaurante.png" alt="Painel do restaurante"></td>
+    <td><img src="docs/screenshots/07-painel-cliente.png" alt="Painel do cliente"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Painel do restaurante</b></td>
+    <td align="center"><b>Painel do cliente</b></td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/03-detalhes.png" alt="Detalhes do restaurante" width="520"></td>
+    <td><img src="docs/screenshots/10-mobile.png" alt="Versão para celular" width="260"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Detalhes, checklist e avaliações</b></td>
+    <td align="center"><b>Versão para celular</b></td>
+  </tr>
+</table>
+
+---
+
 ## 🧩 Módulos
 
 Cada módulo fica em uma pasta de `codigo/public/modulos/`, com seu próprio HTML, CSS e JavaScript.
